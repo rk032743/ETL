@@ -451,12 +451,27 @@
       <to>JS_CONVERT_DATE_VOLUMES</to>
       <enabled>Y</enabled>
     </hop>
+    <hop>
+      <from>RENAME</from>
+      <to>SET VAR METADADOS</to>
+      <enabled>Y</enabled>
+    </hop>
+    <hop>
+      <from>CONVERT_DATE_VOLUMES</from>
+      <to>METADADOS</to>
+      <enabled>Y</enabled>
+    </hop>
+    <hop>
+      <from>METADADOS</from>
+      <to>RENAME</to>
+      <enabled>Y</enabled>
+    </hop>
   </order>
   <step>
     <name>CONVERT_DATE_VOLUMES</name>
     <type>SelectValues</type>
     <description/>
-    <distribute>Y</distribute>
+    <distribute>N</distribute>
     <custom_distribution/>
     <copies>1</copies>
     <partitioning>
@@ -516,6 +531,15 @@
         <name>duracao_fila</name>
       </field>
       <field>
+        <name>atendida_ate_45s</name>
+      </field>
+      <field>
+        <name>atendida_46s_a_90s</name>
+      </field>
+      <field>
+        <name>atendida_91s_a_120s</name>
+      </field>
+      <field>
         <name>atendida_ate_20s</name>
       </field>
       <field>
@@ -524,7 +548,27 @@
       <field>
         <name>arquivo</name>
       </field>
+      <field>
+        <name>data_baixado</name>
+      </field>
       <select_unspecified>N</select_unspecified>
+      <meta>
+        <name>data_baixado</name>
+        <rename>data_baixado</rename>
+        <type>Date</type>
+        <length>-2</length>
+        <precision>-2</precision>
+        <conversion_mask>yyyy-MM-dd HH:mm:ss</conversion_mask>
+        <date_format_lenient>false</date_format_lenient>
+        <date_format_locale/>
+        <date_format_timezone/>
+        <lenient_string_to_number>false</lenient_string_to_number>
+        <encoding/>
+        <decimal_symbol/>
+        <grouping_symbol/>
+        <currency_symbol/>
+        <storage_type/>
+      </meta>
     </fields>
     <attributes/>
     <cluster_schema/>
@@ -535,7 +579,7 @@
       </output>
     </remotesteps>
     <GUI>
-      <xloc>512</xloc>
+      <xloc>432</xloc>
       <yloc>48</yloc>
       <draw>Y</draw>
     </GUI>
@@ -582,6 +626,282 @@
       <splitevery/>
     </file>
     <fields>
+      <field>
+        <name>data_ligacao</name>
+        <type>String</type>
+        <format>dd/MM/yyyy</format>
+        <currency/>
+        <decimal/>
+        <group/>
+        <nullif/>
+        <trim_type>none</trim_type>
+        <length>-1</length>
+        <precision>-1</precision>
+      </field>
+      <field>
+        <name>login_operador</name>
+        <type>String</type>
+        <format/>
+        <currency/>
+        <decimal/>
+        <group/>
+        <nullif/>
+        <trim_type>none</trim_type>
+        <length>-1</length>
+        <precision>-1</precision>
+      </field>
+      <field>
+        <name>hora</name>
+        <type>String</type>
+        <format/>
+        <currency/>
+        <decimal/>
+        <group/>
+        <nullif/>
+        <trim_type>none</trim_type>
+        <length>-1</length>
+        <precision>-1</precision>
+      </field>
+      <field>
+        <name>grupo</name>
+        <type>Integer</type>
+        <format/>
+        <currency/>
+        <decimal/>
+        <group/>
+        <nullif/>
+        <trim_type>none</trim_type>
+        <length>-1</length>
+        <precision>0</precision>
+      </field>
+      <field>
+        <name>nb</name>
+        <type>Integer</type>
+        <format/>
+        <currency/>
+        <decimal/>
+        <group/>
+        <nullif/>
+        <trim_type>none</trim_type>
+        <length>-1</length>
+        <precision>0</precision>
+      </field>
+      <field>
+        <name>tipo_atendimento</name>
+        <type>String</type>
+        <format/>
+        <currency/>
+        <decimal/>
+        <group/>
+        <nullif/>
+        <trim_type>none</trim_type>
+        <length>-1</length>
+        <precision>-1</precision>
+      </field>
+      <field>
+        <name>recebida_ura</name>
+        <type>Integer</type>
+        <format/>
+        <currency/>
+        <decimal/>
+        <group/>
+        <nullif/>
+        <trim_type>none</trim_type>
+        <length>-1</length>
+        <precision>0</precision>
+      </field>
+      <field>
+        <name>abandonada_ura</name>
+        <type>Integer</type>
+        <format/>
+        <currency/>
+        <decimal/>
+        <group/>
+        <nullif/>
+        <trim_type>none</trim_type>
+        <length>-1</length>
+        <precision>0</precision>
+      </field>
+      <field>
+        <name>oferecida</name>
+        <type>Integer</type>
+        <format/>
+        <currency/>
+        <decimal/>
+        <group/>
+        <nullif/>
+        <trim_type>none</trim_type>
+        <length>-1</length>
+        <precision>0</precision>
+      </field>
+      <field>
+        <name>atendida</name>
+        <type>Integer</type>
+        <format/>
+        <currency/>
+        <decimal/>
+        <group/>
+        <nullif/>
+        <trim_type>none</trim_type>
+        <length>-1</length>
+        <precision>0</precision>
+      </field>
+      <field>
+        <name>atendida_ate_50s</name>
+        <type>Integer</type>
+        <format/>
+        <currency/>
+        <decimal/>
+        <group/>
+        <nullif/>
+        <trim_type>none</trim_type>
+        <length>-1</length>
+        <precision>0</precision>
+      </field>
+      <field>
+        <name>abandonada_fila</name>
+        <type>Integer</type>
+        <format/>
+        <currency/>
+        <decimal/>
+        <group/>
+        <nullif/>
+        <trim_type>none</trim_type>
+        <length>-1</length>
+        <precision>0</precision>
+      </field>
+      <field>
+        <name>abandonada_fila_ate_50s</name>
+        <type>Integer</type>
+        <format/>
+        <currency/>
+        <decimal/>
+        <group/>
+        <nullif/>
+        <trim_type>none</trim_type>
+        <length>-1</length>
+        <precision>0</precision>
+      </field>
+      <field>
+        <name>ocupada</name>
+        <type>Integer</type>
+        <format/>
+        <currency/>
+        <decimal/>
+        <group/>
+        <nullif/>
+        <trim_type>none</trim_type>
+        <length>-1</length>
+        <precision>0</precision>
+      </field>
+      <field>
+        <name>tempo_ligacoes_atendidas</name>
+        <type>Integer</type>
+        <format/>
+        <currency/>
+        <decimal/>
+        <group/>
+        <nullif/>
+        <trim_type>none</trim_type>
+        <length>-1</length>
+        <precision>0</precision>
+      </field>
+      <field>
+        <name>tempo_ligacoes_com_operador</name>
+        <type>Integer</type>
+        <format/>
+        <currency/>
+        <decimal/>
+        <group/>
+        <nullif/>
+        <trim_type>none</trim_type>
+        <length>-1</length>
+        <precision>0</precision>
+      </field>
+      <field>
+        <name>duracao_fila</name>
+        <type>Integer</type>
+        <format/>
+        <currency/>
+        <decimal/>
+        <group/>
+        <nullif/>
+        <trim_type>none</trim_type>
+        <length>-1</length>
+        <precision>0</precision>
+      </field>
+      <field>
+        <name>atendida_ate_45s</name>
+        <type>Integer</type>
+        <format/>
+        <currency/>
+        <decimal/>
+        <group/>
+        <nullif/>
+        <trim_type>none</trim_type>
+        <length>-1</length>
+        <precision>0</precision>
+      </field>
+      <field>
+        <name>atendida_46s_a_90s</name>
+        <type>Integer</type>
+        <format/>
+        <currency/>
+        <decimal/>
+        <group/>
+        <nullif/>
+        <trim_type>none</trim_type>
+        <length>-1</length>
+        <precision>0</precision>
+      </field>
+      <field>
+        <name>atendida_91s_a_120s</name>
+        <type>Integer</type>
+        <format/>
+        <currency/>
+        <decimal/>
+        <group/>
+        <nullif/>
+        <trim_type>none</trim_type>
+        <length>-1</length>
+        <precision>0</precision>
+      </field>
+      <field>
+        <name>atendida_ate_20s</name>
+        <type>Integer</type>
+        <format/>
+        <currency/>
+        <decimal/>
+        <group/>
+        <nullif/>
+        <trim_type>none</trim_type>
+        <length>-1</length>
+        <precision>0</precision>
+      </field>
+      <field>
+        <name>abandonada_fila_ate_20s</name>
+        <type>Integer</type>
+        <format/>
+        <currency/>
+        <decimal/>
+        <group/>
+        <nullif/>
+        <trim_type>none</trim_type>
+        <length>-1</length>
+        <precision>0</precision>
+      </field>
+      <field>
+        <name>arquivo</name>
+        <type>String</type>
+        <format/>
+        <currency/>
+        <decimal/>
+        <group/>
+        <nullif/>
+        <trim_type>none</trim_type>
+        <length>-1</length>
+        <precision>-1</precision>
+      </field>
     </fields>
     <attributes/>
     <cluster_schema/>
@@ -592,7 +912,7 @@
       </output>
     </remotesteps>
     <GUI>
-      <xloc>720</xloc>
+      <xloc>640</xloc>
       <yloc>48</yloc>
       <draw>Y</draw>
     </GUI>
@@ -728,8 +1048,59 @@ Alert(date2str(dValue,"dd.MM.yyyy HH:mm:ss","EN", "EST"));
       </output>
     </remotesteps>
     <GUI>
-      <xloc>304</xloc>
+      <xloc>224</xloc>
       <yloc>48</yloc>
+      <draw>Y</draw>
+    </GUI>
+  </step>
+  <step>
+    <name>METADADOS</name>
+    <type>MemoryGroupBy</type>
+    <description/>
+    <distribute>Y</distribute>
+    <custom_distribution/>
+    <copies>1</copies>
+    <partitioning>
+      <method>none</method>
+      <schema_name/>
+    </partitioning>
+    <give_back_row>N</give_back_row>
+    <group>
+      <field>
+        <name>data_ligacao</name>
+      </field>
+    </group>
+    <fields>
+      <field>
+        <aggregate>qtd</aggregate>
+        <subject>arquivo</subject>
+        <type>COUNT_ANY</type>
+        <valuefield/>
+      </field>
+      <field>
+        <aggregate>arquivo</aggregate>
+        <subject>arquivo</subject>
+        <type>MAX</type>
+        <valuefield/>
+      </field>
+      <field>
+        <aggregate>data_arquivo</aggregate>
+        <subject>data_baixado</subject>
+        <type>MAX</type>
+        <valuefield/>
+      </field>
+    </fields>
+    <attributes/>
+    <cluster_schema/>
+    <remotesteps>
+      <input>
+      </input>
+      <output>
+      </output>
+    </remotesteps>
+    <GUI>
+      <xloc>432</xloc>
+      <yloc>160</yloc>
       <draw>Y</draw>
     </GUI>
   </step>
@@ -795,7 +1166,7 @@ Alert(date2str(dValue,"dd.MM.yyyy HH:mm:ss","EN", "EST"));
         <position>-1</position>
         <length>-1</length>
         <precision>-1</precision>
-        <trim_type>both</trim_type>
+        <trim_type>none</trim_type>
         <repeat>N</repeat>
       </field>
       <field>
@@ -810,7 +1181,7 @@ Alert(date2str(dValue,"dd.MM.yyyy HH:mm:ss","EN", "EST"));
         <position>-1</position>
         <length>-1</length>
         <precision>-1</precision>
-        <trim_type>both</trim_type>
+        <trim_type>none</trim_type>
         <repeat>N</repeat>
       </field>
       <field>
@@ -825,12 +1196,12 @@ Alert(date2str(dValue,"dd.MM.yyyy HH:mm:ss","EN", "EST"));
         <position>-1</position>
         <length>-1</length>
         <precision>-1</precision>
-        <trim_type>both</trim_type>
+        <trim_type>none</trim_type>
         <repeat>N</repeat>
       </field>
       <field>
         <name>grupo</name>
-        <type>String</type>
+        <type>Integer</type>
         <format/>
         <currency/>
         <decimal/>
@@ -840,12 +1211,12 @@ Alert(date2str(dValue,"dd.MM.yyyy HH:mm:ss","EN", "EST"));
         <position>-1</position>
         <length>-1</length>
         <precision>-1</precision>
-        <trim_type>both</trim_type>
+        <trim_type>none</trim_type>
         <repeat>N</repeat>
       </field>
       <field>
         <name>nb</name>
-        <type>String</type>
+        <type>Integer</type>
         <format/>
         <currency/>
         <decimal/>
@@ -855,7 +1226,7 @@ Alert(date2str(dValue,"dd.MM.yyyy HH:mm:ss","EN", "EST"));
         <position>-1</position>
         <length>-1</length>
         <precision>-1</precision>
-        <trim_type>both</trim_type>
+        <trim_type>none</trim_type>
         <repeat>N</repeat>
       </field>
       <field>
@@ -870,12 +1241,12 @@ Alert(date2str(dValue,"dd.MM.yyyy HH:mm:ss","EN", "EST"));
         <position>-1</position>
         <length>-1</length>
         <precision>-1</precision>
-        <trim_type>both</trim_type>
+        <trim_type>none</trim_type>
         <repeat>N</repeat>
       </field>
       <field>
         <name>recebida_ura</name>
-        <type>String</type>
+        <type>Integer</type>
         <format/>
         <currency/>
         <decimal/>
@@ -885,12 +1256,12 @@ Alert(date2str(dValue,"dd.MM.yyyy HH:mm:ss","EN", "EST"));
         <position>-1</position>
         <length>-1</length>
         <precision>-1</precision>
-        <trim_type>both</trim_type>
+        <trim_type>none</trim_type>
         <repeat>N</repeat>
       </field>
       <field>
         <name>abandonada_ura</name>
-        <type>String</type>
+        <type>Integer</type>
         <format/>
         <currency/>
         <decimal/>
@@ -900,12 +1271,12 @@ Alert(date2str(dValue,"dd.MM.yyyy HH:mm:ss","EN", "EST"));
         <position>-1</position>
         <length>-1</length>
         <precision>-1</precision>
-        <trim_type>both</trim_type>
+        <trim_type>none</trim_type>
         <repeat>N</repeat>
       </field>
       <field>
         <name>oferecida</name>
-        <type>String</type>
+        <type>Integer</type>
         <format/>
         <currency/>
         <decimal/>
@@ -915,12 +1286,12 @@ Alert(date2str(dValue,"dd.MM.yyyy HH:mm:ss","EN", "EST"));
         <position>-1</position>
         <length>-1</length>
         <precision>-1</precision>
-        <trim_type>both</trim_type>
+        <trim_type>none</trim_type>
         <repeat>N</repeat>
       </field>
       <field>
         <name>atendida</name>
-        <type>String</type>
+        <type>Integer</type>
         <format/>
         <currency/>
         <decimal/>
@@ -930,12 +1301,12 @@ Alert(date2str(dValue,"dd.MM.yyyy HH:mm:ss","EN", "EST"));
         <position>-1</position>
         <length>-1</length>
         <precision>-1</precision>
-        <trim_type>both</trim_type>
+        <trim_type>none</trim_type>
         <repeat>N</repeat>
       </field>
       <field>
         <name>atendida_ate_50s</name>
-        <type>String</type>
+        <type>Integer</type>
         <format/>
         <currency/>
         <decimal/>
@@ -945,12 +1316,12 @@ Alert(date2str(dValue,"dd.MM.yyyy HH:mm:ss","EN", "EST"));
         <position>-1</position>
         <length>-1</length>
         <precision>-1</precision>
-        <trim_type>both</trim_type>
+        <trim_type>none</trim_type>
         <repeat>N</repeat>
       </field>
       <field>
         <name>abandonada_fila</name>
-        <type>String</type>
+        <type>Integer</type>
         <format/>
         <currency/>
         <decimal/>
@@ -960,12 +1331,12 @@ Alert(date2str(dValue,"dd.MM.yyyy HH:mm:ss","EN", "EST"));
         <position>-1</position>
         <length>-1</length>
         <precision>-1</precision>
-        <trim_type>both</trim_type>
+        <trim_type>none</trim_type>
         <repeat>N</repeat>
       </field>
       <field>
         <name>abandonada_fila_ate_50s</name>
-        <type>String</type>
+        <type>Integer</type>
         <format/>
         <currency/>
         <decimal/>
@@ -975,12 +1346,12 @@ Alert(date2str(dValue,"dd.MM.yyyy HH:mm:ss","EN", "EST"));
         <position>-1</position>
         <length>-1</length>
         <precision>-1</precision>
-        <trim_type>both</trim_type>
+        <trim_type>none</trim_type>
         <repeat>N</repeat>
       </field>
       <field>
         <name>ocupada</name>
-        <type>String</type>
+        <type>Integer</type>
         <format/>
         <currency/>
         <decimal/>
@@ -990,12 +1361,12 @@ Alert(date2str(dValue,"dd.MM.yyyy HH:mm:ss","EN", "EST"));
         <position>-1</position>
         <length>-1</length>
         <precision>-1</precision>
-        <trim_type>both</trim_type>
+        <trim_type>none</trim_type>
         <repeat>N</repeat>
       </field>
       <field>
         <name>tempo_ligacoes_atendidas</name>
-        <type>String</type>
+        <type>Integer</type>
         <format/>
         <currency/>
         <decimal/>
@@ -1005,12 +1376,12 @@ Alert(date2str(dValue,"dd.MM.yyyy HH:mm:ss","EN", "EST"));
         <position>-1</position>
         <length>-1</length>
         <precision>-1</precision>
-        <trim_type>both</trim_type>
+        <trim_type>none</trim_type>
         <repeat>N</repeat>
       </field>
       <field>
         <name>tempo_ligacoes_com_operador</name>
-        <type>String</type>
+        <type>Integer</type>
         <format/>
         <currency/>
         <decimal/>
@@ -1020,12 +1391,12 @@ Alert(date2str(dValue,"dd.MM.yyyy HH:mm:ss","EN", "EST"));
         <position>-1</position>
         <length>-1</length>
         <precision>-1</precision>
-        <trim_type>both</trim_type>
+        <trim_type>none</trim_type>
         <repeat>N</repeat>
       </field>
       <field>
         <name>duracao_fila</name>
-        <type>String</type>
+        <type>Integer</type>
         <format/>
         <currency/>
         <decimal/>
@@ -1035,12 +1406,57 @@ Alert(date2str(dValue,"dd.MM.yyyy HH:mm:ss","EN", "EST"));
         <position>-1</position>
         <length>-1</length>
         <precision>-1</precision>
-        <trim_type>both</trim_type>
+        <trim_type>none</trim_type>
+        <repeat>N</repeat>
+      </field>
+      <field>
+        <name>atendida_ate_45s</name>
+        <type>Integer</type>
+        <format/>
+        <currency/>
+        <decimal/>
+        <group/>
+        <nullif/>
+        <ifnull/>
+        <position>-1</position>
+        <length>-1</length>
+        <precision>-1</precision>
+        <trim_type>none</trim_type>
+        <repeat>N</repeat>
+      </field>
+      <field>
+        <name>atendida_46s_a_90s</name>
+        <type>Integer</type>
+        <format/>
+        <currency/>
+        <decimal/>
+        <group/>
+        <nullif/>
+        <ifnull/>
+        <position>-1</position>
+        <length>-1</length>
+        <precision>-1</precision>
+        <trim_type>none</trim_type>
+        <repeat>N</repeat>
+      </field>
+      <field>
+        <name>atendida_91s_a_120s</name>
+        <type>Integer</type>
+        <format/>
+        <currency/>
+        <decimal/>
+        <group/>
+        <nullif/>
+        <ifnull/>
+        <position>-1</position>
+        <length>-1</length>
+        <precision>-1</precision>
+        <trim_type>none</trim_type>
         <repeat>N</repeat>
       </field>
       <field>
         <name>atendida_ate_20s</name>
-        <type>String</type>
+        <type>Integer</type>
         <format/>
         <currency/>
         <decimal/>
@@ -1050,12 +1466,12 @@ Alert(date2str(dValue,"dd.MM.yyyy HH:mm:ss","EN", "EST"));
         <position>-1</position>
         <length>-1</length>
         <precision>-1</precision>
-        <trim_type>both</trim_type>
+        <trim_type>none</trim_type>
         <repeat>N</repeat>
       </field>
       <field>
         <name>abandonada_fila_ate_20s</name>
-        <type>String</type>
+        <type>Integer</type>
         <format/>
         <currency/>
         <decimal/>
@@ -1065,7 +1481,7 @@ Alert(date2str(dValue,"dd.MM.yyyy HH:mm:ss","EN", "EST"));
         <position>-1</position>
         <length>-1</length>
         <precision>-1</precision>
-        <trim_type>both</trim_type>
+        <trim_type>none</trim_type>
         <repeat>N</repeat>
       </field>
     </fields>
@@ -1089,7 +1505,7 @@ Alert(date2str(dValue,"dd.MM.yyyy HH:mm:ss","EN", "EST"));
     <shortFileFieldName>arquivo</shortFileFieldName>
     <pathFieldName/>
     <hiddenFieldName/>
-    <lastModificationTimeFieldName/>
+    <lastModificationTimeFieldName>data_baixado</lastModificationTimeFieldName>
     <uriNameFieldName/>
     <rootUriNameFieldName/>
     <extensionFieldName/>
@@ -1105,6 +1521,103 @@ Alert(date2str(dValue,"dd.MM.yyyy HH:mm:ss","EN", "EST"));
     <GUI>
       <xloc>64</xloc>
       <yloc>48</yloc>
+      <draw>Y</draw>
+    </GUI>
+  </step>
+  <step>
+    <name>RENAME</name>
+    <type>SelectValues</type>
+    <description/>
+    <distribute>Y</distribute>
+    <custom_distribution/>
+    <copies>1</copies>
+    <partitioning>
+      <method>none</method>
+      <schema_name/>
+    </partitioning>
+    <fields>
+      <select_unspecified>N</select_unspecified>
+      <meta>
+        <name>data_ligacao</name>
+        <rename>data_ref</rename>
+        <type>None</type>
+        <length>-2</length>
+        <precision>-2</precision>
+        <conversion_mask/>
+        <date_format_lenient>false</date_format_lenient>
+        <date_format_locale/>
+        <date_format_timezone/>
+        <lenient_string_to_number>false</lenient_string_to_number>
+        <encoding/>
+        <decimal_symbol/>
+        <grouping_symbol/>
+        <currency_symbol/>
+        <storage_type/>
+      </meta>
+    </fields>
+    <attributes/>
+    <cluster_schema/>
+    <remotesteps>
+      <input>
+      </input>
+      <output>
+      </output>
+    </remotesteps>
+    <GUI>
+      <xloc>720</xloc>
+      <yloc>160</yloc>
+      <draw>Y</draw>
+    </GUI>
+  </step>
+  <step>
+    <name>SET VAR METADADOS</name>
+    <type>SetVariable</type>
+    <description/>
+    <distribute>Y</distribute>
+    <custom_distribution/>
+    <copies>1</copies>
+    <partitioning>
+      <method>none</method>
+      <schema_name/>
+    </partitioning>
+    <fields>
+      <field>
+        <field_name>data_ref</field_name>
+        <variable_name>DATA_REF</variable_name>
+        <variable_type>ROOT_JOB</variable_type>
+        <default_value/>
+      </field>
+      <field>
+        <field_name>qtd</field_name>
+        <variable_name>QTD</variable_name>
+        <variable_type>ROOT_JOB</variable_type>
+        <default_value/>
+      </field>
+      <field>
+        <field_name>arquivo</field_name>
+        <variable_name>ARQUIVO</variable_name>
+        <variable_type>ROOT_JOB</variable_type>
+        <default_value/>
+      </field>
+      <field>
+        <field_name>data_arquivo</field_name>
+        <variable_name>DATA_ARQUIVO</variable_name>
+        <variable_type>ROOT_JOB</variable_type>
+        <default_value/>
+      </field>
+    </fields>
+    <use_formatting>Y</use_formatting>
+    <attributes/>
+    <cluster_schema/>
+    <remotesteps>
+      <input>
+      </input>
+      <output>
+      </output>
+    </remotesteps>
+    <GUI>
+      <xloc>864</xloc>
+      <yloc>160</yloc>
       <draw>Y</draw>
     </GUI>
   </step>

@@ -463,13 +463,23 @@
     </hop>
     <hop>
       <from>ADDING_BACKSLASHS</from>
+      <to>JOIN_CURRENT_MACHINE</to>
+      <enabled>Y</enabled>
+    </hop>
+    <hop>
+      <from>JOIN_CURRENT_MACHINE</from>
       <to>SET_VARIABLE_PATH</to>
+      <enabled>Y</enabled>
+    </hop>
+    <hop>
+      <from>GET_SYS_INFO</from>
+      <to>JOIN_CURRENT_MACHINE</to>
       <enabled>Y</enabled>
     </hop>
   </order>
   <step>
-    <name>GET_SYS_INFO</name>
-    <type>SystemInfo</type>
+    <name>ADDING_BACKSLASHS</name>
+    <type>ReplaceString</type>
     <description/>
     <distribute>Y</distribute>
     <custom_distribution/>
@@ -480,139 +490,28 @@
     </partitioning>
     <fields>
       <field>
-        <name>AGORA</name>
-        <type>system date (fixed)</type>
-      </field>
-    </fields>
-    <attributes/>
-    <cluster_schema/>
-    <remotesteps>
-      <input>
-      </input>
-      <output>
-      </output>
-    </remotesteps>
-    <GUI>
-      <xloc>64</xloc>
-      <yloc>112</yloc>
-      <draw>Y</draw>
-    </GUI>
-  </step>
-  <step>
-    <name>SET_VARIABLE_MASK_DATETIME</name>
-    <type>SetVariable</type>
-    <description/>
-    <distribute>Y</distribute>
-    <custom_distribution/>
-    <copies>1</copies>
-    <partitioning>
-      <method>none</method>
-      <schema_name/>
-    </partitioning>
-    <fields>
-      <field>
-        <field_name>TIME</field_name>
-        <variable_name>VAR_TIME_STR</variable_name>
-        <variable_type>ROOT_JOB</variable_type>
-        <default_value/>
+        <in_stream_name>PLAN_PATH</in_stream_name>
+        <out_stream_name/>
+        <use_regex>no</use_regex>
+        <replace_string>\</replace_string>
+        <replace_by_string>\\\\</replace_by_string>
+        <set_empty_string>N</set_empty_string>
+        <replace_field_by_string/>
+        <whole_word>no</whole_word>
+        <case_sensitive>no</case_sensitive>
+        <is_unicode>no</is_unicode>
       </field>
       <field>
-        <field_name>DATE</field_name>
-        <variable_name>VAR_DATE_STR</variable_name>
-        <variable_type>ROOT_JOB</variable_type>
-        <default_value/>
-      </field>
-      <field>
-        <field_name>YEAR_MONTH</field_name>
-        <variable_name>VAR_YEAR_MONTH</variable_name>
-        <variable_type>ROOT_JOB</variable_type>
-        <default_value/>
-      </field>
-    </fields>
-    <use_formatting>Y</use_formatting>
-    <attributes/>
-    <cluster_schema/>
-    <remotesteps>
-      <input>
-      </input>
-      <output>
-      </output>
-    </remotesteps>
-    <GUI>
-      <xloc>656</xloc>
-      <yloc>112</yloc>
-      <draw>Y</draw>
-    </GUI>
-  </step>
-  <step>
-    <name>SET_VARIABLE_PATH</name>
-    <type>SetVariable</type>
-    <description/>
-    <distribute>Y</distribute>
-    <custom_distribution/>
-    <copies>1</copies>
-    <partitioning>
-      <method>none</method>
-      <schema_name/>
-    </partitioning>
-    <fields>
-      <field>
-        <field_name>PLAN_PATH</field_name>
-        <variable_name>PATH_PLAN</variable_name>
-        <variable_type>ROOT_JOB</variable_type>
-        <default_value/>
-      </field>
-      <field>
-        <field_name>ENG_PATH</field_name>
-        <variable_name>PATH_ENG</variable_name>
-        <variable_type>ROOT_JOB</variable_type>
-        <default_value/>
-      </field>
-    </fields>
-    <use_formatting>Y</use_formatting>
-    <attributes/>
-    <cluster_schema/>
-    <remotesteps>
-      <input>
-      </input>
-      <output>
-      </output>
-    </remotesteps>
-    <GUI>
-      <xloc>336</xloc>
-      <yloc>16</yloc>
-      <draw>Y</draw>
-    </GUI>
-  </step>
-  <step>
-    <name>SPLIT_FIELDS</name>
-    <type>StringCut</type>
-    <description/>
-    <distribute>Y</distribute>
-    <custom_distribution/>
-    <copies>1</copies>
-    <partitioning>
-      <method>none</method>
-      <schema_name/>
-    </partitioning>
-    <fields>
-      <field>
-        <in_stream_name>TIME_FILE_DEFAULT</in_stream_name>
-        <out_stream_name>TIME</out_stream_name>
-        <cut_from>9</cut_from>
-        <cut_to>13</cut_to>
-      </field>
-      <field>
-        <in_stream_name>TIME_FILE_DEFAULT</in_stream_name>
-        <out_stream_name>DATE</out_stream_name>
-        <cut_from>0</cut_from>
-        <cut_to>8</cut_to>
-      </field>
-      <field>
-        <in_stream_name>TIME_FILE_DEFAULT</in_stream_name>
-        <out_stream_name>YEAR_MONTH</out_stream_name>
-        <cut_from>0</cut_from>
-        <cut_to>6</cut_to>
+        <in_stream_name>ENG_PATH</in_stream_name>
+        <out_stream_name/>
+        <use_regex>no</use_regex>
+        <replace_string>\</replace_string>
+        <replace_by_string>\\\\</replace_by_string>
+        <set_empty_string>N</set_empty_string>
+        <replace_field_by_string/>
+        <whole_word>no</whole_word>
+        <case_sensitive>no</case_sensitive>
+        <is_unicode>no</is_unicode>
       </field>
     </fields>
     <attributes/>
@@ -625,71 +524,15 @@
     </remotesteps>
     <GUI>
       <xloc>480</xloc>
-      <yloc>112</yloc>
+      <yloc>48</yloc>
       <draw>Y</draw>
     </GUI>
   </step>
   <step>
-    <name>TIME_DFF_1_HOUR</name>
-    <type>Calculator</type>
+    <name>GET_SYS_INFO</name>
+    <type>SystemInfo</type>
     <description/>
-    <distribute>Y</distribute>
-    <custom_distribution/>
-    <copies>1</copies>
-    <partitioning>
-      <method>none</method>
-      <schema_name/>
-    </partitioning>
-    <failIfNoFile>Y</failIfNoFile>
-    <calculation>
-      <field_name>HORA</field_name>
-      <calc_type>CONSTANT</calc_type>
-      <field_a>3600000</field_a>
-      <field_b/>
-      <field_c/>
-      <value_type>Integer</value_type>
-      <value_length>-1</value_length>
-      <value_precision>-1</value_precision>
-      <remove>N</remove>
-      <conversion_mask/>
-      <decimal_symbol/>
-      <grouping_symbol/>
-      <currency_symbol/>
-    </calculation>
-    <calculation>
-      <field_name>TIME_FILE</field_name>
-      <calc_type>DATE_DIFF_MSEC</calc_type>
-      <field_a>AGORA</field_a>
-      <field_b>HORA</field_b>
-      <field_c/>
-      <value_type>Date</value_type>
-      <value_length>-1</value_length>
-      <value_precision>-1</value_precision>
-      <remove>N</remove>
-      <conversion_mask>yyyyMMdd_HH00</conversion_mask>
-      <decimal_symbol/>
-      <grouping_symbol/>
-      <currency_symbol/>
-    </calculation>
-    <attributes/>
-    <cluster_schema/>
-    <remotesteps>
-      <input>
-      </input>
-      <output>
-      </output>
-    </remotesteps>
-    <GUI>
-      <xloc>192</xloc>
-      <yloc>112</yloc>
-      <draw>Y</draw>
-    </GUI>
-  </step>
-  <step>
-    <name>TO_STR</name>
-    <type>SelectValues</type>
-    <description/>
-    <distribute>Y</distribute>
+    <distribute>N</distribute>
     <custom_distribution/>
     <copies>1</copies>
     <partitioning>
@@ -697,41 +540,14 @@
       <schema_name/>
     </partitioning>
     <fields>
-      <select_unspecified>N</select_unspecified>
-      <meta>
-        <name>TIME_FILE</name>
-        <rename>TIME_FILE_STR</rename>
-        <type>String</type>
-        <length>-2</length>
-        <precision>-2</precision>
-        <conversion_mask/>
-        <date_format_lenient>false</date_format_lenient>
-        <date_format_locale/>
-        <date_format_timezone/>
-        <lenient_string_to_number>false</lenient_string_to_number>
-        <encoding/>
-        <decimal_symbol/>
-        <grouping_symbol/>
-        <currency_symbol/>
-        <storage_type/>
-      </meta>
-      <meta>
+      <field>
         <name>AGORA</name>
-        <rename>TIME_FILE_DEFAULT</rename>
-        <type>String</type>
-        <length>-2</length>
-        <precision>-2</precision>
-        <conversion_mask>yyyyMMdd_HH00</conversion_mask>
-        <date_format_lenient>false</date_format_lenient>
-        <date_format_locale/>
-        <date_format_timezone/>
-        <lenient_string_to_number>false</lenient_string_to_number>
-        <encoding/>
-        <decimal_symbol/>
-        <grouping_symbol/>
-        <currency_symbol/>
-        <storage_type/>
-      </meta>
+        <type>system date (fixed)</type>
+      </field>
+      <field>
+        <name>HOST</name>
+        <type>Hostname real</type>
+      </field>
     </fields>
     <attributes/>
     <cluster_schema/>
@@ -742,8 +558,42 @@
       </output>
     </remotesteps>
     <GUI>
-      <xloc>336</xloc>
-      <yloc>112</yloc>
+      <xloc>352</xloc>
+      <yloc>192</yloc>
+      <draw>Y</draw>
+    </GUI>
+  </step>
+  <step>
+    <name>JOIN_CURRENT_MACHINE</name>
+    <type>MergeJoin</type>
+    <description/>
+    <distribute>Y</distribute>
+    <custom_distribution/>
+    <copies>1</copies>
+    <partitioning>
+      <method>none</method>
+      <schema_name/>
+    </partitioning>
+    <join_type>INNER</join_type>
+    <step1>ADDING_BACKSLASHS</step1>
+    <step2>GET_SYS_INFO</step2>
+    <keys_1>
+      <key>HOST</key>
+    </keys_1>
+    <keys_2>
+      <key>HOST</key>
+    </keys_2>
+    <attributes/>
+    <cluster_schema/>
+    <remotesteps>
+      <input>
+      </input>
+      <output>
+      </output>
+    </remotesteps>
+    <GUI>
+      <xloc>640</xloc>
+      <yloc>48</yloc>
       <draw>Y</draw>
     </GUI>
   </step>
@@ -778,7 +628,7 @@
     </file>
     <fields>
       <field>
-        <name>HOST</name>
+        <name>IP</name>
         <path>$.PATH..IP</path>
         <type>String</type>
         <format/>
@@ -791,8 +641,8 @@
         <repeat>N</repeat>
       </field>
       <field>
-        <name>IP</name>
-        <path>$.PATH..IP</path>
+        <name>HOST</name>
+        <path>$.PATH..HOST</path>
         <type>String</type>
         <format/>
         <currency/>
@@ -864,14 +714,14 @@
       </output>
     </remotesteps>
     <GUI>
-      <xloc>64</xloc>
-      <yloc>16</yloc>
+      <xloc>336</xloc>
+      <yloc>48</yloc>
       <draw>Y</draw>
     </GUI>
   </step>
   <step>
-    <name>ADDING_BACKSLASHS</name>
-    <type>ReplaceString</type>
+    <name>SET_VARIABLE_MASK_DATETIME</name>
+    <type>SetVariable</type>
     <description/>
     <distribute>Y</distribute>
     <custom_distribution/>
@@ -882,28 +732,108 @@
     </partitioning>
     <fields>
       <field>
-        <in_stream_name>PLAN_PATH</in_stream_name>
-        <out_stream_name/>
-        <use_regex>no</use_regex>
-        <replace_string>\</replace_string>
-        <replace_by_string>\\\\</replace_by_string>
-        <set_empty_string>N</set_empty_string>
-        <replace_field_by_string/>
-        <whole_word>no</whole_word>
-        <case_sensitive>no</case_sensitive>
-        <is_unicode>no</is_unicode>
+        <field_name>TIME</field_name>
+        <variable_name>VAR_TIME_STR</variable_name>
+        <variable_type>ROOT_JOB</variable_type>
+        <default_value/>
       </field>
       <field>
-        <in_stream_name>ENG_PATH</in_stream_name>
-        <out_stream_name/>
-        <use_regex>no</use_regex>
-        <replace_string>\</replace_string>
-        <replace_by_string>\\\\</replace_by_string>
-        <set_empty_string>N</set_empty_string>
-        <replace_field_by_string/>
-        <whole_word>no</whole_word>
-        <case_sensitive>no</case_sensitive>
-        <is_unicode>no</is_unicode>
+        <field_name>DATE</field_name>
+        <variable_name>VAR_DATE_STR</variable_name>
+        <variable_type>ROOT_JOB</variable_type>
+        <default_value/>
+      </field>
+      <field>
+        <field_name>YEAR_MONTH</field_name>
+        <variable_name>VAR_YEAR_MONTH</variable_name>
+        <variable_type>ROOT_JOB</variable_type>
+        <default_value/>
+      </field>
+    </fields>
+    <use_formatting>Y</use_formatting>
+    <attributes/>
+    <cluster_schema/>
+    <remotesteps>
+      <input>
+      </input>
+      <output>
+      </output>
+    </remotesteps>
+    <GUI>
+      <xloc>944</xloc>
+      <yloc>192</yloc>
+      <draw>Y</draw>
+    </GUI>
+  </step>
+  <step>
+    <name>SET_VARIABLE_PATH</name>
+    <type>SetVariable</type>
+    <description/>
+    <distribute>Y</distribute>
+    <custom_distribution/>
+    <copies>1</copies>
+    <partitioning>
+      <method>none</method>
+      <schema_name/>
+    </partitioning>
+    <fields>
+      <field>
+        <field_name>PLAN_PATH</field_name>
+        <variable_name>PATH_PLAN</variable_name>
+        <variable_type>ROOT_JOB</variable_type>
+        <default_value/>
+      </field>
+      <field>
+        <field_name>ENG_PATH</field_name>
+        <variable_name>PATH_ENG</variable_name>
+        <variable_type>ROOT_JOB</variable_type>
+        <default_value/>
+      </field>
+    </fields>
+    <use_formatting>Y</use_formatting>
+    <attributes/>
+    <cluster_schema/>
+    <remotesteps>
+      <input>
+      </input>
+      <output>
+      </output>
+    </remotesteps>
+    <GUI>
+      <xloc>784</xloc>
+      <yloc>48</yloc>
+      <draw>Y</draw>
+    </GUI>
+  </step>
+  <step>
+    <name>SPLIT_FIELDS</name>
+    <type>StringCut</type>
+    <description/>
+    <distribute>Y</distribute>
+    <custom_distribution/>
+    <copies>1</copies>
+    <partitioning>
+      <method>none</method>
+      <schema_name/>
+    </partitioning>
+    <fields>
+      <field>
+        <in_stream_name>TIME_FILE_DEFAULT</in_stream_name>
+        <out_stream_name>TIME</out_stream_name>
+        <cut_from>9</cut_from>
+        <cut_to>13</cut_to>
+      </field>
+      <field>
+        <in_stream_name>TIME_FILE_DEFAULT</in_stream_name>
+        <out_stream_name>DATE</out_stream_name>
+        <cut_from>0</cut_from>
+        <cut_to>8</cut_to>
+      </field>
+      <field>
+        <in_stream_name>TIME_FILE_DEFAULT</in_stream_name>
+        <out_stream_name>YEAR_MONTH</out_stream_name>
+        <cut_from>0</cut_from>
+        <cut_to>6</cut_to>
       </field>
     </fields>
     <attributes/>
@@ -915,8 +845,126 @@
       </output>
     </remotesteps>
     <GUI>
-      <xloc>192</xloc>
-      <yloc>16</yloc>
+      <xloc>768</xloc>
+      <yloc>192</yloc>
+      <draw>Y</draw>
+    </GUI>
+  </step>
+  <step>
+    <name>TIME_DFF_1_HOUR</name>
+    <type>Calculator</type>
+    <description/>
+    <distribute>Y</distribute>
+    <custom_distribution/>
+    <copies>1</copies>
+    <partitioning>
+      <method>none</method>
+      <schema_name/>
+    </partitioning>
+    <failIfNoFile>Y</failIfNoFile>
+    <calculation>
+      <field_name>HORA</field_name>
+      <calc_type>CONSTANT</calc_type>
+      <field_a>3600000</field_a>
+      <field_b/>
+      <field_c/>
+      <value_type>Integer</value_type>
+      <value_length>-1</value_length>
+      <value_precision>-1</value_precision>
+      <remove>N</remove>
+      <conversion_mask/>
+      <decimal_symbol/>
+      <grouping_symbol/>
+      <currency_symbol/>
+    </calculation>
+    <calculation>
+      <field_name>TIME_FILE</field_name>
+      <calc_type>DATE_DIFF_MSEC</calc_type>
+      <field_a>AGORA</field_a>
+      <field_b>HORA</field_b>
+      <field_c/>
+      <value_type>Date</value_type>
+      <value_length>-1</value_length>
+      <value_precision>-1</value_precision>
+      <remove>N</remove>
+      <conversion_mask>yyyyMMdd_HH00</conversion_mask>
+      <decimal_symbol/>
+      <grouping_symbol/>
+      <currency_symbol/>
+    </calculation>
+    <attributes/>
+    <cluster_schema/>
+    <remotesteps>
+      <input>
+      </input>
+      <output>
+      </output>
+    </remotesteps>
+    <GUI>
+      <xloc>480</xloc>
+      <yloc>192</yloc>
+      <draw>Y</draw>
+    </GUI>
+  </step>
+  <step>
+    <name>TO_STR</name>
+    <type>SelectValues</type>
+    <description/>
+    <distribute>Y</distribute>
+    <custom_distribution/>
+    <copies>1</copies>
+    <partitioning>
+      <method>none</method>
+      <schema_name/>
+    </partitioning>
+    <fields>
+      <select_unspecified>N</select_unspecified>
+      <meta>
+        <name>TIME_FILE</name>
+        <rename>TIME_FILE_STR</rename>
+        <type>String</type>
+        <length>-2</length>
+        <precision>-2</precision>
+        <conversion_mask/>
+        <date_format_lenient>false</date_format_lenient>
+        <date_format_locale/>
+        <date_format_timezone/>
+        <lenient_string_to_number>false</lenient_string_to_number>
+        <encoding/>
+        <decimal_symbol/>
+        <grouping_symbol/>
+        <currency_symbol/>
+        <storage_type/>
+      </meta>
+      <meta>
+        <name>AGORA</name>
+        <rename>TIME_FILE_DEFAULT</rename>
+        <type>String</type>
+        <length>-2</length>
+        <precision>-2</precision>
+        <conversion_mask>yyyyMMdd_HH00</conversion_mask>
+        <date_format_lenient>false</date_format_lenient>
+        <date_format_locale/>
+        <date_format_timezone/>
+        <lenient_string_to_number>false</lenient_string_to_number>
+        <encoding/>
+        <decimal_symbol/>
+        <grouping_symbol/>
+        <currency_symbol/>
+        <storage_type/>
+      </meta>
+    </fields>
+    <attributes/>
+    <cluster_schema/>
+    <remotesteps>
+      <input>
+      </input>
+      <output>
+      </output>
+    </remotesteps>
+    <GUI>
+      <xloc>624</xloc>
+      <yloc>192</yloc>
       <draw>Y</draw>
     </GUI>
   </step>

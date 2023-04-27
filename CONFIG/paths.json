@@ -1,0 +1,39 @@
+{
+  "PATH": [
+    {
+      "ID": 0,
+      "IP": "10.192.12.35",
+      "HOST": "BR-LAP-BI-010",
+      "USER": "ewerton.prediger",
+      "PLAN_PATH": "E:\\OneDrive - URANET PROJETOS E SISTEMAS LTDA\\Documents - Planejamento\\",
+      "ENG_PATH": "E:\\OneDrive - URANET PROJETOS E SISTEMAS LTDA\\DataOffice\\CODIGOS\\PRODUCAO\\ENGENHARIA\\ETL\\"
+    },
+    {
+      "ID": 1,
+      "IP": "10.192.12.38",
+      "HOST": "BR-7A-GAC-013",
+      "USER": "kamilla.isabelle",
+      "PLAN_PATH": "C:\\OneDrive - URANET PROJETOS E SISTEMAS LTDA\\Documentos - Planejamento\\",
+      "ENG_PATH": "C:\\OneDrive - URANET PROJETOS E SISTEMAS LTDA\\DataOffice\\CODIGOS\\PRODUCAO\\ENGENHARIA\\ETL\\"
+    },
+	{
+      "ID": 2,
+      "IP": "10.192.12.29",
+      "HOST": "BR-LAP-PLA-006",
+      "USER": "mayke.barbosa",
+      "PLAN_PATH": "D:\\OneDrive - URANET PROJETOS E SISTEMAS LTDA\\Documents - Planejamento\\",
+      "ENG_PATH": "D:\\OneDrive - URANET PROJETOS E SISTEMAS LTDA\\DataOffice\\CODIGOS\\PRODUCAO\\ENGENHARIA\\ETL\\"
+    },
+	
+	{
+      "ID": 3,
+      "IP": "192.168.204.251",
+      "HOST": "VMDATASCIENCE-1",
+      "USER": "BD01",
+      "PLAN_PATH": "C:\\ONEDRIVE\\OneDrive - URANET PROJETOS E SISTEMAS LTDA\\Documents - Planejamento\\",
+      "ENG_PATH": "C:\\ONEDRIVE\\OneDrive - URANET PROJETOS E SISTEMAS LTDA\\DataOffice\\CODIGOS\\PRODUCAO\\ENGENHARIA\\ETL\\"
+    }
+  ]
+}
+
+

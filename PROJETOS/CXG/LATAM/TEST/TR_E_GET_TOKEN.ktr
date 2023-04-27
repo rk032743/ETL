@@ -430,36 +430,66 @@
     <created_date>2022/11/07 11:49:32.011</created_date>
     <modified_user>-</modified_user>
     <modified_date>2022/11/07 11:49:32.011</modified_date>
-    <key_for_session_key/>
+    <key_for_session_key>H4sIAAAAAAAAAAMAAAAAAAAAAAA=</key_for_session_key>
     <is_key_private>N</is_key_private>
   </info>
   <notepads>
   </notepads>
   <order>
     <hop>
-      <from>Generate rows</from>
-      <to>REST client</to>
+      <from>PARSE_JSON</from>
+      <to>DROP_FIELDS</to>
       <enabled>Y</enabled>
     </hop>
     <hop>
-      <from>REST client</from>
-      <to>Select values</to>
+      <from>DROP_FIELDS</from>
+      <to>SHOW</to>
       <enabled>Y</enabled>
     </hop>
     <hop>
-      <from>Select values</from>
-      <to>JSON input</to>
+      <from>GENESYS_AUTH</from>
+      <to>PARSE_JSON</to>
       <enabled>Y</enabled>
     </hop>
     <hop>
-      <from>JSON input</from>
-      <to>Dummy (do nothing)</to>
+      <from>SHOW</from>
+      <to>JOIN_FIELDS</to>
+      <enabled>Y</enabled>
+    </hop>
+    <hop>
+      <from>GET_NOW</from>
+      <to>JOIN_FIELDS</to>
+      <enabled>Y</enabled>
+    </hop>
+    <hop>
+      <from>JOIN_FIELDS</from>
+      <to>CONVERT_INT</to>
+      <enabled>Y</enabled>
+    </hop>
+    <hop>
+      <from>CONVERT_INT</from>
+      <to>CALC_EXPIRATION_DATE_TOKEN</to>
+      <enabled>Y</enabled>
+    </hop>
+    <hop>
+      <from>CALC_EXPIRATION_DATE_TOKEN</from>
+      <to>GENERATE_JSON_INFO</to>
+      <enabled>Y</enabled>
+    </hop>
+    <hop>
+      <from>GENERATE_PARAMS</from>
+      <to>BASE64_ENCODE</to>
+      <enabled>Y</enabled>
+    </hop>
+    <hop>
+      <from>BASE64_ENCODE</from>
+      <to>GENESYS_AUTH</to>
       <enabled>Y</enabled>
     </hop>
   </order>
   <step>
-    <name>Dummy (do nothing)</name>
-    <type>Dummy</type>
+    <name>BASE64_ENCODE</name>
+    <type>ScriptValueMod</type>
     <description/>
     <distribute>Y</distribute>
     <custom_distribution/>
@@ -468,6 +498,31 @@
       <method>none</method>
       <schema_name/>
     </partitioning>
+    <compatible>N</compatible>
+    <optimizationLevel>9</optimizationLevel>
+    <jsScripts>
+      <jsScript>
+        <jsScript_type>0</jsScript_type>
+        <jsScript_name>Script 1</jsScript_name>
+        <jsScript_script>var credentials = client_id+":"+client_secret;
+
+var decoded = new Packages.java.lang.String( credentials );
+
+var auth = new Packages.java.lang.String( Packages.org.apache.commons.codec.binary.Base64.encodeBase64( decoded.getBytes() ) );
+
+var b64_auth = "Basic "+auth;</jsScript_script>
+      </jsScript>
+    </jsScripts>
+    <fields>
+      <field>
+        <name>b64_auth</name>
+        <rename>b64_auth</rename>
+        <type>String</type>
+        <length>-1</length>
+        <precision>-1</precision>
+        <replace>N</replace>
+      </field>
+    </fields>
     <attributes/>
     <cluster_schema/>
     <remotesteps>
@@ -477,14 +532,201 @@
       </output>
     </remotesteps>
     <GUI>
-      <xloc>736</xloc>
-      <yloc>128</yloc>
+      <xloc>192</xloc>
+      <yloc>32</yloc>
       <draw>Y</draw>
     </GUI>
   </step>
   <step>
-    <name>Generate rows</name>
-    <type>RowGenerator</type>
+    <name>CALC_EXPIRATION_DATE_TOKEN</name>
+    <type>Calculator</type>
+    <description/>
+    <distribute>Y</distribute>
+    <custom_distribution/>
+    <copies>1</copies>
+    <partitioning>
+      <method>none</method>
+      <schema_name/>
+    </partitioning>
+    <failIfNoFile>Y</failIfNoFile>
+    <calculation>
+      <field_name>expire_date</field_name>
+      <calc_type>ADD_SECONDS</calc_type>
+      <field_a>agora</field_a>
+      <field_b>expires_in</field_b>
+      <field_c/>
+      <value_type>Date</value_type>
+      <value_length>-1</value_length>
+      <value_precision>-1</value_precision>
+      <remove>N</remove>
+      <conversion_mask/>
+      <decimal_symbol/>
+      <grouping_symbol/>
+      <currency_symbol/>
+    </calculation>
+    <attributes/>
+    <cluster_schema/>
+    <remotesteps>
+      <input>
+      </input>
+      <output>
+      </output>
+    </remotesteps>
+    <GUI>
+      <xloc>848</xloc>
+      <yloc>160</yloc>
+      <draw>Y</draw>
+    </GUI>
+  </step>
+  <step>
+    <name>CONVERT_INT</name>
+    <type>SelectValues</type>
+    <description/>
+    <distribute>Y</distribute>
+    <custom_distribution/>
+    <copies>1</copies>
+    <partitioning>
+      <method>none</method>
+      <schema_name/>
+    </partitioning>
+    <fields>
+      <select_unspecified>N</select_unspecified>
+      <meta>
+        <name>expires_in</name>
+        <rename>expires_in</rename>
+        <type>Integer</type>
+        <length>-2</length>
+        <precision>-2</precision>
+        <conversion_mask/>
+        <date_format_lenient>false</date_format_lenient>
+        <date_format_locale/>
+        <date_format_timezone/>
+        <lenient_string_to_number>false</lenient_string_to_number>
+        <encoding/>
+        <decimal_symbol/>
+        <grouping_symbol/>
+        <currency_symbol/>
+        <storage_type/>
+      </meta>
+    </fields>
+    <attributes/>
+    <cluster_schema/>
+    <remotesteps>
+      <input>
+      </input>
+      <output>
+      </output>
+    </remotesteps>
+    <GUI>
+      <xloc>704</xloc>
+      <yloc>160</yloc>
+      <draw>Y</draw>
+    </GUI>
+  </step>
+  <step>
+    <name>DROP_FIELDS</name>
+    <type>SelectValues</type>
+    <description/>
+    <distribute>Y</distribute>
+    <custom_distribution/>
+    <copies>1</copies>
+    <partitioning>
+      <method>none</method>
+      <schema_name/>
+    </partitioning>
+    <fields>
+      <select_unspecified>N</select_unspecified>
+      <remove>
+        <name>url</name>
+      </remove>
+      <remove>
+        <name>Authorization</name>
+      </remove>
+      <remove>
+        <name>Content-Type</name>
+      </remove>
+      <remove>
+        <name>grant_type</name>
+      </remove>
+      <remove>
+        <name>result</name>
+      </remove>
+    </fields>
+    <attributes/>
+    <cluster_schema/>
+    <remotesteps>
+      <input>
+      </input>
+      <output>
+      </output>
+    </remotesteps>
+    <GUI>
+      <xloc>528</xloc>
+      <yloc>32</yloc>
+      <draw>Y</draw>
+    </GUI>
+  </step>
+  <step>
+    <name>GENERATE_JSON_INFO</name>
+    <type>JsonOutput</type>
+    <description/>
+    <distribute>Y</distribute>
+    <custom_distribution/>
+    <copies>1</copies>
+    <partitioning>
+      <method>none</method>
+      <schema_name/>
+    </partitioning>
+    <outputValue>outputValue</outputValue>
+    <jsonBloc/>
+    <nrRowsInBloc>0</nrRowsInBloc>
+    <operation_type>writetofile</operation_type>
+    <compatibility_mode>N</compatibility_mode>
+    <encoding>UTF-8</encoding>
+    <addtoresult>N</addtoresult>
+    <file>
+      <name>E:\OneDrive - URANET PROJETOS E SISTEMAS LTDA\DataOffice\CODIGOS\PRODUCAO\ENGENHARIA\ETL\PROJETOS\CXG\LATAM\CONFIG\token_info</name>
+      <extention>json</extention>
+      <append>N</append>
+      <split>N</split>
+      <haspartno>N</haspartno>
+      <add_date>N</add_date>
+      <add_time>N</add_time>
+      <create_parent_folder>N</create_parent_folder>
+      <DoNotOpenNewFileInit>N</DoNotOpenNewFileInit>
+      <servlet_output>N</servlet_output>
+    </file>
+    <fields>
+      <field>
+        <name>access_token</name>
+        <element>access_token</element>
+      </field>
+      <field>
+        <name>token_type</name>
+        <element>token_type</element>
+      </field>
+      <field>
+        <name>expire_date</name>
+        <element>expire_date</element>
+      </field>
+    </fields>
+    <attributes/>
+    <cluster_schema/>
+    <remotesteps>
+      <input>
+      </input>
+      <output>
+      </output>
+    </remotesteps>
+    <GUI>
+      <xloc>1024</xloc>
+      <yloc>160</yloc>
+      <draw>Y</draw>
+    </GUI>
+  </step>
+  <step>
+    <name>GENERATE_PARAMS</name>
+    <type>DataGrid</type>
     <description/>
     <distribute>Y</distribute>
     <custom_distribution/>
@@ -495,13 +737,23 @@
     </partitioning>
     <fields>
       <field>
+        <name>url</name>
+        <type>String</type>
+        <format/>
+        <currency/>
+        <decimal/>
+        <group/>
+        <length>-1</length>
+        <precision>-1</precision>
+        <set_empty_string>N</set_empty_string>
+      </field>
+      <field>
         <name>Authorization</name>
         <type>String</type>
         <format/>
         <currency/>
         <decimal/>
         <group/>
-        <nullif>bearer pUwYvxzSjlU7VSsgXdwgeta5aZzjECn3ulixlC572As6iDsqTM4kX8Dk3LTIB5x-dGGbwp5upe1QEUlKdhtlXw</nullif>
         <length>-1</length>
         <precision>-1</precision>
         <set_empty_string>N</set_empty_string>
@@ -513,29 +765,54 @@
         <currency/>
         <decimal/>
         <group/>
-        <nullif>application/json</nullif>
         <length>-1</length>
         <precision>-1</precision>
         <set_empty_string>N</set_empty_string>
       </field>
       <field>
-        <name>ENDPOINT</name>
+        <name>grant_type</name>
         <type>String</type>
         <format/>
         <currency/>
         <decimal/>
         <group/>
-        <nullif>https://api.mypurecloud.com/api/v2/users?pageSize=100&amp;pageNumber=1</nullif>
+        <length>-1</length>
+        <precision>-1</precision>
+        <set_empty_string>N</set_empty_string>
+      </field>
+      <field>
+        <name>client_id</name>
+        <type>String</type>
+        <format/>
+        <currency/>
+        <decimal/>
+        <group/>
+        <length>-1</length>
+        <precision>-1</precision>
+        <set_empty_string>N</set_empty_string>
+      </field>
+      <field>
+        <name>client_secret</name>
+        <type>String</type>
+        <format/>
+        <currency/>
+        <decimal/>
+        <group/>
         <length>-1</length>
         <precision>-1</precision>
         <set_empty_string>N</set_empty_string>
       </field>
     </fields>
-    <limit>1</limit>
-    <never_ending>N</never_ending>
-    <interval_in_ms>5000</interval_in_ms>
-    <row_time_field>now</row_time_field>
-    <last_time_field>FiveSecondsAgo</last_time_field>
+    <data>
+      <line>
+        <item>https://login.mypurecloud.com/oauth/token</item>
+        <item>Basic N2M5OGI3YTYtNWE5MS00Yjg4LTljYTItZGMyN2FjMjk1ODhhOjlHZWw5TjY3c1F1WE5USjI0NkNBc1djUWs0TkQ1MEU4RFpzX0xXNUJKUkk=</item>
+        <item>application/x-www-form-urlencoded</item>
+        <item>grant_type=client_credentials</item>
+        <item>7c98b7a6-5a91-4b88-9ca2-dc27ac29588a</item>
+        <item>9Gel9N67sQuXNTJ246CAsWcQk4ND50E8DZs_LW5BJRI</item>
+      </line>
+    </data>
     <attributes/>
     <cluster_schema/>
     <remotesteps>
@@ -545,13 +822,13 @@
       </output>
     </remotesteps>
     <GUI>
-      <xloc>112</xloc>
-      <yloc>128</yloc>
+      <xloc>48</xloc>
+      <yloc>32</yloc>
       <draw>Y</draw>
     </GUI>
   </step>
   <step>
-    <name>REST client</name>
+    <name>GENESYS_AUTH</name>
     <type>Rest</type>
     <description/>
     <distribute>Y</distribute>
@@ -561,14 +838,14 @@
       <method>none</method>
       <schema_name/>
     </partitioning>
-    <applicationType>JSON</applicationType>
-    <method>GET</method>
-    <url/>
+    <applicationType>FORM URLENCODED</applicationType>
+    <method>POST</method>
+    <url>https://login.mypurecloud.com/oauth/token</url>
     <urlInField>Y</urlInField>
     <dynamicMethod>N</dynamicMethod>
     <methodFieldName/>
-    <urlField>ENDPOINT</urlField>
-    <bodyField/>
+    <urlField>url</urlField>
+    <bodyField>grant_type</bodyField>
     <httpLogin/>
     <httpPassword>Encrypted </httpPassword>
     <proxyHost/>
@@ -578,7 +855,7 @@
     <trustStorePassword>Encrypted </trustStorePassword>
     <headers>
       <header>
-        <field>Authorization</field>
+        <field>b64_auth</field>
         <name>Authorization</name>
       </header>
       <header>
@@ -605,14 +882,14 @@
       </output>
     </remotesteps>
     <GUI>
-      <xloc>256</xloc>
-      <yloc>128</yloc>
+      <xloc>336</xloc>
+      <yloc>32</yloc>
       <draw>Y</draw>
     </GUI>
   </step>
   <step>
-    <name>Select values</name>
-    <type>SelectValues</type>
+    <name>GET_NOW</name>
+    <type>SystemInfo</type>
     <description/>
     <distribute>Y</distribute>
     <custom_distribution/>
@@ -623,10 +900,9 @@
     </partitioning>
     <fields>
       <field>
-        <name>result</name>
-        <rename/>
+        <name>agora</name>
+        <type>system date (fixed)</type>
       </field>
-      <select_unspecified>N</select_unspecified>
     </fields>
     <attributes/>
     <cluster_schema/>
@@ -637,13 +913,45 @@
       </output>
     </remotesteps>
     <GUI>
-      <xloc>384</xloc>
-      <yloc>128</yloc>
+      <xloc>464</xloc>
+      <yloc>160</yloc>
       <draw>Y</draw>
     </GUI>
   </step>
   <step>
-    <name>JSON input</name>
+    <name>JOIN_FIELDS</name>
+    <type>MergeJoin</type>
+    <description/>
+    <distribute>Y</distribute>
+    <custom_distribution/>
+    <copies>1</copies>
+    <partitioning>
+      <method>none</method>
+      <schema_name/>
+    </partitioning>
+    <join_type>FULL OUTER</join_type>
+    <step1>SHOW</step1>
+    <step2>GET_NOW</step2>
+    <keys_1>
+    </keys_1>
+    <keys_2>
+    </keys_2>
+    <attributes/>
+    <cluster_schema/>
+    <remotesteps>
+      <input>
+      </input>
+      <output>
+      </output>
+    </remotesteps>
+    <GUI>
+      <xloc>608</xloc>
+      <yloc>160</yloc>
+      <draw>Y</draw>
+    </GUI>
+  </step>
+  <step>
+    <name>PARSE_JSON</name>
     <type>JsonInput</type>
     <description/>
     <distribute>Y</distribute>
@@ -673,8 +981,34 @@
     </file>
     <fields>
       <field>
-        <name>division_name</name>
-        <path>$.entities..division.name</path>
+        <name>access_token</name>
+        <path>$.access_token</path>
+        <type>String</type>
+        <format/>
+        <currency/>
+        <decimal/>
+        <group/>
+        <length>-1</length>
+        <precision>-1</precision>
+        <trim_type>none</trim_type>
+        <repeat>N</repeat>
+      </field>
+      <field>
+        <name>token_type</name>
+        <path>$.token_type</path>
+        <type>String</type>
+        <format/>
+        <currency/>
+        <decimal/>
+        <group/>
+        <length>-1</length>
+        <precision>-1</precision>
+        <trim_type>none</trim_type>
+        <repeat>N</repeat>
+      </field>
+      <field>
+        <name>expires_in</name>
+        <path>$.expires_in</path>
         <type>String</type>
         <format/>
         <currency/>
@@ -707,8 +1041,33 @@
       </output>
     </remotesteps>
     <GUI>
-      <xloc>560</xloc>
-      <yloc>128</yloc>
+      <xloc>432</xloc>
+      <yloc>32</yloc>
+      <draw>Y</draw>
+    </GUI>
+  </step>
+  <step>
+    <name>SHOW</name>
+    <type>Dummy</type>
+    <description/>
+    <distribute>N</distribute>
+    <custom_distribution/>
+    <copies>1</copies>
+    <partitioning>
+      <method>none</method>
+      <schema_name/>
+    </partitioning>
+    <attributes/>
+    <cluster_schema/>
+    <remotesteps>
+      <input>
+      </input>
+      <output>
+      </output>
+    </remotesteps>
+    <GUI>
+      <xloc>608</xloc>
+      <yloc>32</yloc>
       <draw>Y</draw>
     </GUI>
   </step>

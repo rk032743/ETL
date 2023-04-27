@@ -1,0 +1,55 @@
+{
+  "LISTA": [
+
+    {
+      "ID": 91,
+      "REPRESENTANTE": "Decolar",
+      "ARQUIVO": "Forecast Decolar.xlsx",
+      "BANCO": "cxg_db_decolar",
+      "TABELA": "tb_forecast",
+      "COLUNAS": "'DATA','INTERVALO','ATENDIMENTO','AGRUPAMENTO','VOLUME','PA','TMO','NS', 'NR17', 'REFORCO', 'DIALOGO','FEEDBACK', 'PARTICULAR'"
+    },
+	  {
+      "ID": 86,
+      "REPRESENTANTE": "Latam",
+      "ARQUIVO": "Forecast Latam.xlsx",
+      "BANCO": "cxg_db_latam",
+      "TABELA": "tb_forecast",
+      "COLUNAS": "'DATA','INTERVALO','ATENDIMENTO','AGRUPAMENTO','VOLUME','PA','TMO','NS', 'NR17', 'REFORCO', 'DIALOGO','FEEDBACK', 'PARTICULAR'"
+    },
+	
+	  {
+      "ID": 90,
+      "REPRESENTANTE": "Orizon",
+      "ARQUIVO": "Forecast Orizon.xlsx",
+      "BANCO": "cxg_db_orizon",
+      "TABELA": "tb_forecast",
+      "COLUNAS": "'DATA','INTERVALO','ATENDIMENTO','AGRUPAMENTO','VOLUME','PA','TMO','NS', 'NR17', 'REFORCO', 'DIALOGO','FEEDBACK', 'PARTICULAR'"
+    },
+  	{
+      "ID": 65,
+      "REPRESENTANTE": "Sem Parar",
+      "ARQUIVO": "Forecast Sem Parar B2C.xlsx",
+      "BANCO": "cxg_db_semparar",
+      "TABELA": "tb_forecast",
+      "COLUNAS": "'DATA','INTERVALO','ATENDIMENTO','AGRUPAMENTO','VOLUME','PA','TMO','NS', 'NR17', 'REFORCO', 'DIALOGO','FEEDBACK', 'PARTICULAR'"
+    },
+    {
+      "ID": 92,
+      "REPRESENTANTE": "Veloe",
+      "ARQUIVO": "Forecast Veloe.xlsx",
+      "BANCO": "cxg_db_veloe",
+      "TABELA": "tb_forecast",
+      "COLUNAS": "'DATA','INTERVALO','ATENDIMENTO','AGRUPAMENTO','VOLUME','PA','TMO','NS', 'NR17', 'REFORCO', 'DIALOGO','FEEDBACK', 'PARTICULAR'"
+    },
+    {
+      "ID": 89,
+      "REPRESENTANTE": "Yamaha",
+      "ARQUIVO": "Forecast Yamaha.xlsx",
+      "BANCO": "cxg_db_yamaha",
+      "TABELA": "tb_forecast",
+      "COLUNAS": "'DATA','INTERVALO','ATENDIMENTO','AGRUPAMENTO','VOLUME','PA','TMO','NS', 'NR17', 'REFORCO', 'DIALOGO','FEEDBACK', 'PARTICULAR'"
+    }
+  ]
+}
+

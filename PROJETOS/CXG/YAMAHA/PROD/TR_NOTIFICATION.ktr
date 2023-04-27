@@ -464,40 +464,17 @@
       <jsScript>
         <jsScript_type>0</jsScript_type>
         <jsScript_name>Script 1</jsScript_name>
-        <jsScript_script>var obj = {};
-var erro = 8;
-var err_code = getVariable("ERR_CODE", "");
-var err = getVariable("ERR", "");
-var err_desc = getVariable("ERR_DESC", "");
-var url_error = "https://pentaho-community.atlassian.net/wiki/spaces/COM/pages/186253433/Step+error+handling+codes";
-//var txt = "Forecast Yamaha\nStatus: Erro\nError_Code: "+err_code+";
+        <jsScript_script>var obj = getVariable("P_REPRESENTANTE", "")
+var processo = "["+obj+"] Base de Volumetria";
+var objeto = getVariable("VAR_MASK_FILE", "");
+var err = "Arquivo não disponível na FTP!";
 
-data = {"text":"Forecast Yamaha\n"+"\nStatus: Erro"+"\nErro_Cod: "+err_code+"\nErro_Validator: "+err+"\nErro_Desc: "+err_desc+"\nVerifique o arquivo do Forecast!\n\nDetalhes: "+url_error};
+
+data = {"text":""+processo+"\nArquivo: "+objeto+"\nMensagem: "+err};
 var jsonString = JSON.stringify(data);
 
 
 </jsScript_script>
-      </jsScript>
-      <jsScript>
-        <jsScript_type>-1</jsScript_type>
-        <jsScript_name>getVariable_Sample</jsScript_name>
-        <jsScript_script>// Retrieves the value of a given Kettle/Pentaho Variable
-// 
-// Usage:
-// getVariable(var, var);
-// 1: String - The name of the variable to retrieve.
-// 2: String - The default if the variable doesn't exist.
-//
-// 2007-07-27
-//
-var strVarName="getVariableTest";
-var strVarValue="123456";
-Alert(getVariable(strVarName, ""));
-setVariable(strVarName,strVarValue, "r");
-Alert(getVariable(strVarName, ""));
-strVarValue="654321";
-setVariable(strVarName,strVarValue, "r");
-Alert(getVariable(strVarName, ""));</jsScript_script>
       </jsScript>
     </jsScripts>
     <fields>

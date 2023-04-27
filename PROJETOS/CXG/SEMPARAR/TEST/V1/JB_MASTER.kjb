@@ -304,7 +304,7 @@
       <parallel>N</parallel>
       <draw>Y</draw>
       <nr>0</nr>
-      <xloc>80</xloc>
+      <xloc>48</xloc>
       <yloc>32</yloc>
       <attributes_kjc/>
     </entry>
@@ -334,7 +334,7 @@
         </field>
         <field>
           <variable_name>P_DUMP</variable_name>
-          <variable_value>${PATH_ENG}DUMP\\${P_REPRESENTANTE}\\</variable_value>
+          <variable_value>${PATH_ENG}DUMP\\NRT\\${P_REPRESENTANTE}\\</variable_value>
           <variable_type>ROOT_JOB</variable_type>
         </field>
         <field>
@@ -348,13 +348,18 @@
           <variable_type>ROOT_JOB</variable_type>
         </field>
         <field>
-          <variable_name>P_FTP_PATH</variable_name>
+          <variable_name>P_FTP_SALESFORCE_PATH</variable_name>
           <variable_value>/Atendimento_Sem_Parar/SalesForce/Historico</variable_value>
           <variable_type>ROOT_JOB</variable_type>
         </field>
         <field>
           <variable_name>P_PLAN_PATH</variable_name>
           <variable_value>${PATH_PLAN}</variable_value>
+          <variable_type>ROOT_JOB</variable_type>
+        </field>
+        <field>
+          <variable_name>P_FTP_GENESYS_PATH</variable_name>
+          <variable_value>/Atendimento_Sem_Parar/Genesys/Online</variable_value>
           <variable_type>ROOT_JOB</variable_type>
         </field>
       </fields>
@@ -449,7 +454,7 @@
         </field>
         <field>
           <variable_name>VAR_CXG_DB</variable_name>
-          <variable_value>r_db_semparar</variable_value>
+          <variable_value>cxg_db_semparar</variable_value>
           <variable_type>ROOT_JOB</variable_type>
         </field>
       </fields>
@@ -470,38 +475,8 @@
       <file_variable_type>ROOT_JOB</file_variable_type>
       <fields>
         <field>
-          <variable_name>P_FILE_1</variable_name>
-          <variable_value>Repeated.txt</variable_value>
-          <variable_type>ROOT_JOB</variable_type>
-        </field>
-        <field>
-          <variable_name>P_FILE_2</variable_name>
-          <variable_value>Tmo.txt</variable_value>
-          <variable_type>ROOT_JOB</variable_type>
-        </field>
-        <field>
-          <variable_name>P_FILE_3</variable_name>
-          <variable_value>Presence.txt</variable_value>
-          <variable_type>ROOT_JOB</variable_type>
-        </field>
-        <field>
-          <variable_name>P_FILE_4</variable_name>
-          <variable_value>Case.txt</variable_value>
-          <variable_type>ROOT_JOB</variable_type>
-        </field>
-        <field>
           <variable_name>P_FORECAST</variable_name>
           <variable_value>Forecast Sem Parar B2C</variable_value>
-          <variable_type>ROOT_JOB</variable_type>
-        </field>
-        <field>
-          <variable_name>P_FORECAST_FILENAME</variable_name>
-          <variable_value>${PATH_PLAN}${P_REPRESENTANTE}\\Forecast\\${P_FORECAST}.xlsx</variable_value>
-          <variable_type>ROOT_JOB</variable_type>
-        </field>
-        <field>
-          <variable_name>P_CARGA_FILENAME</variable_name>
-          <variable_value>${PATH_PLAN}${P_REPRESENTANTE}\\Forecast\\CARGAS\\${P_FORECAST}_${VAR_DATE_STR}_${VAR_TIME_STR}</variable_value>
           <variable_type>ROOT_JOB</variable_type>
         </field>
         <field>
@@ -510,8 +485,48 @@
           <variable_type>ROOT_JOB</variable_type>
         </field>
         <field>
-          <variable_name>P_CARGA_VOLUMES</variable_name>
-          <variable_value>'${P_DUMP}${P_MASK_FILENAME}_dump.csv'</variable_value>
+          <variable_name>P_FILE_2</variable_name>
+          <variable_value>${P_DUMP}Tmo.txt</variable_value>
+          <variable_type>ROOT_JOB</variable_type>
+        </field>
+        <field>
+          <variable_name>P_FILE_1</variable_name>
+          <variable_value>${P_DUMP}Repeated.txt</variable_value>
+          <variable_type>ROOT_JOB</variable_type>
+        </field>
+        <field>
+          <variable_name>P_FILE_3</variable_name>
+          <variable_value>${P_DUMP}Presence.txt</variable_value>
+          <variable_type>ROOT_JOB</variable_type>
+        </field>
+        <field>
+          <variable_name>P_FILE_6</variable_name>
+          <variable_value>${P_DUMP}ConvSintetico.txt</variable_value>
+          <variable_type>ROOT_JOB</variable_type>
+        </field>
+        <field>
+          <variable_name>P_FILE_5</variable_name>
+          <variable_value>${P_DUMP}ConvDetalhe.txt</variable_value>
+          <variable_type>ROOT_JOB</variable_type>
+        </field>
+        <field>
+          <variable_name>P_FILE_4</variable_name>
+          <variable_value>${P_DUMP}Case.txt</variable_value>
+          <variable_type>ROOT_JOB</variable_type>
+        </field>
+        <field>
+          <variable_name>P_CARGA_FILENAME</variable_name>
+          <variable_value>${PATH_PLAN}${P_REPRESENTANTE}\\Forecast\\CARGAS\\${P_FORECAST}_${VAR_DATE_STR}_${VAR_TIME_STR}</variable_value>
+          <variable_type>ROOT_JOB</variable_type>
+        </field>
+        <field>
+          <variable_name>P_FORECAST_FILENAME</variable_name>
+          <variable_value>${PATH_PLAN}${P_REPRESENTANTE}\\Forecast\\${P_FORECAST}.xlsx</variable_value>
+          <variable_type>ROOT_JOB</variable_type>
+        </field>
+        <field>
+          <variable_name>P_FILE_7</variable_name>
+          <variable_value>${P_DUMP}UsersDetails.txt</variable_value>
           <variable_type>ROOT_JOB</variable_type>
         </field>
       </fields>
@@ -538,7 +553,7 @@
         </field>
         <field>
           <variable_name>P_FAIXA_ATUALIZA</variable_name>
-          <variable_value>1000,0000,2200</variable_value>
+          <variable_value>1000,0000</variable_value>
           <variable_type>ROOT_JOB</variable_type>
         </field>
         <field>
@@ -575,27 +590,42 @@
       <fields>
         <field>
           <variable_name>P_TABLE_1</variable_name>
-          <variable_value>tb_r_salesforce_repeated</variable_value>
+          <variable_value>tb_a_salesforce_repeated</variable_value>
           <variable_type>ROOT_JOB</variable_type>
         </field>
         <field>
           <variable_name>P_TABLE_2</variable_name>
-          <variable_value>tb_r_salesforce_tmo</variable_value>
+          <variable_value>tb_a_salesforce_tmo</variable_value>
           <variable_type>ROOT_JOB</variable_type>
         </field>
         <field>
           <variable_name>P_TABLE_3</variable_name>
-          <variable_value>tb_r_salesforce_presence</variable_value>
+          <variable_value>tb_a_salesforce_presence</variable_value>
           <variable_type>ROOT_JOB</variable_type>
         </field>
         <field>
           <variable_name>P_TABLE_4</variable_name>
-          <variable_value>tb_r_salesforce_case</variable_value>
+          <variable_value>tb_a_salesforce_case</variable_value>
+          <variable_type>ROOT_JOB</variable_type>
+        </field>
+        <field>
+          <variable_name>P_TABLE_5</variable_name>
+          <variable_value>tb_a_genesys_conversations_d0</variable_value>
+          <variable_type>ROOT_JOB</variable_type>
+        </field>
+        <field>
+          <variable_name>P_TABLE_6</variable_name>
+          <variable_value>tb_s_genesys_conversations</variable_value>
           <variable_type>ROOT_JOB</variable_type>
         </field>
         <field>
           <variable_name>P_FORECAST_FILENAME</variable_name>
           <variable_value>${PATH_PLAN}${P_REPRESENTANTE}\\Forecast\\${P_FORECAST}.xlsx</variable_value>
+          <variable_type>ROOT_JOB</variable_type>
+        </field>
+        <field>
+          <variable_name>P_TABLE_7</variable_name>
+          <variable_value>tb_a_genesys_user_details</variable_value>
           <variable_type>ROOT_JOB</variable_type>
         </field>
       </fields>
@@ -604,43 +634,6 @@
       <nr>0</nr>
       <xloc>864</xloc>
       <yloc>32</yloc>
-      <attributes_kjc/>
-    </entry>
-    <entry>
-      <name>JB_FORECAST</name>
-      <description/>
-      <type>JOB</type>
-      <attributes/>
-      <specification_method>filename</specification_method>
-      <job_object_id/>
-      <filename>${Internal.Entry.Current.Directory}/JB_FORECAST.kjb</filename>
-      <jobname/>
-      <directory/>
-      <arg_from_previous>N</arg_from_previous>
-      <params_from_previous>N</params_from_previous>
-      <exec_per_row>N</exec_per_row>
-      <set_logfile>N</set_logfile>
-      <logfile/>
-      <logext/>
-      <add_date>N</add_date>
-      <add_time>N</add_time>
-      <loglevel>Nothing</loglevel>
-      <slave_server_name/>
-      <wait_until_finished>Y</wait_until_finished>
-      <follow_abort_remote>N</follow_abort_remote>
-      <expand_remote_job>N</expand_remote_job>
-      <create_parent_folder>N</create_parent_folder>
-      <pass_export>N</pass_export>
-      <run_configuration>Pentaho local</run_configuration>
-      <parameters>
-        <pass_all_parameters>Y</pass_all_parameters>
-      </parameters>
-      <set_append_logfile>N</set_append_logfile>
-      <parallel>N</parallel>
-      <draw>Y</draw>
-      <nr>0</nr>
-      <xloc>704</xloc>
-      <yloc>192</yloc>
       <attributes_kjc/>
     </entry>
     <entry>
@@ -677,7 +670,28 @@
       <draw>Y</draw>
       <nr>0</nr>
       <xloc>864</xloc>
-      <yloc>192</yloc>
+      <yloc>224</yloc>
+      <attributes_kjc/>
+    </entry>
+    <entry>
+      <name>Write to log</name>
+      <description/>
+      <type>WRITE_TO_LOG</type>
+      <attributes/>
+      <logmessage>
+##############################################################################
+VAR_ENGENHARIA_ROOT: ${VAR_ENGENHARIA_ROOT}
+P_REPRESENTANTE: ${P_REPRESENTANTE}
+P_PROJETO: ${P_PROJETO}
+P_PLAN_PATH: ${P_PLAN_PATH}
+##############################################################################</logmessage>
+      <loglevel>Minimal</loglevel>
+      <logsubject/>
+      <parallel>N</parallel>
+      <draw>Y</draw>
+      <nr>0</nr>
+      <xloc>864</xloc>
+      <yloc>128</yloc>
       <attributes_kjc/>
     </entry>
   </entries>
@@ -737,51 +751,30 @@
       <unconditional>Y</unconditional>
     </hop>
     <hop>
-      <from>PARAMETROS_FILE</from>
-      <to>JB_FORECAST</to>
+      <from>PARAMETROS_TABLES</from>
+      <to>Write to log</to>
       <from_nr>0</from_nr>
       <to_nr>0</to_nr>
-      <enabled>Y</enabled>
-      <evaluation>N</evaluation>
+      <enabled>N</enabled>
+      <evaluation>Y</evaluation>
       <unconditional>Y</unconditional>
     </hop>
     <hop>
-      <from>PARAMETROS_TABLES</from>
+      <from>Write to log</from>
       <to>JB_GET_FILES_SFTP</to>
       <from_nr>0</from_nr>
       <to_nr>0</to_nr>
-      <enabled>Y</enabled>
-      <evaluation>N</evaluation>
-      <unconditional>Y</unconditional>
+      <enabled>N</enabled>
+      <evaluation>Y</evaluation>
+      <unconditional>N</unconditional>
     </hop>
   </hops>
   <notepads>
     <notepad>
-      <note>FORECAST</note>
-      <xloc>656</xloc>
-      <yloc>256</yloc>
-      <width>115</width>
-      <heigth>38</heigth>
-      <fontname>Segoe UI</fontname>
-      <fontsize>16</fontsize>
-      <fontbold>Y</fontbold>
-      <fontitalic>N</fontitalic>
-      <fontcolorred>0</fontcolorred>
-      <fontcolorgreen>0</fontcolorgreen>
-      <fontcolorblue>0</fontcolorblue>
-      <backgroundcolorred>128</backgroundcolorred>
-      <backgroundcolorgreen>255</backgroundcolorgreen>
-      <backgroundcolorblue>128</backgroundcolorblue>
-      <bordercolorred>0</bordercolorred>
-      <bordercolorgreen>0</bordercolorgreen>
-      <bordercolorblue>0</bordercolorblue>
-      <drawshadow>Y</drawshadow>
-    </notepad>
-    <notepad>
       <note>FTP
 </note>
       <xloc>864</xloc>
-      <yloc>256</yloc>
+      <yloc>320</yloc>
       <width>46</width>
       <heigth>68</heigth>
       <fontname>Segoe UI</fontname>
@@ -852,10 +845,6 @@
     </group>
     <group>
       <name>{"_":"Embedded MetaStore Elements","namespace":"pentaho","type":"Default Run Configuration"}</name>
-      <attribute>
-        <key>Pentaho local</key>
-        <value>{"children":[{"children":[],"id":"server","value":null},{"children":[],"id":"clustered","value":"N"},{"children":[],"id":"name","value":"Pentaho local"},{"children":[],"id":"description","value":null},{"children":[],"id":"pentaho","value":"N"},{"children":[],"id":"readOnly","value":"Y"},{"children":[],"id":"sendResources","value":"N"},{"children":[],"id":"logRemoteExecutionLocally","value":"N"},{"children":[],"id":"remote","value":"N"},{"children":[],"id":"local","value":"Y"},{"children":[],"id":"showTransformations","value":"N"}],"id":"Pentaho local","value":null,"name":"Pentaho local","owner":null,"ownerPermissionsList":[]}</value>
-      </attribute>
     </group>
   </attributes>
 </job>

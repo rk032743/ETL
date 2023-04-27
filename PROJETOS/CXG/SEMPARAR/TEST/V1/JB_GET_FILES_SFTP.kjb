@@ -12,7 +12,7 @@
   <parameters>
     </parameters>
   <connection>
-    <name>CNN_CXG_YAMAHA</name>
+    <name>CNN_CXG_SEMPARAR</name>
     <server>${VAR_CXG_DB_HOST}</server>
     <type>MYSQL</type>
     <access>Native</access>
@@ -20,85 +20,6 @@
     <port>3306</port>
     <username>${VAR_CXG_DB_USR}</username>
     <password>${VAR_CXG_DB_PWD}</password>
-    <servername/>
-    <data_tablespace/>
-    <index_tablespace/>
-    <attributes>
-      <attribute>
-        <code>EXTRA_OPTION_MYSQL.allowLoadLocalInfile</code>
-        <attribute>true</attribute>
-      </attribute>
-      <attribute>
-        <code>EXTRA_OPTION_MYSQL.rewriteBatchedStatements</code>
-        <attribute>true</attribute>
-      </attribute>
-      <attribute>
-        <code>EXTRA_OPTION_MYSQL.useCompression</code>
-        <attribute>true</attribute>
-      </attribute>
-      <attribute>
-        <code>EXTRA_OPTION_MYSQL.useSSL</code>
-        <attribute>false</attribute>
-      </attribute>
-      <attribute>
-        <code>EXTRA_OPTION_MYSQL.useServerPrepStmts</code>
-        <attribute>false</attribute>
-      </attribute>
-      <attribute>
-        <code>EXTRA_OPTION_MYSQL.zeroDateTimeBehavior</code>
-        <attribute>convertToNull</attribute>
-      </attribute>
-      <attribute>
-        <code>FORCE_IDENTIFIERS_TO_LOWERCASE</code>
-        <attribute>N</attribute>
-      </attribute>
-      <attribute>
-        <code>FORCE_IDENTIFIERS_TO_UPPERCASE</code>
-        <attribute>N</attribute>
-      </attribute>
-      <attribute>
-        <code>IS_CLUSTERED</code>
-        <attribute>N</attribute>
-      </attribute>
-      <attribute>
-        <code>PORT_NUMBER</code>
-        <attribute>3306</attribute>
-      </attribute>
-      <attribute>
-        <code>PRESERVE_RESERVED_WORD_CASE</code>
-        <attribute>Y</attribute>
-      </attribute>
-      <attribute>
-        <code>QUOTE_ALL_FIELDS</code>
-        <attribute>N</attribute>
-      </attribute>
-      <attribute>
-        <code>STREAM_RESULTS</code>
-        <attribute>Y</attribute>
-      </attribute>
-      <attribute>
-        <code>SUPPORTS_BOOLEAN_DATA_TYPE</code>
-        <attribute>Y</attribute>
-      </attribute>
-      <attribute>
-        <code>SUPPORTS_TIMESTAMP_DATA_TYPE</code>
-        <attribute>Y</attribute>
-      </attribute>
-      <attribute>
-        <code>USE_POOLING</code>
-        <attribute>N</attribute>
-      </attribute>
-    </attributes>
-  </connection>
-  <connection>
-    <name>CNN_R_TEST</name>
-    <server>192.168.1.11</server>
-    <type>MYSQL</type>
-    <access>Native</access>
-    <database>r_db_semparar</database>
-    <port>3306</port>
-    <username>dev_etl</username>
-    <password>Encrypted 2be98afc86aa7f2aeb84ffb355993ff8a</password>
     <servername/>
     <data_tablespace/>
     <index_tablespace/>
@@ -462,12 +383,12 @@
       <parallel>N</parallel>
       <draw>Y</draw>
       <nr>0</nr>
-      <xloc>48</xloc>
+      <xloc>16</xloc>
       <yloc>32</yloc>
       <attributes_kjc/>
     </entry>
     <entry>
-      <name>GET_FROM_SFTP</name>
+      <name>GET_FROM_SFTP_SALESFORCE</name>
       <description/>
       <type>SFTP</type>
       <attributes/>
@@ -475,7 +396,7 @@
       <serverport>${VAR_FTP_PORT}</serverport>
       <username>${VAR_FTP_USR}</username>
       <password>${VAR_FTP_PWD}</password>
-      <sftpdirectory>${P_FTP_PATH}</sftpdirectory>
+      <sftpdirectory>${P_FTP_SALESFORCE_PATH}</sftpdirectory>
       <targetdirectory>${P_DUMP}</targetdirectory>
       <wildcard>.*\.txt</wildcard>
       <remove>N</remove>
@@ -494,25 +415,7 @@
       <parallel>N</parallel>
       <draw>Y</draw>
       <nr>0</nr>
-      <xloc>384</xloc>
-      <yloc>32</yloc>
-      <attributes_kjc/>
-    </entry>
-    <entry>
-      <name>CHECK_IF_EXISTS_FILE_1</name>
-      <description/>
-      <type>WAIT_FOR_FILE</type>
-      <attributes/>
-      <filename>${P_DUMP}${P_FILE_1}</filename>
-      <maximum_timeout>1</maximum_timeout>
-      <check_cycle_time>10</check_cycle_time>
-      <success_on_timeout>N</success_on_timeout>
-      <file_size_check>N</file_size_check>
-      <add_filename_result>N</add_filename_result>
-      <parallel>N</parallel>
-      <draw>Y</draw>
-      <nr>0</nr>
-      <xloc>384</xloc>
+      <xloc>448</xloc>
       <yloc>144</yloc>
       <attributes_kjc/>
     </entry>
@@ -532,293 +435,8 @@
       <parallel>N</parallel>
       <draw>Y</draw>
       <nr>0</nr>
-      <xloc>208</xloc>
+      <xloc>256</xloc>
       <yloc>32</yloc>
-      <attributes_kjc/>
-    </entry>
-    <entry>
-      <name>FAIL_FILE_1</name>
-      <description/>
-      <type>SPECIAL</type>
-      <attributes/>
-      <start>N</start>
-      <dummy>Y</dummy>
-      <repeat>N</repeat>
-      <schedulerType>0</schedulerType>
-      <intervalSeconds>0</intervalSeconds>
-      <intervalMinutes>60</intervalMinutes>
-      <hour>12</hour>
-      <minutes>0</minutes>
-      <weekDay>1</weekDay>
-      <DayOfMonth>1</DayOfMonth>
-      <parallel>N</parallel>
-      <draw>Y</draw>
-      <nr>0</nr>
-      <xloc>224</xloc>
-      <yloc>144</yloc>
-      <attributes_kjc/>
-    </entry>
-    <entry>
-      <name>CHECK_IF_EXISTS_FILE_2</name>
-      <description/>
-      <type>WAIT_FOR_FILE</type>
-      <attributes/>
-      <filename>${P_DUMP}${P_FILE_2}</filename>
-      <maximum_timeout>1</maximum_timeout>
-      <check_cycle_time>10</check_cycle_time>
-      <success_on_timeout>N</success_on_timeout>
-      <file_size_check>N</file_size_check>
-      <add_filename_result>N</add_filename_result>
-      <parallel>N</parallel>
-      <draw>Y</draw>
-      <nr>0</nr>
-      <xloc>384</xloc>
-      <yloc>224</yloc>
-      <attributes_kjc/>
-    </entry>
-    <entry>
-      <name>CHECK_IF_EXISTS_FILE_3</name>
-      <description/>
-      <type>WAIT_FOR_FILE</type>
-      <attributes/>
-      <filename>${P_DUMP}${P_FILE_3}</filename>
-      <maximum_timeout>1</maximum_timeout>
-      <check_cycle_time>10</check_cycle_time>
-      <success_on_timeout>N</success_on_timeout>
-      <file_size_check>N</file_size_check>
-      <add_filename_result>N</add_filename_result>
-      <parallel>N</parallel>
-      <draw>Y</draw>
-      <nr>0</nr>
-      <xloc>384</xloc>
-      <yloc>304</yloc>
-      <attributes_kjc/>
-    </entry>
-    <entry>
-      <name>CHECK_IF_EXISTS_FILE_4</name>
-      <description/>
-      <type>WAIT_FOR_FILE</type>
-      <attributes/>
-      <filename>${P_DUMP}${P_FILE_4}</filename>
-      <maximum_timeout>1</maximum_timeout>
-      <check_cycle_time>10</check_cycle_time>
-      <success_on_timeout>N</success_on_timeout>
-      <file_size_check>N</file_size_check>
-      <add_filename_result>N</add_filename_result>
-      <parallel>N</parallel>
-      <draw>Y</draw>
-      <nr>0</nr>
-      <xloc>384</xloc>
-      <yloc>384</yloc>
-      <attributes_kjc/>
-    </entry>
-    <entry>
-      <name>FAIL_FILE_ 2</name>
-      <description/>
-      <type>SPECIAL</type>
-      <attributes/>
-      <start>N</start>
-      <dummy>Y</dummy>
-      <repeat>N</repeat>
-      <schedulerType>0</schedulerType>
-      <intervalSeconds>0</intervalSeconds>
-      <intervalMinutes>60</intervalMinutes>
-      <hour>12</hour>
-      <minutes>0</minutes>
-      <weekDay>1</weekDay>
-      <DayOfMonth>1</DayOfMonth>
-      <parallel>N</parallel>
-      <draw>Y</draw>
-      <nr>0</nr>
-      <xloc>224</xloc>
-      <yloc>224</yloc>
-      <attributes_kjc/>
-    </entry>
-    <entry>
-      <name>FAIL_FILE_ 3</name>
-      <description/>
-      <type>SPECIAL</type>
-      <attributes/>
-      <start>N</start>
-      <dummy>Y</dummy>
-      <repeat>N</repeat>
-      <schedulerType>0</schedulerType>
-      <intervalSeconds>0</intervalSeconds>
-      <intervalMinutes>60</intervalMinutes>
-      <hour>12</hour>
-      <minutes>0</minutes>
-      <weekDay>1</weekDay>
-      <DayOfMonth>1</DayOfMonth>
-      <parallel>N</parallel>
-      <draw>Y</draw>
-      <nr>0</nr>
-      <xloc>224</xloc>
-      <yloc>304</yloc>
-      <attributes_kjc/>
-    </entry>
-    <entry>
-      <name>FAIL_FILE_ 4</name>
-      <description/>
-      <type>SPECIAL</type>
-      <attributes/>
-      <start>N</start>
-      <dummy>Y</dummy>
-      <repeat>N</repeat>
-      <schedulerType>0</schedulerType>
-      <intervalSeconds>0</intervalSeconds>
-      <intervalMinutes>60</intervalMinutes>
-      <hour>12</hour>
-      <minutes>0</minutes>
-      <weekDay>1</weekDay>
-      <DayOfMonth>1</DayOfMonth>
-      <parallel>N</parallel>
-      <draw>Y</draw>
-      <nr>0</nr>
-      <xloc>224</xloc>
-      <yloc>384</yloc>
-      <attributes_kjc/>
-    </entry>
-    <entry>
-      <name>DELETE_MONTH_1</name>
-      <description/>
-      <type>SQL</type>
-      <attributes/>
-      <sql>DELETE FROM ${P_TABLE_1}
-WHERE EXTRACT(YEAR_MONTH FROM data) >= ${VAR_YEAR_MONTH};</sql>
-      <useVariableSubstitution>T</useVariableSubstitution>
-      <sqlfromfile>F</sqlfromfile>
-      <sqlfilename/>
-      <sendOneStatement>F</sendOneStatement>
-      <connection>CNN_R_TEST</connection>
-      <parallel>N</parallel>
-      <draw>Y</draw>
-      <nr>0</nr>
-      <xloc>528</xloc>
-      <yloc>144</yloc>
-      <attributes_kjc/>
-    </entry>
-    <entry>
-      <name>DELETE_MONTH_ 2</name>
-      <description/>
-      <type>SQL</type>
-      <attributes/>
-      <sql>DELETE FROM ${P_TABLE_2}
-WHERE EXTRACT(YEAR_MONTH FROM data) >= ${VAR_YEAR_MONTH};</sql>
-      <useVariableSubstitution>T</useVariableSubstitution>
-      <sqlfromfile>F</sqlfromfile>
-      <sqlfilename/>
-      <sendOneStatement>F</sendOneStatement>
-      <connection>CNN_R_TEST</connection>
-      <parallel>N</parallel>
-      <draw>Y</draw>
-      <nr>0</nr>
-      <xloc>528</xloc>
-      <yloc>224</yloc>
-      <attributes_kjc/>
-    </entry>
-    <entry>
-      <name>DELETE_MONTH_ 3</name>
-      <description/>
-      <type>SQL</type>
-      <attributes/>
-      <sql>DELETE FROM ${P_TABLE_3}
-WHERE EXTRACT(YEAR_MONTH FROM data) >= ${VAR_YEAR_MONTH};</sql>
-      <useVariableSubstitution>T</useVariableSubstitution>
-      <sqlfromfile>F</sqlfromfile>
-      <sqlfilename/>
-      <sendOneStatement>F</sendOneStatement>
-      <connection>CNN_R_TEST</connection>
-      <parallel>N</parallel>
-      <draw>Y</draw>
-      <nr>0</nr>
-      <xloc>528</xloc>
-      <yloc>304</yloc>
-      <attributes_kjc/>
-    </entry>
-    <entry>
-      <name>DELETE_MONTH_ 4</name>
-      <description/>
-      <type>SQL</type>
-      <attributes/>
-      <sql>DELETE FROM ${P_TABLE_4}
-WHERE EXTRACT(YEAR_MONTH FROM data) >= ${VAR_YEAR_MONTH};</sql>
-      <useVariableSubstitution>T</useVariableSubstitution>
-      <sqlfromfile>F</sqlfromfile>
-      <sqlfilename/>
-      <sendOneStatement>F</sendOneStatement>
-      <connection>CNN_R_TEST</connection>
-      <parallel>N</parallel>
-      <draw>Y</draw>
-      <nr>0</nr>
-      <xloc>528</xloc>
-      <yloc>384</yloc>
-      <attributes_kjc/>
-    </entry>
-    <entry>
-      <name>VALIDA_PROCS</name>
-      <description/>
-      <type>SIMPLE_EVAL</type>
-      <attributes/>
-      <valuetype>variable</valuetype>
-      <fieldname/>
-      <variablename>${VAR_TIME_STR}</variablename>
-      <fieldtype>number</fieldtype>
-      <mask/>
-      <comparevalue>0000</comparevalue>
-      <minvalue/>
-      <maxvalue/>
-      <successcondition>equal</successcondition>
-      <successnumbercondition>equal</successnumbercondition>
-      <successbooleancondition>false</successbooleancondition>
-      <successwhenvarset>N</successwhenvarset>
-      <parallel>N</parallel>
-      <draw>Y</draw>
-      <nr>0</nr>
-      <xloc>768</xloc>
-      <yloc>496</yloc>
-      <attributes_kjc/>
-    </entry>
-    <entry>
-      <name>MOVE_FILES</name>
-      <description/>
-      <type>MOVE_FILES</type>
-      <attributes/>
-      <move_empty_folders>N</move_empty_folders>
-      <arg_from_previous>N</arg_from_previous>
-      <include_subfolders>N</include_subfolders>
-      <add_result_filesname>N</add_result_filesname>
-      <destination_is_a_file>N</destination_is_a_file>
-      <create_destination_folder>Y</create_destination_folder>
-      <add_date>N</add_date>
-      <add_time>N</add_time>
-      <SpecifyFormat>N</SpecifyFormat>
-      <date_time_format/>
-      <nr_errors_less_than>10</nr_errors_less_than>
-      <success_condition>success_if_no_errors</success_condition>
-      <AddDateBeforeExtension>N</AddDateBeforeExtension>
-      <DoNotKeepFolderStructure>N</DoNotKeepFolderStructure>
-      <iffileexists>overwrite_file</iffileexists>
-      <destinationFolder/>
-      <ifmovedfileexists>do_nothing</ifmovedfileexists>
-      <moved_date_time_format/>
-      <create_move_to_folder>N</create_move_to_folder>
-      <add_moved_date>N</add_moved_date>
-      <add_moved_time>N</add_moved_time>
-      <SpecifyMoveFormat>N</SpecifyMoveFormat>
-      <AddMovedDateBeforeExtension>N</AddMovedDateBeforeExtension>
-      <simulate>N</simulate>
-      <fields>
-        <field>
-          <source_filefolder>${P_DUMP}</source_filefolder>
-          <destination_filefolder>${P_DUMP}CARGAS</destination_filefolder>
-          <wildcard>.*\.*</wildcard>
-        </field>
-      </fields>
-      <parallel>N</parallel>
-      <draw>Y</draw>
-      <nr>0</nr>
-      <xloc>640</xloc>
-      <yloc>496</yloc>
       <attributes_kjc/>
     </entry>
     <entry>
@@ -855,29 +473,29 @@ WHERE EXTRACT(YEAR_MONTH FROM data) >= ${VAR_YEAR_MONTH};</sql>
       <parallel>N</parallel>
       <draw>Y</draw>
       <nr>0</nr>
-      <xloc>384</xloc>
-      <yloc>496</yloc>
+      <xloc>608</xloc>
+      <yloc>144</yloc>
       <attributes_kjc/>
     </entry>
     <entry>
-      <name>PROC D-1</name>
+      <name>PROC_HIST_1</name>
       <description/>
       <type>SQL</type>
       <attributes/>
       <sql>-- CALL sp_etl_bi_hist();
 -- ATUALIZADO EM 16/08/2022 Á PEDIDO DO DÁRIO;
 CALL sp_carga_tb_hist();
--- CALL sp_resultado_intervalo_d1(DATE_FORMAT(SUBDATE(CURDATE(), INTERVAL 1 DAY), '%Y%m%d'));</sql>
+</sql>
       <useVariableSubstitution>F</useVariableSubstitution>
       <sqlfromfile>F</sqlfromfile>
       <sqlfilename/>
       <sendOneStatement>F</sendOneStatement>
-      <connection>CNN_CXG_YAMAHA</connection>
+      <connection>CNN_CXG_SEMPARAR</connection>
       <parallel>N</parallel>
       <draw>Y</draw>
       <nr>0</nr>
-      <xloc>768</xloc>
-      <yloc>592</yloc>
+      <xloc>1008</xloc>
+      <yloc>144</yloc>
       <attributes_kjc/>
     </entry>
     <entry>
@@ -888,12 +506,12 @@ CALL sp_carga_tb_hist();
       <parallel>N</parallel>
       <draw>Y</draw>
       <nr>0</nr>
-      <xloc>928</xloc>
-      <yloc>496</yloc>
+      <xloc>1008</xloc>
+      <yloc>416</yloc>
       <attributes_kjc/>
     </entry>
     <entry>
-      <name>Process result filenames</name>
+      <name>COPY_FILES</name>
       <description/>
       <type>COPY_MOVE_RESULT_FILENAMES</type>
       <attributes/>
@@ -911,182 +529,420 @@ CALL sp_carga_tb_hist();
       <action>copy</action>
       <AddDateBeforeExtension>Y</AddDateBeforeExtension>
       <OverwriteFile>Y</OverwriteFile>
-      <CreateDestinationFolder>N</CreateDestinationFolder>
+      <CreateDestinationFolder>Y</CreateDestinationFolder>
       <RemovedSourceFilename>Y</RemovedSourceFilename>
       <AddDestinationFilename>Y</AddDestinationFilename>
       <parallel>N</parallel>
       <draw>Y</draw>
       <nr>0</nr>
-      <xloc>512</xloc>
-      <yloc>496</yloc>
+      <xloc>736</xloc>
+      <yloc>144</yloc>
+      <attributes_kjc/>
+    </entry>
+    <entry>
+      <name>CREATE_DUMP_FOLDER</name>
+      <description/>
+      <type>CREATE_FOLDER</type>
+      <attributes/>
+      <foldername>${P_DUMP}</foldername>
+      <fail_of_folder_exists>N</fail_of_folder_exists>
+      <parallel>N</parallel>
+      <draw>Y</draw>
+      <nr>0</nr>
+      <xloc>128</xloc>
+      <yloc>32</yloc>
+      <attributes_kjc/>
+    </entry>
+    <entry>
+      <name>VALIDA_EXECUCAO_1</name>
+      <description/>
+      <type>SIMPLE_EVAL</type>
+      <attributes/>
+      <valuetype>variable</valuetype>
+      <fieldname/>
+      <variablename>${VAR_TIME_STR}</variablename>
+      <fieldtype>number</fieldtype>
+      <mask/>
+      <comparevalue>1000</comparevalue>
+      <minvalue/>
+      <maxvalue/>
+      <successcondition>equal</successcondition>
+      <successnumbercondition>equal</successnumbercondition>
+      <successbooleancondition>false</successbooleancondition>
+      <successwhenvarset>N</successwhenvarset>
+      <parallel>N</parallel>
+      <draw>Y</draw>
+      <nr>0</nr>
+      <xloc>256</xloc>
+      <yloc>144</yloc>
+      <attributes_kjc/>
+    </entry>
+    <entry>
+      <name>GET_FROM_SFTP_GENESYS</name>
+      <description/>
+      <type>SFTP</type>
+      <attributes/>
+      <servername>${VAR_FTP_HOST}</servername>
+      <serverport>${VAR_FTP_PORT}</serverport>
+      <username>${VAR_FTP_USR}</username>
+      <password>${VAR_FTP_PWD}</password>
+      <sftpdirectory>${P_FTP_GENESYS_PATH}</sftpdirectory>
+      <targetdirectory>${P_DUMP}</targetdirectory>
+      <wildcard>.*\.txt</wildcard>
+      <remove>N</remove>
+      <isaddresult>Y</isaddresult>
+      <createtargetfolder>Y</createtargetfolder>
+      <copyprevious>N</copyprevious>
+      <usekeyfilename>N</usekeyfilename>
+      <keyfilename/>
+      <keyfilepass>Encrypted </keyfilepass>
+      <compression>none</compression>
+      <proxyType/>
+      <proxyHost/>
+      <proxyPort/>
+      <proxyUsername/>
+      <proxyPassword>Encrypted </proxyPassword>
+      <parallel>N</parallel>
+      <draw>Y</draw>
+      <nr>0</nr>
+      <xloc>256</xloc>
+      <yloc>336</yloc>
+      <attributes_kjc/>
+    </entry>
+    <entry>
+      <name>VALIDA_EXECUCAO_2</name>
+      <description/>
+      <type>SIMPLE_EVAL</type>
+      <attributes/>
+      <valuetype>variable</valuetype>
+      <fieldname/>
+      <variablename>${VAR_TIME_STR}</variablename>
+      <fieldtype>number</fieldtype>
+      <mask/>
+      <comparevalue>0900</comparevalue>
+      <minvalue>0700</minvalue>
+      <maxvalue>2300</maxvalue>
+      <successcondition>equal</successcondition>
+      <successnumbercondition>between</successnumbercondition>
+      <successbooleancondition>false</successbooleancondition>
+      <successwhenvarset>N</successwhenvarset>
+      <parallel>N</parallel>
+      <draw>Y</draw>
+      <nr>0</nr>
+      <xloc>256</xloc>
+      <yloc>256</yloc>
+      <attributes_kjc/>
+    </entry>
+    <entry>
+      <name>CHECK_IF_EXISTS_FILE_5</name>
+      <description/>
+      <type>WAIT_FOR_FILE</type>
+      <attributes/>
+      <filename>${P_FILE_5}</filename>
+      <maximum_timeout>1</maximum_timeout>
+      <check_cycle_time>10</check_cycle_time>
+      <success_on_timeout>N</success_on_timeout>
+      <file_size_check>N</file_size_check>
+      <add_filename_result>N</add_filename_result>
+      <parallel>N</parallel>
+      <draw>Y</draw>
+      <nr>0</nr>
+      <xloc>256</xloc>
+      <yloc>464</yloc>
+      <attributes_kjc/>
+    </entry>
+    <entry>
+      <name>FAIL_FILE_5</name>
+      <description/>
+      <type>SPECIAL</type>
+      <attributes/>
+      <start>N</start>
+      <dummy>Y</dummy>
+      <repeat>N</repeat>
+      <schedulerType>0</schedulerType>
+      <intervalSeconds>0</intervalSeconds>
+      <intervalMinutes>60</intervalMinutes>
+      <hour>12</hour>
+      <minutes>0</minutes>
+      <weekDay>1</weekDay>
+      <DayOfMonth>1</DayOfMonth>
+      <parallel>N</parallel>
+      <draw>Y</draw>
+      <nr>0</nr>
+      <xloc>112</xloc>
+      <yloc>464</yloc>
+      <attributes_kjc/>
+    </entry>
+    <entry>
+      <name>CHECK_IF_EXISTS_FILE_6</name>
+      <description/>
+      <type>WAIT_FOR_FILE</type>
+      <attributes/>
+      <filename>${P_FILE_6}</filename>
+      <maximum_timeout>1</maximum_timeout>
+      <check_cycle_time>10</check_cycle_time>
+      <success_on_timeout>N</success_on_timeout>
+      <file_size_check>N</file_size_check>
+      <add_filename_result>N</add_filename_result>
+      <parallel>N</parallel>
+      <draw>Y</draw>
+      <nr>0</nr>
+      <xloc>256</xloc>
+      <yloc>560</yloc>
+      <attributes_kjc/>
+    </entry>
+    <entry>
+      <name>FAIL_FILE_6</name>
+      <description/>
+      <type>SPECIAL</type>
+      <attributes/>
+      <start>N</start>
+      <dummy>Y</dummy>
+      <repeat>N</repeat>
+      <schedulerType>0</schedulerType>
+      <intervalSeconds>0</intervalSeconds>
+      <intervalMinutes>60</intervalMinutes>
+      <hour>12</hour>
+      <minutes>0</minutes>
+      <weekDay>1</weekDay>
+      <DayOfMonth>1</DayOfMonth>
+      <parallel>N</parallel>
+      <draw>Y</draw>
+      <nr>0</nr>
+      <xloc>112</xloc>
+      <yloc>560</yloc>
+      <attributes_kjc/>
+    </entry>
+    <entry>
+      <name>DELETE_TODAY_5</name>
+      <description/>
+      <type>SQL</type>
+      <attributes/>
+      <sql>DELETE FROM ${P_TABLE_5}
+WHERE CAST(data_carga AS DATE) = CURDATE();</sql>
+      <useVariableSubstitution>T</useVariableSubstitution>
+      <sqlfromfile>F</sqlfromfile>
+      <sqlfilename/>
+      <sendOneStatement>F</sendOneStatement>
+      <connection>CNN_CXG_SEMPARAR</connection>
+      <parallel>N</parallel>
+      <draw>Y</draw>
+      <nr>0</nr>
+      <xloc>400</xloc>
+      <yloc>464</yloc>
+      <attributes_kjc/>
+    </entry>
+    <entry>
+      <name>DELETE_TODAY_6</name>
+      <description/>
+      <type>SQL</type>
+      <attributes/>
+      <sql>DELETE FROM ${P_TABLE_6}
+WHERE CAST(data_carga AS DATE) = CURDATE();</sql>
+      <useVariableSubstitution>T</useVariableSubstitution>
+      <sqlfromfile>F</sqlfromfile>
+      <sqlfilename/>
+      <sendOneStatement>F</sendOneStatement>
+      <connection>CNN_CXG_SEMPARAR</connection>
+      <parallel>N</parallel>
+      <draw>Y</draw>
+      <nr>0</nr>
+      <xloc>400</xloc>
+      <yloc>560</yloc>
+      <attributes_kjc/>
+    </entry>
+    <entry>
+      <name>VALIDA_EXECUCAO_3</name>
+      <description/>
+      <type>SIMPLE_EVAL</type>
+      <attributes/>
+      <valuetype>variable</valuetype>
+      <fieldname/>
+      <variablename>${VAR_TIME_STR}</variablename>
+      <fieldtype>number</fieldtype>
+      <mask/>
+      <comparevalue>2300</comparevalue>
+      <minvalue/>
+      <maxvalue/>
+      <successcondition>equal</successcondition>
+      <successnumbercondition>equal</successnumbercondition>
+      <successbooleancondition>false</successbooleancondition>
+      <successwhenvarset>N</successwhenvarset>
+      <parallel>N</parallel>
+      <draw>Y</draw>
+      <nr>0</nr>
+      <xloc>736</xloc>
+      <yloc>272</yloc>
+      <attributes_kjc/>
+    </entry>
+    <entry>
+      <name>PROC_HIST_2</name>
+      <description/>
+      <type>SQL</type>
+      <attributes/>
+      <sql>INSERT INTO tb_a_genesys_conversations_hist
+SELECT * FROM tb_a_genesys_conversations_d0;
+
+TRUNCATE tb_a_genesys_conversations_d0</sql>
+      <useVariableSubstitution>F</useVariableSubstitution>
+      <sqlfromfile>F</sqlfromfile>
+      <sqlfilename/>
+      <sendOneStatement>F</sendOneStatement>
+      <connection>CNN_CXG_SEMPARAR</connection>
+      <parallel>N</parallel>
+      <draw>Y</draw>
+      <nr>0</nr>
+      <xloc>736</xloc>
+      <yloc>416</yloc>
+      <attributes_kjc/>
+    </entry>
+    <entry>
+      <name>VALIDA_EXECUCAO_4</name>
+      <description/>
+      <type>SIMPLE_EVAL</type>
+      <attributes/>
+      <valuetype>variable</valuetype>
+      <fieldname/>
+      <variablename>${VAR_TIME_STR}</variablename>
+      <fieldtype>number</fieldtype>
+      <mask/>
+      <comparevalue>1000</comparevalue>
+      <minvalue/>
+      <maxvalue/>
+      <successcondition>equal</successcondition>
+      <successnumbercondition>equal</successnumbercondition>
+      <successbooleancondition>false</successbooleancondition>
+      <successwhenvarset>N</successwhenvarset>
+      <parallel>N</parallel>
+      <draw>Y</draw>
+      <nr>0</nr>
+      <xloc>864</xloc>
+      <yloc>144</yloc>
+      <attributes_kjc/>
+    </entry>
+    <entry>
+      <name>TR_GENESYS</name>
+      <description/>
+      <type>TRANS</type>
+      <attributes/>
+      <specification_method>filename</specification_method>
+      <trans_object_id/>
+      <filename>${Internal.Entry.Current.Directory}/TR_ETL_GENESYS.ktr</filename>
+      <transname/>
+      <arg_from_previous>N</arg_from_previous>
+      <params_from_previous>N</params_from_previous>
+      <exec_per_row>N</exec_per_row>
+      <clear_rows>N</clear_rows>
+      <clear_files>N</clear_files>
+      <set_logfile>N</set_logfile>
+      <logfile/>
+      <logext/>
+      <add_date>N</add_date>
+      <add_time>N</add_time>
+      <loglevel>Basic</loglevel>
+      <cluster>N</cluster>
+      <slave_server_name/>
+      <set_append_logfile>N</set_append_logfile>
+      <wait_until_finished>Y</wait_until_finished>
+      <follow_abort_remote>N</follow_abort_remote>
+      <create_parent_folder>N</create_parent_folder>
+      <logging_remote_work>N</logging_remote_work>
+      <run_configuration>Pentaho local</run_configuration>
+      <parameters>
+        <pass_all_parameters>Y</pass_all_parameters>
+      </parameters>
+      <parallel>N</parallel>
+      <draw>Y</draw>
+      <nr>0</nr>
+      <xloc>416</xloc>
+      <yloc>768</yloc>
+      <attributes_kjc/>
+    </entry>
+    <entry>
+      <name>DO_NOTHING_GENESYS</name>
+      <description/>
+      <type>SPECIAL</type>
+      <attributes/>
+      <start>N</start>
+      <dummy>Y</dummy>
+      <repeat>N</repeat>
+      <schedulerType>0</schedulerType>
+      <intervalSeconds>0</intervalSeconds>
+      <intervalMinutes>60</intervalMinutes>
+      <hour>12</hour>
+      <minutes>0</minutes>
+      <weekDay>1</weekDay>
+      <DayOfMonth>1</DayOfMonth>
+      <parallel>N</parallel>
+      <draw>Y</draw>
+      <nr>0</nr>
+      <xloc>112</xloc>
+      <yloc>256</yloc>
+      <attributes_kjc/>
+    </entry>
+    <entry>
+      <name>CHECK_IF_EXISTS_FILE_7</name>
+      <description/>
+      <type>WAIT_FOR_FILE</type>
+      <attributes/>
+      <filename>${P_FILE_7}</filename>
+      <maximum_timeout>1</maximum_timeout>
+      <check_cycle_time>10</check_cycle_time>
+      <success_on_timeout>N</success_on_timeout>
+      <file_size_check>N</file_size_check>
+      <add_filename_result>N</add_filename_result>
+      <parallel>N</parallel>
+      <draw>Y</draw>
+      <nr>0</nr>
+      <xloc>256</xloc>
+      <yloc>656</yloc>
+      <attributes_kjc/>
+    </entry>
+    <entry>
+      <name>FAIL_FILE_7</name>
+      <description/>
+      <type>SPECIAL</type>
+      <attributes/>
+      <start>N</start>
+      <dummy>Y</dummy>
+      <repeat>N</repeat>
+      <schedulerType>0</schedulerType>
+      <intervalSeconds>0</intervalSeconds>
+      <intervalMinutes>60</intervalMinutes>
+      <hour>12</hour>
+      <minutes>0</minutes>
+      <weekDay>1</weekDay>
+      <DayOfMonth>1</DayOfMonth>
+      <parallel>N</parallel>
+      <draw>Y</draw>
+      <nr>0</nr>
+      <xloc>128</xloc>
+      <yloc>656</yloc>
+      <attributes_kjc/>
+    </entry>
+    <entry>
+      <name>DELETE_TODAY_7</name>
+      <description/>
+      <type>SQL</type>
+      <attributes/>
+      <sql>DELETE FROM ${P_TABLE_7}
+WHERE CAST(DataCarga AS DATE) = CURDATE();</sql>
+      <useVariableSubstitution>T</useVariableSubstitution>
+      <sqlfromfile>F</sqlfromfile>
+      <sqlfilename/>
+      <sendOneStatement>F</sendOneStatement>
+      <connection>CNN_CXG_SEMPARAR</connection>
+      <parallel>N</parallel>
+      <draw>Y</draw>
+      <nr>0</nr>
+      <xloc>416</xloc>
+      <yloc>656</yloc>
       <attributes_kjc/>
     </entry>
   </entries>
   <hops>
     <hop>
-      <from>START</from>
-      <to>CLEAR_FOLDERS</to>
-      <from_nr>0</from_nr>
-      <to_nr>0</to_nr>
-      <enabled>Y</enabled>
-      <evaluation>Y</evaluation>
-      <unconditional>Y</unconditional>
-    </hop>
-    <hop>
-      <from>CLEAR_FOLDERS</from>
-      <to>GET_FROM_SFTP</to>
-      <from_nr>0</from_nr>
-      <to_nr>0</to_nr>
-      <enabled>Y</enabled>
-      <evaluation>N</evaluation>
-      <unconditional>Y</unconditional>
-    </hop>
-    <hop>
-      <from>GET_FROM_SFTP</from>
-      <to>CHECK_IF_EXISTS_FILE_1</to>
-      <from_nr>0</from_nr>
-      <to_nr>0</to_nr>
-      <enabled>Y</enabled>
-      <evaluation>Y</evaluation>
-      <unconditional>N</unconditional>
-    </hop>
-    <hop>
-      <from>CHECK_IF_EXISTS_FILE_1</from>
-      <to>CHECK_IF_EXISTS_FILE_2</to>
-      <from_nr>0</from_nr>
-      <to_nr>0</to_nr>
-      <enabled>Y</enabled>
-      <evaluation>N</evaluation>
-      <unconditional>Y</unconditional>
-    </hop>
-    <hop>
-      <from>CHECK_IF_EXISTS_FILE_2</from>
-      <to>CHECK_IF_EXISTS_FILE_3</to>
-      <from_nr>0</from_nr>
-      <to_nr>0</to_nr>
-      <enabled>Y</enabled>
-      <evaluation>N</evaluation>
-      <unconditional>Y</unconditional>
-    </hop>
-    <hop>
-      <from>CHECK_IF_EXISTS_FILE_3</from>
-      <to>CHECK_IF_EXISTS_FILE_4</to>
-      <from_nr>0</from_nr>
-      <to_nr>0</to_nr>
-      <enabled>Y</enabled>
-      <evaluation>N</evaluation>
-      <unconditional>Y</unconditional>
-    </hop>
-    <hop>
-      <from>CHECK_IF_EXISTS_FILE_1</from>
-      <to>FAIL_FILE_1</to>
-      <from_nr>0</from_nr>
-      <to_nr>0</to_nr>
-      <enabled>Y</enabled>
-      <evaluation>N</evaluation>
-      <unconditional>N</unconditional>
-    </hop>
-    <hop>
-      <from>CHECK_IF_EXISTS_FILE_1</from>
-      <to>DELETE_MONTH_1</to>
-      <from_nr>0</from_nr>
-      <to_nr>0</to_nr>
-      <enabled>Y</enabled>
-      <evaluation>Y</evaluation>
-      <unconditional>N</unconditional>
-    </hop>
-    <hop>
-      <from>CHECK_IF_EXISTS_FILE_2</from>
-      <to>DELETE_MONTH_ 2</to>
-      <from_nr>0</from_nr>
-      <to_nr>0</to_nr>
-      <enabled>Y</enabled>
-      <evaluation>Y</evaluation>
-      <unconditional>N</unconditional>
-    </hop>
-    <hop>
-      <from>CHECK_IF_EXISTS_FILE_3</from>
-      <to>DELETE_MONTH_ 3</to>
-      <from_nr>0</from_nr>
-      <to_nr>0</to_nr>
-      <enabled>N</enabled>
-      <evaluation>Y</evaluation>
-      <unconditional>N</unconditional>
-    </hop>
-    <hop>
-      <from>CHECK_IF_EXISTS_FILE_4</from>
-      <to>DELETE_MONTH_ 4</to>
-      <from_nr>0</from_nr>
-      <to_nr>0</to_nr>
-      <enabled>N</enabled>
-      <evaluation>Y</evaluation>
-      <unconditional>N</unconditional>
-    </hop>
-    <hop>
-      <from>CHECK_IF_EXISTS_FILE_2</from>
-      <to>FAIL_FILE_ 2</to>
-      <from_nr>0</from_nr>
-      <to_nr>0</to_nr>
-      <enabled>Y</enabled>
-      <evaluation>N</evaluation>
-      <unconditional>N</unconditional>
-    </hop>
-    <hop>
-      <from>CHECK_IF_EXISTS_FILE_3</from>
-      <to>FAIL_FILE_ 3</to>
-      <from_nr>0</from_nr>
-      <to_nr>0</to_nr>
-      <enabled>N</enabled>
-      <evaluation>N</evaluation>
-      <unconditional>N</unconditional>
-    </hop>
-    <hop>
-      <from>CHECK_IF_EXISTS_FILE_4</from>
-      <to>FAIL_FILE_ 4</to>
-      <from_nr>0</from_nr>
-      <to_nr>0</to_nr>
-      <enabled>N</enabled>
-      <evaluation>N</evaluation>
-      <unconditional>N</unconditional>
-    </hop>
-    <hop>
-      <from>CHECK_IF_EXISTS_FILE_4</from>
-      <to>TR_VOLUMES</to>
-      <from_nr>0</from_nr>
-      <to_nr>0</to_nr>
-      <enabled>Y</enabled>
-      <evaluation>N</evaluation>
-      <unconditional>Y</unconditional>
-    </hop>
-    <hop>
-      <from>MOVE_FILES</from>
-      <to>VALIDA_PROCS</to>
-      <from_nr>0</from_nr>
-      <to_nr>0</to_nr>
-      <enabled>N</enabled>
-      <evaluation>Y</evaluation>
-      <unconditional>N</unconditional>
-    </hop>
-    <hop>
-      <from>VALIDA_PROCS</from>
-      <to>PROC D-1</to>
-      <from_nr>0</from_nr>
-      <to_nr>0</to_nr>
-      <enabled>N</enabled>
-      <evaluation>Y</evaluation>
-      <unconditional>N</unconditional>
-    </hop>
-    <hop>
-      <from>VALIDA_PROCS</from>
-      <to>CONCLUÍDO</to>
-      <from_nr>0</from_nr>
-      <to_nr>0</to_nr>
-      <enabled>N</enabled>
-      <evaluation>N</evaluation>
-      <unconditional>Y</unconditional>
-    </hop>
-    <hop>
-      <from>PROC D-1</from>
+      <from>PROC_HIST_1</from>
       <to>CONCLUÍDO</to>
       <from_nr>0</from_nr>
       <to_nr>0</to_nr>
@@ -1096,7 +952,16 @@ CALL sp_carga_tb_hist();
     </hop>
     <hop>
       <from>TR_VOLUMES</from>
-      <to>Process result filenames</to>
+      <to>COPY_FILES</to>
+      <from_nr>0</from_nr>
+      <to_nr>0</to_nr>
+      <enabled>N</enabled>
+      <evaluation>Y</evaluation>
+      <unconditional>N</unconditional>
+    </hop>
+    <hop>
+      <from>START</from>
+      <to>CREATE_DUMP_FOLDER</to>
       <from_nr>0</from_nr>
       <to_nr>0</to_nr>
       <enabled>Y</enabled>
@@ -1104,16 +969,247 @@ CALL sp_carga_tb_hist();
       <unconditional>Y</unconditional>
     </hop>
     <hop>
-      <from>Process result filenames</from>
-      <to>MOVE_FILES</to>
+      <from>CREATE_DUMP_FOLDER</from>
+      <to>CLEAR_FOLDERS</to>
+      <from_nr>0</from_nr>
+      <to_nr>0</to_nr>
+      <enabled>Y</enabled>
+      <evaluation>Y</evaluation>
+      <unconditional>Y</unconditional>
+    </hop>
+    <hop>
+      <from>VALIDA_EXECUCAO_1</from>
+      <to>GET_FROM_SFTP_SALESFORCE</to>
+      <from_nr>0</from_nr>
+      <to_nr>0</to_nr>
+      <enabled>N</enabled>
+      <evaluation>Y</evaluation>
+      <unconditional>N</unconditional>
+    </hop>
+    <hop>
+      <from>VALIDA_EXECUCAO_2</from>
+      <to>GET_FROM_SFTP_GENESYS</to>
+      <from_nr>0</from_nr>
+      <to_nr>0</to_nr>
+      <enabled>N</enabled>
+      <evaluation>Y</evaluation>
+      <unconditional>N</unconditional>
+    </hop>
+    <hop>
+      <from>GET_FROM_SFTP_GENESYS</from>
+      <to>CHECK_IF_EXISTS_FILE_5</to>
+      <from_nr>0</from_nr>
+      <to_nr>0</to_nr>
+      <enabled>N</enabled>
+      <evaluation>Y</evaluation>
+      <unconditional>N</unconditional>
+    </hop>
+    <hop>
+      <from>CHECK_IF_EXISTS_FILE_5</from>
+      <to>FAIL_FILE_5</to>
+      <from_nr>0</from_nr>
+      <to_nr>0</to_nr>
+      <enabled>N</enabled>
+      <evaluation>N</evaluation>
+      <unconditional>N</unconditional>
+    </hop>
+    <hop>
+      <from>CHECK_IF_EXISTS_FILE_5</from>
+      <to>DELETE_TODAY_5</to>
+      <from_nr>0</from_nr>
+      <to_nr>0</to_nr>
+      <enabled>N</enabled>
+      <evaluation>Y</evaluation>
+      <unconditional>N</unconditional>
+    </hop>
+    <hop>
+      <from>CHECK_IF_EXISTS_FILE_5</from>
+      <to>CHECK_IF_EXISTS_FILE_6</to>
+      <from_nr>0</from_nr>
+      <to_nr>0</to_nr>
+      <enabled>N</enabled>
+      <evaluation>N</evaluation>
+      <unconditional>Y</unconditional>
+    </hop>
+    <hop>
+      <from>CHECK_IF_EXISTS_FILE_6</from>
+      <to>DELETE_TODAY_6</to>
+      <from_nr>0</from_nr>
+      <to_nr>0</to_nr>
+      <enabled>N</enabled>
+      <evaluation>Y</evaluation>
+      <unconditional>N</unconditional>
+    </hop>
+    <hop>
+      <from>CHECK_IF_EXISTS_FILE_6</from>
+      <to>FAIL_FILE_6</to>
+      <from_nr>0</from_nr>
+      <to_nr>0</to_nr>
+      <enabled>N</enabled>
+      <evaluation>N</evaluation>
+      <unconditional>N</unconditional>
+    </hop>
+    <hop>
+      <from>COPY_FILES</from>
+      <to>VALIDA_EXECUCAO_3</to>
+      <from_nr>0</from_nr>
+      <to_nr>0</to_nr>
+      <enabled>N</enabled>
+      <evaluation>N</evaluation>
+      <unconditional>Y</unconditional>
+    </hop>
+    <hop>
+      <from>VALIDA_EXECUCAO_3</from>
+      <to>PROC_HIST_2</to>
+      <from_nr>0</from_nr>
+      <to_nr>0</to_nr>
+      <enabled>N</enabled>
+      <evaluation>Y</evaluation>
+      <unconditional>N</unconditional>
+    </hop>
+    <hop>
+      <from>COPY_FILES</from>
+      <to>VALIDA_EXECUCAO_4</to>
       <from_nr>0</from_nr>
       <to_nr>0</to_nr>
       <enabled>N</enabled>
       <evaluation>Y</evaluation>
       <unconditional>Y</unconditional>
     </hop>
+    <hop>
+      <from>VALIDA_EXECUCAO_4</from>
+      <to>PROC_HIST_1</to>
+      <from_nr>0</from_nr>
+      <to_nr>0</to_nr>
+      <enabled>N</enabled>
+      <evaluation>Y</evaluation>
+      <unconditional>N</unconditional>
+    </hop>
+    <hop>
+      <from>PROC_HIST_2</from>
+      <to>CONCLUÍDO</to>
+      <from_nr>0</from_nr>
+      <to_nr>0</to_nr>
+      <enabled>N</enabled>
+      <evaluation>Y</evaluation>
+      <unconditional>N</unconditional>
+    </hop>
+    <hop>
+      <from>VALIDA_EXECUCAO_3</from>
+      <to>CONCLUÍDO</to>
+      <from_nr>0</from_nr>
+      <to_nr>0</to_nr>
+      <enabled>N</enabled>
+      <evaluation>N</evaluation>
+      <unconditional>N</unconditional>
+    </hop>
+    <hop>
+      <from>VALIDA_EXECUCAO_4</from>
+      <to>CONCLUÍDO</to>
+      <from_nr>0</from_nr>
+      <to_nr>0</to_nr>
+      <enabled>N</enabled>
+      <evaluation>N</evaluation>
+      <unconditional>N</unconditional>
+    </hop>
+    <hop>
+      <from>CLEAR_FOLDERS</from>
+      <to>VALIDA_EXECUCAO_1</to>
+      <from_nr>0</from_nr>
+      <to_nr>0</to_nr>
+      <enabled>N</enabled>
+      <evaluation>Y</evaluation>
+      <unconditional>Y</unconditional>
+    </hop>
+    <hop>
+      <from>VALIDA_EXECUCAO_1</from>
+      <to>VALIDA_EXECUCAO_2</to>
+      <from_nr>0</from_nr>
+      <to_nr>0</to_nr>
+      <enabled>N</enabled>
+      <evaluation>Y</evaluation>
+      <unconditional>Y</unconditional>
+    </hop>
+    <hop>
+      <from>GET_FROM_SFTP_SALESFORCE</from>
+      <to>TR_VOLUMES</to>
+      <from_nr>0</from_nr>
+      <to_nr>0</to_nr>
+      <enabled>N</enabled>
+      <evaluation>Y</evaluation>
+      <unconditional>N</unconditional>
+    </hop>
+    <hop>
+      <from>VALIDA_EXECUCAO_2</from>
+      <to>DO_NOTHING_GENESYS</to>
+      <from_nr>0</from_nr>
+      <to_nr>0</to_nr>
+      <enabled>N</enabled>
+      <evaluation>N</evaluation>
+      <unconditional>N</unconditional>
+    </hop>
+    <hop>
+      <from>TR_GENESYS</from>
+      <to>COPY_FILES</to>
+      <from_nr>0</from_nr>
+      <to_nr>0</to_nr>
+      <enabled>N</enabled>
+      <evaluation>Y</evaluation>
+      <unconditional>N</unconditional>
+    </hop>
+    <hop>
+      <from>CHECK_IF_EXISTS_FILE_6</from>
+      <to>CHECK_IF_EXISTS_FILE_7</to>
+      <from_nr>0</from_nr>
+      <to_nr>0</to_nr>
+      <enabled>N</enabled>
+      <evaluation>N</evaluation>
+      <unconditional>Y</unconditional>
+    </hop>
+    <hop>
+      <from>CHECK_IF_EXISTS_FILE_7</from>
+      <to>FAIL_FILE_7</to>
+      <from_nr>0</from_nr>
+      <to_nr>0</to_nr>
+      <enabled>N</enabled>
+      <evaluation>N</evaluation>
+      <unconditional>N</unconditional>
+    </hop>
+    <hop>
+      <from>CHECK_IF_EXISTS_FILE_7</from>
+      <to>DELETE_TODAY_7</to>
+      <from_nr>0</from_nr>
+      <to_nr>0</to_nr>
+      <enabled>N</enabled>
+      <evaluation>Y</evaluation>
+      <unconditional>N</unconditional>
+    </hop>
+    <hop>
+      <from>DELETE_TODAY_7</from>
+      <to>TR_GENESYS</to>
+      <from_nr>0</from_nr>
+      <to_nr>0</to_nr>
+      <enabled>N</enabled>
+      <evaluation>N</evaluation>
+      <unconditional>Y</unconditional>
+    </hop>
   </hops>
   <notepads>
   </notepads>
-  <attributes/>
+  <attributes>
+    <group>
+      <name>METASTORE.pentaho</name>
+      <attribute>
+        <key>Default Run Configuration</key>
+        <value>{"namespace":"pentaho","id":"Default Run Configuration","name":"Default Run Configuration","description":"Defines a default run configuration","metaStoreName":null}</value>
+      </attribute>
+    </group>
+    <group>
+      <name>{"_":"Embedded MetaStore Elements","namespace":"pentaho","type":"Default Run Configuration"}</name>
+      <attribute>
+        <key>Pentaho local</key>
+        <value>{"children":[{"children":[],"id":"server","value":null},{"children":[],"id":"clustered","value":"N"},{"children":[],"id":"name","value":"Pentaho local"},{"children":[],"id":"description","value":null},{"children":[],"id":"pentaho","value":"N"},{"children":[],"id":"readOnly","value":"Y"},{"children":[],"id":"sendResources","value":"N"},{"children":[],"id":"logRemoteExecutionLocally","value":"N"},{"children":[],"id":"remote","value":"N"},{"children":[],"id":"local","value":"Y"},{"children":[],"id":"showTransformations","value":"N"}],"id":"Pentaho local","value":null,"name":"Pentaho local","owner":null,"ownerPermissionsList":[]}</value>
+      </attribute>
+    </group>
+  </attributes>
 </job>

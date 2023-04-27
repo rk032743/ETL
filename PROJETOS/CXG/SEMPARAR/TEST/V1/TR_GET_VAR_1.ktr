@@ -523,7 +523,7 @@
       </output>
     </remotesteps>
     <GUI>
-      <xloc>192</xloc>
+      <xloc>256</xloc>
       <yloc>16</yloc>
       <draw>Y</draw>
     </GUI>
@@ -548,6 +548,10 @@
         <name>HOST</name>
         <type>Hostname real</type>
       </field>
+      <field>
+        <name>IP</name>
+        <type>IP address</type>
+      </field>
     </fields>
     <attributes/>
     <cluster_schema/>
@@ -559,7 +563,7 @@
     </remotesteps>
     <GUI>
       <xloc>48</xloc>
-      <yloc>128</yloc>
+      <yloc>160</yloc>
       <draw>Y</draw>
     </GUI>
   </step>
@@ -592,7 +596,7 @@
       </output>
     </remotesteps>
     <GUI>
-      <xloc>336</xloc>
+      <xloc>480</xloc>
       <yloc>16</yloc>
       <draw>Y</draw>
     </GUI>
@@ -620,7 +624,7 @@
     <defaultPathLeafToNull>Y</defaultPathLeafToNull>
     <rownum_field/>
     <file>
-      <name>C:\ETL\CONFIG\paths.json</name>
+      <name>C:\Users\dario.gomes\OneDrive - URANET PROJETOS E SISTEMAS LTDA\DataOffice\CODIGOS\CONFIG\paths.json</name>
       <filemask/>
       <exclude_filemask/>
       <file_required>N</file_required>
@@ -773,8 +777,8 @@
       </output>
     </remotesteps>
     <GUI>
-      <xloc>640</xloc>
-      <yloc>128</yloc>
+      <xloc>784</xloc>
+      <yloc>160</yloc>
       <draw>Y</draw>
     </GUI>
   </step>
@@ -813,7 +817,7 @@
       </output>
     </remotesteps>
     <GUI>
-      <xloc>496</xloc>
+      <xloc>640</xloc>
       <yloc>16</yloc>
       <draw>Y</draw>
     </GUI>
@@ -858,8 +862,8 @@
       </output>
     </remotesteps>
     <GUI>
-      <xloc>464</xloc>
-      <yloc>128</yloc>
+      <xloc>608</xloc>
+      <yloc>160</yloc>
       <draw>Y</draw>
     </GUI>
   </step>
@@ -914,8 +918,8 @@
       </output>
     </remotesteps>
     <GUI>
-      <xloc>176</xloc>
-      <yloc>128</yloc>
+      <xloc>320</xloc>
+      <yloc>160</yloc>
       <draw>Y</draw>
     </GUI>
   </step>
@@ -976,8 +980,8 @@
       </output>
     </remotesteps>
     <GUI>
-      <xloc>320</xloc>
-      <yloc>128</yloc>
+      <xloc>464</xloc>
+      <yloc>160</yloc>
       <draw>Y</draw>
     </GUI>
   </step>

@@ -559,7 +559,7 @@
     <hop>
       <from>LOAD_FORECAST</from>
       <to>SET_ERROR_VAR</to>
-      <enabled>Y</enabled>
+      <enabled>N</enabled>
     </hop>
     <hop>
       <from>TRANSFORM DATES</from>
@@ -1384,7 +1384,7 @@ Alert(date2str(dValue,"dd.MM.yyyy HH:mm:ss","EN", "EST"));
     <error>
       <source_step>LOAD_FORECAST</source_step>
       <target_step>SET_ERROR_VAR</target_step>
-      <is_enabled>Y</is_enabled>
+      <is_enabled>N</is_enabled>
       <nr_valuename>ERR</nr_valuename>
       <descriptions_valuename>ERR_DESC</descriptions_valuename>
       <fields_valuename>ERR_FIELD</fields_valuename>

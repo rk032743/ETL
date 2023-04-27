@@ -436,14 +436,14 @@
   <notepads>
   </notepads>
   <connection>
-    <name>CNN_R_TEST</name>
-    <server>192.168.1.11</server>
+    <name>CNN_CXG_SEMPARAR</name>
+    <server>${VAR_CXG_DB_HOST}</server>
     <type>MYSQL</type>
     <access>Native</access>
-    <database>r_db_semparar</database>
+    <database>${VAR_CXG_DB}</database>
     <port>3306</port>
-    <username>dev_etl</username>
-    <password>Encrypted 2be98afc86aa7f2aeb84ffb355993ff8a</password>
+    <username>${VAR_CXG_DB_USR}</username>
+    <password>${VAR_CXG_DB_PWD}</password>
     <servername/>
     <data_tablespace/>
     <index_tablespace/>
@@ -516,34 +516,74 @@
   </connection>
   <order>
     <hop>
-      <from>CONVERT_DATE_VOLUMES</from>
-      <to>DUMP_VOLUMES</to>
-      <enabled>N</enabled>
+      <from>READ_FILE_2_(TMO)</from>
+      <to>SORT_ 2</to>
+      <enabled>Y</enabled>
     </hop>
     <hop>
-      <from>JS_CONVERT_DATE_VOLUMES</from>
-      <to>CONVERT_DATE_VOLUMES</to>
-      <enabled>N</enabled>
+      <from>SORT_ 2</from>
+      <to>TO_NULL_ 2</to>
+      <enabled>Y</enabled>
     </hop>
     <hop>
-      <from>LOAD_FILE_1_(REPEATED)</from>
-      <to>JS_CONVERT_DATE_VOLUMES</to>
-      <enabled>N</enabled>
+      <from>TO_NULL_ 2</from>
+      <to>LOAD_FILE_2_(TMO)</to>
+      <enabled>Y</enabled>
+    </hop>
+    <hop>
+      <from>READ_FILE_3_(PRESENCE)</from>
+      <to>SORT_ 3</to>
+      <enabled>Y</enabled>
+    </hop>
+    <hop>
+      <from>SORT_ 3</from>
+      <to>TO_NULL_ 3</to>
+      <enabled>Y</enabled>
+    </hop>
+    <hop>
+      <from>TO_NULL_ 3</from>
+      <to>LOAD_FILE_3_(PRESENCE)</to>
+      <enabled>Y</enabled>
+    </hop>
+    <hop>
+      <from>SORT_ 4</from>
+      <to>TO_NULL_ 4</to>
+      <enabled>Y</enabled>
     </hop>
     <hop>
       <from>READ_FILE_1_(REPEATED)</from>
+      <to>SORT_1</to>
+      <enabled>Y</enabled>
+    </hop>
+    <hop>
+      <from>SORT_1</from>
+      <to>TO_NULL_1</to>
+      <enabled>Y</enabled>
+    </hop>
+    <hop>
+      <from>TO_NULL_1</from>
       <to>LOAD_FILE_1_(REPEATED)</to>
       <enabled>Y</enabled>
     </hop>
     <hop>
-      <from>READ_FILE_3_(TMO)</from>
-      <to>LOAD_FILE_3_(TMO)</to>
+      <from>READ_FILE_4_(CASE)</from>
+      <to>CPython Script4</to>
+      <enabled>Y</enabled>
+    </hop>
+    <hop>
+      <from>CPython Script4</from>
+      <to>SORT_ 4</to>
+      <enabled>Y</enabled>
+    </hop>
+    <hop>
+      <from>TO_NULL_ 4</from>
+      <to>LOAD_FILE_4_(CASE)</to>
       <enabled>Y</enabled>
     </hop>
   </order>
   <step>
-    <name>CONVERT_DATE_VOLUMES</name>
-    <type>SelectValues</type>
+    <name>CPython Script4</name>
+    <type>CPythonScriptExecutor</type>
     <description/>
     <distribute>Y</distribute>
     <custom_distribution/>
@@ -552,262 +592,39 @@
       <method>none</method>
       <schema_name/>
     </partitioning>
-    <fields>
-      <field>
-        <name>data_ligacao</name>
-      </field>
-      <field>
-        <name>login_operador</name>
-      </field>
-      <field>
-        <name>hora</name>
-      </field>
-      <field>
-        <name>grupo</name>
-      </field>
-      <field>
-        <name>nb</name>
-      </field>
-      <field>
-        <name>tipo_atendimento</name>
-      </field>
-      <field>
-        <name>recebida_ura</name>
-      </field>
-      <field>
-        <name>abandonada_ura</name>
-      </field>
-      <field>
-        <name>oferecida</name>
-      </field>
-      <field>
-        <name>atendida</name>
-      </field>
-      <field>
-        <name>atendida_ate_50s</name>
-      </field>
-      <field>
-        <name>abandonada_fila</name>
-      </field>
-      <field>
-        <name>abandonada_fila_ate_50s</name>
-      </field>
-      <field>
-        <name>ocupada</name>
-      </field>
-      <field>
-        <name>tempo_ligacoes_atendidas</name>
-      </field>
-      <field>
-        <name>tempo_ligacoes_com_operador</name>
-      </field>
-      <field>
-        <name>duracao_fila</name>
-      </field>
-      <field>
-        <name>atendida_ate_20s</name>
-      </field>
-      <field>
-        <name>abandonada_fila_ate_20s</name>
-      </field>
-      <field>
-        <name>arquivo</name>
-      </field>
-      <select_unspecified>N</select_unspecified>
-    </fields>
-    <attributes/>
-    <cluster_schema/>
-    <remotesteps>
-      <input>
-      </input>
-      <output>
-      </output>
-    </remotesteps>
-    <GUI>
-      <xloc>880</xloc>
-      <yloc>48</yloc>
-      <draw>Y</draw>
-    </GUI>
-  </step>
-  <step>
-    <name>DUMP_VOLUMES</name>
-    <type>TextFileOutput</type>
-    <description/>
-    <distribute>Y</distribute>
-    <custom_distribution/>
-    <copies>1</copies>
-    <partitioning>
-      <method>none</method>
-      <schema_name/>
-    </partitioning>
-    <separator>;</separator>
-    <enclosure>"</enclosure>
-    <enclosure_forced>Y</enclosure_forced>
-    <enclosure_fix_disabled>N</enclosure_fix_disabled>
-    <header>Y</header>
-    <footer>N</footer>
-    <format>DOS</format>
-    <compression>None</compression>
-    <encoding>windows-1252</encoding>
-    <endedLine/>
-    <fileNameInField>N</fileNameInField>
-    <fileNameField/>
-    <create_parent_folder>Y</create_parent_folder>
-    <file>
-      <name>${P_DUMP}${P_MASK_FILENAME}_dump</name>
-      <servlet_output>N</servlet_output>
-      <do_not_open_new_file_init>N</do_not_open_new_file_init>
-      <extention>csv</extention>
-      <append>N</append>
-      <split>N</split>
-      <haspartno>N</haspartno>
-      <add_date>N</add_date>
-      <add_time>N</add_time>
-      <SpecifyFormat>N</SpecifyFormat>
-      <date_time_format/>
-      <add_to_result_filenames>Y</add_to_result_filenames>
-      <pad>Y</pad>
-      <fast_dump>Y</fast_dump>
-      <splitevery/>
-    </file>
-    <fields>
-    </fields>
-    <attributes/>
-    <cluster_schema/>
-    <remotesteps>
-      <input>
-      </input>
-      <output>
-      </output>
-    </remotesteps>
-    <GUI>
-      <xloc>1088</xloc>
-      <yloc>48</yloc>
-      <draw>Y</draw>
-    </GUI>
-  </step>
-  <step>
-    <name>JS_CONVERT_DATE_VOLUMES</name>
-    <type>ScriptValueMod</type>
-    <description/>
-    <distribute>Y</distribute>
-    <custom_distribution/>
-    <copies>1</copies>
-    <partitioning>
-      <method>none</method>
-      <schema_name/>
-    </partitioning>
-    <compatible>N</compatible>
-    <optimizationLevel>9</optimizationLevel>
-    <jsScripts>
-      <jsScript>
-        <jsScript_type>0</jsScript_type>
-        <jsScript_name>Script 1</jsScript_name>
-        <jsScript_script>//Script here
+    <rows_to_process>ALL</rows_to_process>
+    <rows_to_process_size/>
+    <reservoir_sampling>N</reservoir_sampling>
+    <reservoir_sampling_size/>
+    <reservoir_sampling_seed>1</reservoir_sampling_seed>
+    <include_input_as_output>N</include_input_as_output>
+    <py_script># python script
+import pandas as pd
 
-var data_ligacao = date2str(data_ligacao,"yyyy-MM-dd");
-</jsScript_script>
-      </jsScript>
-      <jsScript>
-        <jsScript_type>-1</jsScript_type>
-        <jsScript_name>str2date_Sample</jsScript_name>
-        <jsScript_script>// Converts the given String to a date Value.
-//
-// Usage:
-// str2date(var);
-// 1: String - The Variable with the String to convert.
-// This call uses your localized format.
-//
-// str2date(var, var);
-// 1: String - The Variable with the String to convert.
-// 2: String - The Format:
-//        yy / yyyy - 06 / 2006
-//        MM / MMM / MMMMM - 11 / Nov / November
-//        d / dd  - 1 / 01
-//        E / EEEE - Tue / Tuesday
-//        hh / HH - 11 / 23
-//        m / mm - 5 / 05
-//        s / ss - 8 / 08
-//
-// str2date(var, var, var);
-// 1: String - The Variable with the String to convert.
-// 2: String - The Format:
-// 3: String - The Locale Parameter
-//    An valid ISO Language Code. (DE = German, EN = English, FR = France, ...)
-//
-// str2date(var, var, var, var);
-// 1: String - The Variable with the String to convert.
-// 2: String - The Format:
-// 3: String - The Locale Parameter
-//    An valid ISO Language Code. (DE = German, EN = English, FR = France, ...)
-// 4: String - The Timezone Parameter.
-//    A valid timezone: EST, GMT, ... (if invalid GMT will be selected as default)
-// 
-// 2006-11-15
-//
-Alert(str2date("01.12.2006","dd.MM.yyyy"));
-Alert(str2date("01.12.2006 23:23:01","dd.MM.yyyy HH:mm:ss"));
-Alert(str2date("Tue.May.2006","E.MMM.yyyy","EN"));
-Alert(str2date("22.02.2008 23:23:01","dd.MM.yyyy HH:mm:ss","DE"));
-Alert(str2date("22.02.2008 23:23:01","dd.MM.yyyy HH:mm:ss","DE", "EST"));</jsScript_script>
-      </jsScript>
-      <jsScript>
-        <jsScript_type>-1</jsScript_type>
-        <jsScript_name>date2str_Sample</jsScript_name>
-        <jsScript_script>// Converts the given Date to a string Value.
-//
-// Usage:
-// date2str(var);
-// 1: Date - The Variable with the Date to convert.
-// This call uses your localized format.
-//
-// date2str(var, var);
-// 1: Date - The Variable with the Date to convert.
-// 2: String - The Format:
-//        yy / yyyy - 06 / 2006
-//        MM / MMM / MMMMM - 11 / Nov / November
-//        d / dd  - 1 / 01
-//        E / EEEE - Tue / Tuesday
-//        hh / HH - 11 / 23
-//        m / mm - 5 / 05
-//        s / ss - 8 / 08
-//
-// date2str(var, var, var);
-// 1: Date - The Variable with the Date to convert.
-// 2: String - The Format:
-// 3: String - The Locale Parameter
-//    A valid ISO Language Code. (DE = German, EN = English, FR = France, ...)
-//
-// date2str(var, var, var, var);
-// 1: Date - The Variable with the Date to convert.
-// 2: String - The Format:
-// 3: String - The Locale Parameter
-//    A valid ISO Language Code. (DE = German, EN = English, FR = France, ...)
-// 4: String - The Timezone Parameter.
-//    A valid timezone: EST, GMT, ... (if invalid GMT will be selected as default)
-// 
-// 2006-11-15
-//
-var dValue = new Date();
-Alert(date2str(dValue));
-Alert(date2str(dValue,"dd.MM.yyyy"));
-Alert(date2str(dValue,"dd.MM.yyyy HH:mm:ss"));
-Alert(date2str(dValue,"E.MMM.yyyy","DE"));
-Alert(date2str(dValue,"dd.MM.yyyy HH:mm:ss","EN"));
-Alert(date2str(dValue,"dd.MM.yyyy HH:mm:ss","EN", "EST"));
-     </jsScript_script>
-      </jsScript>
-    </jsScripts>
-    <fields>
-      <field>
-        <name>data_ligacao</name>
-        <rename>data_ligacao</rename>
-        <type>String</type>
-        <length>-1</length>
-        <precision>-1</precision>
-        <replace>Y</replace>
-      </field>
-    </fields>
+df = py_data
+
+# Ordena os valores em ordem crescente
+df.sort_values(['case_number','user_bss', 'start_date'], ascending = [True, True, True], inplace = True)
+
+# Cria o flag em ordem crescente
+df['seq_asc'] = df.groupby(['case_number','user_bss'])['start_date'].rank(method='first')
+
+# Ordena os valores em ordem decrescente
+df.sort_values(['case_number','user_bss', 'start_date'], ascending = [True, True, False], inplace = True)
+
+# Cria o flag em ordem decrescente
+df['seq_desc'] = df.groupby(['case_number','user_bss'])['start_date'].rank(method='first')</py_script>
+    <load_script_at_runtime>N</load_script_at_runtime>
+    <script_to_load/>
+    <continue_on_unset_vars>N</continue_on_unset_vars>
+    <py_vars_to_get>df</py_vars_to_get>
+    <include_frame_row_index>N</include_frame_row_index>
+    <frame_names>
+      <frame_name0>py_data</frame_name0>
+    </frame_names>
+    <incoming_step_names>
+      <step_name0>TO_NULL_ 4</step_name0>
+    </incoming_step_names>
     <attributes/>
     <cluster_schema/>
     <remotesteps>
@@ -817,8 +634,8 @@ Alert(date2str(dValue,"dd.MM.yyyy HH:mm:ss","EN", "EST"));
       </output>
     </remotesteps>
     <GUI>
-      <xloc>672</xloc>
-      <yloc>48</yloc>
+      <xloc>208</xloc>
+      <yloc>288</yloc>
       <draw>Y</draw>
     </GUI>
   </step>
@@ -833,9 +650,9 @@ Alert(date2str(dValue,"dd.MM.yyyy HH:mm:ss","EN", "EST"));
       <method>none</method>
       <schema_name/>
     </partitioning>
-    <connection>CNN_R_TEST</connection>
+    <connection>CNN_CXG_SEMPARAR</connection>
     <schema/>
-    <table>tb_r_salesforce_repeated</table>
+    <table>tb_a_salesforce_repeated</table>
     <commit>1000</commit>
     <truncate>Y</truncate>
     <ignore_errors>N</ignore_errors>
@@ -941,13 +758,13 @@ Alert(date2str(dValue,"dd.MM.yyyy HH:mm:ss","EN", "EST"));
       </output>
     </remotesteps>
     <GUI>
-      <xloc>400</xloc>
-      <yloc>48</yloc>
+      <xloc>464</xloc>
+      <yloc>32</yloc>
       <draw>Y</draw>
     </GUI>
   </step>
   <step>
-    <name>LOAD_FILE_3_(TMO)</name>
+    <name>LOAD_FILE_2_(TMO)</name>
     <type>TableOutput</type>
     <description/>
     <distribute>Y</distribute>
@@ -957,9 +774,9 @@ Alert(date2str(dValue,"dd.MM.yyyy HH:mm:ss","EN", "EST"));
       <method>none</method>
       <schema_name/>
     </partitioning>
-    <connection>CNN_R_TEST</connection>
+    <connection>CNN_CXG_SEMPARAR</connection>
     <schema/>
-    <table>tb_r_salesforce_tmo</table>
+    <table>tb_a_salesforce_tmo</table>
     <commit>1000</commit>
     <truncate>Y</truncate>
     <ignore_errors>N</ignore_errors>
@@ -1041,8 +858,240 @@ Alert(date2str(dValue,"dd.MM.yyyy HH:mm:ss","EN", "EST"));
       </output>
     </remotesteps>
     <GUI>
-      <xloc>400</xloc>
-      <yloc>192</yloc>
+      <xloc>464</xloc>
+      <yloc>128</yloc>
+      <draw>Y</draw>
+    </GUI>
+  </step>
+  <step>
+    <name>LOAD_FILE_3_(PRESENCE)</name>
+    <type>TableOutput</type>
+    <description/>
+    <distribute>Y</distribute>
+    <custom_distribution/>
+    <copies>1</copies>
+    <partitioning>
+      <method>none</method>
+      <schema_name/>
+    </partitioning>
+    <connection>CNN_CXG_SEMPARAR</connection>
+    <schema/>
+    <table>tb_a_salesforce_presence</table>
+    <commit>1000</commit>
+    <truncate>Y</truncate>
+    <ignore_errors>N</ignore_errors>
+    <use_batch>Y</use_batch>
+    <specify_fields>Y</specify_fields>
+    <partitioning_enabled>N</partitioning_enabled>
+    <partitioning_field/>
+    <partitioning_daily>N</partitioning_daily>
+    <partitioning_monthly>Y</partitioning_monthly>
+    <tablename_in_field>N</tablename_in_field>
+    <tablename_field/>
+    <tablename_in_table>Y</tablename_in_table>
+    <return_keys>N</return_keys>
+    <return_field/>
+    <fields>
+      <field>
+        <column_name>data_carga</column_name>
+        <stream_name>DataCarga</stream_name>
+      </field>
+      <field>
+        <column_name>username</column_name>
+        <stream_name>UserName</stream_name>
+      </field>
+      <field>
+        <column_name>status_start_date</column_name>
+        <stream_name>StatusStartDate</stream_name>
+      </field>
+      <field>
+        <column_name>status_end_date</column_name>
+        <stream_name>StatusEndDate</stream_name>
+      </field>
+      <field>
+        <column_name>status_duration</column_name>
+        <stream_name>StatusDuration</stream_name>
+      </field>
+      <field>
+        <column_name>configured_capacity</column_name>
+        <stream_name>ConfiguredCapacity</stream_name>
+      </field>
+      <field>
+        <column_name>average_capacity</column_name>
+        <stream_name>AverageCapacity</stream_name>
+      </field>
+      <field>
+        <column_name>tempo_peracional</column_name>
+        <stream_name>TmpOperacional</stream_name>
+      </field>
+      <field>
+        <column_name>master_label</column_name>
+        <stream_name>MasterLabel</stream_name>
+      </field>
+      <field>
+        <column_name>user_eps</column_name>
+        <stream_name>UserEps</stream_name>
+      </field>
+      <field>
+        <column_name>arquivo</column_name>
+        <stream_name>arquivo</stream_name>
+      </field>
+    </fields>
+    <attributes/>
+    <cluster_schema/>
+    <remotesteps>
+      <input>
+      </input>
+      <output>
+      </output>
+    </remotesteps>
+    <GUI>
+      <xloc>464</xloc>
+      <yloc>208</yloc>
+      <draw>Y</draw>
+    </GUI>
+  </step>
+  <step>
+    <name>LOAD_FILE_4_(CASE)</name>
+    <type>TableOutput</type>
+    <description/>
+    <distribute>Y</distribute>
+    <custom_distribution/>
+    <copies>1</copies>
+    <partitioning>
+      <method>none</method>
+      <schema_name/>
+    </partitioning>
+    <connection>CNN_CXG_SEMPARAR</connection>
+    <schema/>
+    <table>tb_a_salesforce_case</table>
+    <commit>1000</commit>
+    <truncate>Y</truncate>
+    <ignore_errors>N</ignore_errors>
+    <use_batch>Y</use_batch>
+    <specify_fields>Y</specify_fields>
+    <partitioning_enabled>N</partitioning_enabled>
+    <partitioning_field/>
+    <partitioning_daily>N</partitioning_daily>
+    <partitioning_monthly>Y</partitioning_monthly>
+    <tablename_in_field>N</tablename_in_field>
+    <tablename_field/>
+    <tablename_in_table>Y</tablename_in_table>
+    <return_keys>N</return_keys>
+    <return_field/>
+    <fields>
+      <field>
+        <column_name>data_carga</column_name>
+        <stream_name>DataCarga</stream_name>
+      </field>
+      <field>
+        <column_name>start_date</column_name>
+        <stream_name>StartDate</stream_name>
+      </field>
+      <field>
+        <column_name>completion_date</column_name>
+        <stream_name>CompletionDate</stream_name>
+      </field>
+      <field>
+        <column_name>time_second</column_name>
+        <stream_name>TimeSecond</stream_name>
+      </field>
+      <field>
+        <column_name>case_number</column_name>
+        <stream_name>CaseNumber</stream_name>
+      </field>
+      <field>
+        <column_name>protocol</column_name>
+        <stream_name>Protocol</stream_name>
+      </field>
+      <field>
+        <column_name>milestone_type</column_name>
+        <stream_name>MilestoneType</stream_name>
+      </field>
+      <field>
+        <column_name>user_bss</column_name>
+        <stream_name>UserBss</stream_name>
+      </field>
+      <field>
+        <column_name>user_eps</column_name>
+        <stream_name>UserEps</stream_name>
+      </field>
+      <field>
+        <column_name>record_type</column_name>
+        <stream_name>RecordType</stream_name>
+      </field>
+      <field>
+        <column_name>status</column_name>
+        <stream_name>Status</stream_name>
+      </field>
+      <field>
+        <column_name>origin</column_name>
+        <stream_name>Origin</stream_name>
+      </field>
+      <field>
+        <column_name>reason</column_name>
+        <stream_name>Reason</stream_name>
+      </field>
+      <field>
+        <column_name>tab_ini_motivo</column_name>
+        <stream_name>TabIniMotivo</stream_name>
+      </field>
+      <field>
+        <column_name>tab_ini_submotivo</column_name>
+        <stream_name>TabIniSubmotivo</stream_name>
+      </field>
+      <field>
+        <column_name>tab_ini_detalhamento</column_name>
+        <stream_name>TabIniDetalhamento</stream_name>
+      </field>
+      <field>
+        <column_name>tab_fim_motivo</column_name>
+        <stream_name>TabFimMotivo</stream_name>
+      </field>
+      <field>
+        <column_name>tab_fim_submotivo</column_name>
+        <stream_name>TabFimSubmotivo</stream_name>
+      </field>
+      <field>
+        <column_name>tab_fim_detalhamento</column_name>
+        <stream_name>TabFimDetalhamento</stream_name>
+      </field>
+      <field>
+        <column_name>csat</column_name>
+        <stream_name>Csat</stream_name>
+      </field>
+      <field>
+        <column_name>motivo_nota</column_name>
+        <stream_name>MotivoNota</stream_name>
+      </field>
+      <field>
+        <column_name>customer_code</column_name>
+        <stream_name>CustomerCode</stream_name>
+      </field>
+      <field>
+        <column_name>seq_asc</column_name>
+        <stream_name>seq_asc</stream_name>
+      </field>
+      <field>
+        <column_name>seq_desc</column_name>
+        <stream_name>seq_desc</stream_name>
+      </field>
+      <field>
+        <column_name>arquivo</column_name>
+        <stream_name>arquivo</stream_name>
+      </field>
+    </fields>
+    <attributes/>
+    <cluster_schema/>
+    <remotesteps>
+      <input>
+      </input>
+      <output>
+      </output>
+    </remotesteps>
+    <GUI>
+      <xloc>608</xloc>
+      <yloc>288</yloc>
       <draw>Y</draw>
     </GUI>
   </step>
@@ -1085,7 +1134,7 @@ Alert(date2str(dValue,"dd.MM.yyyy HH:mm:ss","EN", "EST"));
     <length>Characters</length>
     <add_to_result_filenames>Y</add_to_result_filenames>
     <file>
-      <name>/E:/OneDrive - URANET PROJETOS E SISTEMAS LTDA/Documents - Engenharia/ETL_MULTI/DUMP/SEMPARAR/Repeated.txt</name>
+      <name>${P_FILE_1}</name>
       <filemask/>
       <exclude_filemask/>
       <file_required>N</file_required>
@@ -1417,12 +1466,12 @@ Alert(date2str(dValue,"dd.MM.yyyy HH:mm:ss","EN", "EST"));
     </remotesteps>
     <GUI>
       <xloc>64</xloc>
-      <yloc>48</yloc>
+      <yloc>32</yloc>
       <draw>Y</draw>
     </GUI>
   </step>
   <step>
-    <name>READ_FILE_3_(TMO)</name>
+    <name>READ_FILE_2_(TMO)</name>
     <type>TextFileInput</type>
     <description/>
     <distribute>Y</distribute>
@@ -1460,7 +1509,7 @@ Alert(date2str(dValue,"dd.MM.yyyy HH:mm:ss","EN", "EST"));
     <length>Characters</length>
     <add_to_result_filenames>Y</add_to_result_filenames>
     <file>
-      <name>E:\OneDrive - URANET PROJETOS E SISTEMAS LTDA\Documents - Engenharia\ETL_MULTI\DUMP\SEMPARAR\Tmo.txt</name>
+      <name>${P_FILE_2}</name>
       <filemask/>
       <exclude_filemask/>
       <file_required>N</file_required>
@@ -1702,7 +1751,1215 @@ Alert(date2str(dValue,"dd.MM.yyyy HH:mm:ss","EN", "EST"));
     </remotesteps>
     <GUI>
       <xloc>64</xloc>
-      <yloc>192</yloc>
+      <yloc>128</yloc>
+      <draw>Y</draw>
+    </GUI>
+  </step>
+  <step>
+    <name>READ_FILE_3_(PRESENCE)</name>
+    <type>TextFileInput</type>
+    <description/>
+    <distribute>Y</distribute>
+    <custom_distribution/>
+    <copies>1</copies>
+    <partitioning>
+      <method>none</method>
+      <schema_name/>
+    </partitioning>
+    <accept_filenames>N</accept_filenames>
+    <passing_through_fields>N</passing_through_fields>
+    <accept_field/>
+    <accept_stepname/>
+    <separator>;</separator>
+    <enclosure>"</enclosure>
+    <enclosure_breaks>N</enclosure_breaks>
+    <escapechar/>
+    <header>Y</header>
+    <nr_headerlines>1</nr_headerlines>
+    <footer>N</footer>
+    <nr_footerlines>1</nr_footerlines>
+    <line_wrapped>N</line_wrapped>
+    <nr_wraps>1</nr_wraps>
+    <layout_paged>N</layout_paged>
+    <nr_lines_per_page>80</nr_lines_per_page>
+    <nr_lines_doc_header>0</nr_lines_doc_header>
+    <noempty>Y</noempty>
+    <include>N</include>
+    <include_field/>
+    <rownum>N</rownum>
+    <rownumByFile>N</rownumByFile>
+    <rownum_field/>
+    <format>DOS</format>
+    <encoding>windows-1252</encoding>
+    <length>Characters</length>
+    <add_to_result_filenames>Y</add_to_result_filenames>
+    <file>
+      <name>${P_FILE_3}</name>
+      <filemask/>
+      <exclude_filemask/>
+      <file_required>N</file_required>
+      <include_subfolders>N</include_subfolders>
+      <type>CSV</type>
+      <compression>None</compression>
+    </file>
+    <filters>
+    </filters>
+    <fields>
+      <field>
+        <name>DataCarga</name>
+        <type>Date</type>
+        <format>yyyy-MM-dd HH:mm:ss</format>
+        <currency/>
+        <decimal/>
+        <group/>
+        <nullif>-</nullif>
+        <ifnull/>
+        <position>-1</position>
+        <length>-1</length>
+        <precision>-1</precision>
+        <trim_type>none</trim_type>
+        <repeat>N</repeat>
+      </field>
+      <field>
+        <name>UserName</name>
+        <type>String</type>
+        <format/>
+        <currency/>
+        <decimal>,</decimal>
+        <group>.</group>
+        <nullif>-</nullif>
+        <ifnull/>
+        <position>-1</position>
+        <length>-1</length>
+        <precision>-1</precision>
+        <trim_type>none</trim_type>
+        <repeat>N</repeat>
+      </field>
+      <field>
+        <name>StatusStartDate</name>
+        <type>Date</type>
+        <format>yyyy-MM-dd HH:mm:ss</format>
+        <currency/>
+        <decimal>,</decimal>
+        <group>.</group>
+        <nullif>-</nullif>
+        <ifnull/>
+        <position>-1</position>
+        <length>-1</length>
+        <precision>-1</precision>
+        <trim_type>none</trim_type>
+        <repeat>N</repeat>
+      </field>
+      <field>
+        <name>StatusEndDate</name>
+        <type>Date</type>
+        <format>yyyy-MM-dd HH:mm:ss</format>
+        <currency/>
+        <decimal>,</decimal>
+        <group>.</group>
+        <nullif>-</nullif>
+        <ifnull/>
+        <position>-1</position>
+        <length>-1</length>
+        <precision>-1</precision>
+        <trim_type>none</trim_type>
+        <repeat>N</repeat>
+      </field>
+      <field>
+        <name>StatusDuration</name>
+        <type>Number</type>
+        <format>#.#</format>
+        <currency/>
+        <decimal>.</decimal>
+        <group>,</group>
+        <nullif>-</nullif>
+        <ifnull/>
+        <position>-1</position>
+        <length>-1</length>
+        <precision>-1</precision>
+        <trim_type>none</trim_type>
+        <repeat>N</repeat>
+      </field>
+      <field>
+        <name>ConfiguredCapacity</name>
+        <type>Integer</type>
+        <format>#</format>
+        <currency/>
+        <decimal>,</decimal>
+        <group>.</group>
+        <nullif>-</nullif>
+        <ifnull/>
+        <position>-1</position>
+        <length>-1</length>
+        <precision>-1</precision>
+        <trim_type>none</trim_type>
+        <repeat>N</repeat>
+      </field>
+      <field>
+        <name>AverageCapacity</name>
+        <type>Number</type>
+        <format>#.#</format>
+        <currency/>
+        <decimal>,</decimal>
+        <group>.</group>
+        <nullif>-</nullif>
+        <ifnull/>
+        <position>-1</position>
+        <length>-1</length>
+        <precision>-1</precision>
+        <trim_type>none</trim_type>
+        <repeat>N</repeat>
+      </field>
+      <field>
+        <name>TmpOperacional</name>
+        <type>Number</type>
+        <format>#.#</format>
+        <currency/>
+        <decimal>,</decimal>
+        <group>.</group>
+        <nullif>-</nullif>
+        <ifnull/>
+        <position>-1</position>
+        <length>-1</length>
+        <precision>-1</precision>
+        <trim_type>none</trim_type>
+        <repeat>N</repeat>
+      </field>
+      <field>
+        <name>MasterLabel</name>
+        <type>String</type>
+        <format/>
+        <currency/>
+        <decimal>,</decimal>
+        <group>.</group>
+        <nullif>-</nullif>
+        <ifnull/>
+        <position>-1</position>
+        <length>-1</length>
+        <precision>-1</precision>
+        <trim_type>none</trim_type>
+        <repeat>N</repeat>
+      </field>
+      <field>
+        <name>UserEps</name>
+        <type>String</type>
+        <format/>
+        <currency/>
+        <decimal>,</decimal>
+        <group>.</group>
+        <nullif>-</nullif>
+        <ifnull/>
+        <position>-1</position>
+        <length>-1</length>
+        <precision>-1</precision>
+        <trim_type>none</trim_type>
+        <repeat>N</repeat>
+      </field>
+    </fields>
+    <limit>0</limit>
+    <error_ignored>N</error_ignored>
+    <skip_bad_files>N</skip_bad_files>
+    <file_error_field/>
+    <file_error_message_field/>
+    <error_line_skipped>N</error_line_skipped>
+    <error_count_field/>
+    <error_fields_field/>
+    <error_text_field/>
+    <bad_line_files_destination_directory/>
+    <bad_line_files_extension>warning</bad_line_files_extension>
+    <error_line_files_destination_directory/>
+    <error_line_files_extension>error</error_line_files_extension>
+    <line_number_files_destination_directory/>
+    <line_number_files_extension>line</line_number_files_extension>
+    <date_format_lenient>Y</date_format_lenient>
+    <date_format_locale>pt_BR</date_format_locale>
+    <shortFileFieldName>arquivo</shortFileFieldName>
+    <pathFieldName/>
+    <hiddenFieldName/>
+    <lastModificationTimeFieldName/>
+    <uriNameFieldName/>
+    <rootUriNameFieldName/>
+    <extensionFieldName/>
+    <sizeFieldName/>
+    <attributes/>
+    <cluster_schema/>
+    <remotesteps>
+      <input>
+      </input>
+      <output>
+      </output>
+    </remotesteps>
+    <GUI>
+      <xloc>64</xloc>
+      <yloc>208</yloc>
+      <draw>Y</draw>
+    </GUI>
+  </step>
+  <step>
+    <name>READ_FILE_4_(CASE)</name>
+    <type>TextFileInput</type>
+    <description/>
+    <distribute>Y</distribute>
+    <custom_distribution/>
+    <copies>1</copies>
+    <partitioning>
+      <method>none</method>
+      <schema_name/>
+    </partitioning>
+    <accept_filenames>N</accept_filenames>
+    <passing_through_fields>N</passing_through_fields>
+    <accept_field/>
+    <accept_stepname/>
+    <separator>;</separator>
+    <enclosure>"</enclosure>
+    <enclosure_breaks>N</enclosure_breaks>
+    <escapechar/>
+    <header>Y</header>
+    <nr_headerlines>1</nr_headerlines>
+    <footer>N</footer>
+    <nr_footerlines>1</nr_footerlines>
+    <line_wrapped>N</line_wrapped>
+    <nr_wraps>1</nr_wraps>
+    <layout_paged>N</layout_paged>
+    <nr_lines_per_page>80</nr_lines_per_page>
+    <nr_lines_doc_header>0</nr_lines_doc_header>
+    <noempty>Y</noempty>
+    <include>N</include>
+    <include_field/>
+    <rownum>N</rownum>
+    <rownumByFile>N</rownumByFile>
+    <rownum_field/>
+    <format>mixed</format>
+    <encoding>windows-1252</encoding>
+    <length>Characters</length>
+    <add_to_result_filenames>Y</add_to_result_filenames>
+    <file>
+      <name>${P_FILE_4}</name>
+      <filemask/>
+      <exclude_filemask/>
+      <file_required>N</file_required>
+      <include_subfolders>N</include_subfolders>
+      <type>CSV</type>
+      <compression>None</compression>
+    </file>
+    <filters>
+    </filters>
+    <fields>
+      <field>
+        <name>DataCarga</name>
+        <type>Date</type>
+        <format>yyyy-MM-dd HH:mm:ss</format>
+        <currency/>
+        <decimal>,</decimal>
+        <group>.</group>
+        <nullif>-</nullif>
+        <ifnull/>
+        <position>-1</position>
+        <length>-1</length>
+        <precision>-1</precision>
+        <trim_type>none</trim_type>
+        <repeat>N</repeat>
+      </field>
+      <field>
+        <name>StartDate</name>
+        <type>Date</type>
+        <format>yyyy-MM-dd HH:mm:ss</format>
+        <currency/>
+        <decimal>,</decimal>
+        <group>.</group>
+        <nullif>-</nullif>
+        <ifnull/>
+        <position>-1</position>
+        <length>-1</length>
+        <precision>-1</precision>
+        <trim_type>none</trim_type>
+        <repeat>N</repeat>
+      </field>
+      <field>
+        <name>CompletionDate</name>
+        <type>String</type>
+        <format/>
+        <currency/>
+        <decimal>,</decimal>
+        <group>.</group>
+        <nullif>-</nullif>
+        <ifnull/>
+        <position>-1</position>
+        <length>-1</length>
+        <precision>-1</precision>
+        <trim_type>none</trim_type>
+        <repeat>N</repeat>
+      </field>
+      <field>
+        <name>TimeSecond</name>
+        <type>Number</type>
+        <format>#.#</format>
+        <currency/>
+        <decimal>.</decimal>
+        <group>,</group>
+        <nullif>-</nullif>
+        <ifnull/>
+        <position>-1</position>
+        <length>-1</length>
+        <precision>-1</precision>
+        <trim_type>none</trim_type>
+        <repeat>N</repeat>
+      </field>
+      <field>
+        <name>CaseNumber</name>
+        <type>Number</type>
+        <format>#.#</format>
+        <currency/>
+        <decimal>.</decimal>
+        <group>,</group>
+        <nullif>-</nullif>
+        <ifnull/>
+        <position>-1</position>
+        <length>-1</length>
+        <precision>-1</precision>
+        <trim_type>none</trim_type>
+        <repeat>N</repeat>
+      </field>
+      <field>
+        <name>Protocol</name>
+        <type>Number</type>
+        <format>#.#</format>
+        <currency/>
+        <decimal>.</decimal>
+        <group>,</group>
+        <nullif>-</nullif>
+        <ifnull/>
+        <position>-1</position>
+        <length>-1</length>
+        <precision>-1</precision>
+        <trim_type>none</trim_type>
+        <repeat>N</repeat>
+      </field>
+      <field>
+        <name>MilestoneType</name>
+        <type>String</type>
+        <format/>
+        <currency/>
+        <decimal>,</decimal>
+        <group>.</group>
+        <nullif>-</nullif>
+        <ifnull/>
+        <position>-1</position>
+        <length>-1</length>
+        <precision>-1</precision>
+        <trim_type>none</trim_type>
+        <repeat>N</repeat>
+      </field>
+      <field>
+        <name>UserBss</name>
+        <type>String</type>
+        <format/>
+        <currency/>
+        <decimal>,</decimal>
+        <group>.</group>
+        <nullif>-</nullif>
+        <ifnull/>
+        <position>-1</position>
+        <length>-1</length>
+        <precision>-1</precision>
+        <trim_type>none</trim_type>
+        <repeat>N</repeat>
+      </field>
+      <field>
+        <name>UserEps</name>
+        <type>String</type>
+        <format/>
+        <currency/>
+        <decimal>,</decimal>
+        <group>.</group>
+        <nullif>-</nullif>
+        <ifnull/>
+        <position>-1</position>
+        <length>-1</length>
+        <precision>-1</precision>
+        <trim_type>none</trim_type>
+        <repeat>N</repeat>
+      </field>
+      <field>
+        <name>RecordType</name>
+        <type>String</type>
+        <format/>
+        <currency/>
+        <decimal>,</decimal>
+        <group>.</group>
+        <nullif>-</nullif>
+        <ifnull/>
+        <position>-1</position>
+        <length>-1</length>
+        <precision>-1</precision>
+        <trim_type>none</trim_type>
+        <repeat>N</repeat>
+      </field>
+      <field>
+        <name>Status</name>
+        <type>String</type>
+        <format/>
+        <currency/>
+        <decimal>,</decimal>
+        <group>.</group>
+        <nullif>-</nullif>
+        <ifnull/>
+        <position>-1</position>
+        <length>-1</length>
+        <precision>-1</precision>
+        <trim_type>none</trim_type>
+        <repeat>N</repeat>
+      </field>
+      <field>
+        <name>Origin</name>
+        <type>String</type>
+        <format/>
+        <currency/>
+        <decimal>,</decimal>
+        <group>.</group>
+        <nullif>-</nullif>
+        <ifnull/>
+        <position>-1</position>
+        <length>-1</length>
+        <precision>-1</precision>
+        <trim_type>none</trim_type>
+        <repeat>N</repeat>
+      </field>
+      <field>
+        <name>Reason</name>
+        <type>String</type>
+        <format/>
+        <currency/>
+        <decimal>,</decimal>
+        <group>.</group>
+        <nullif>-</nullif>
+        <ifnull/>
+        <position>-1</position>
+        <length>-1</length>
+        <precision>-1</precision>
+        <trim_type>none</trim_type>
+        <repeat>N</repeat>
+      </field>
+      <field>
+        <name>TabIniMotivo</name>
+        <type>String</type>
+        <format/>
+        <currency/>
+        <decimal>,</decimal>
+        <group>.</group>
+        <nullif>-</nullif>
+        <ifnull/>
+        <position>-1</position>
+        <length>-1</length>
+        <precision>-1</precision>
+        <trim_type>none</trim_type>
+        <repeat>N</repeat>
+      </field>
+      <field>
+        <name>TabIniSubmotivo</name>
+        <type>String</type>
+        <format/>
+        <currency/>
+        <decimal>,</decimal>
+        <group>.</group>
+        <nullif>-</nullif>
+        <ifnull/>
+        <position>-1</position>
+        <length>-1</length>
+        <precision>-1</precision>
+        <trim_type>none</trim_type>
+        <repeat>N</repeat>
+      </field>
+      <field>
+        <name>TabIniDetalhamento</name>
+        <type>String</type>
+        <format/>
+        <currency/>
+        <decimal>,</decimal>
+        <group>.</group>
+        <nullif>-</nullif>
+        <ifnull/>
+        <position>-1</position>
+        <length>-1</length>
+        <precision>-1</precision>
+        <trim_type>none</trim_type>
+        <repeat>N</repeat>
+      </field>
+      <field>
+        <name>TabFimMotivo</name>
+        <type>String</type>
+        <format/>
+        <currency/>
+        <decimal>,</decimal>
+        <group>.</group>
+        <nullif>-</nullif>
+        <ifnull/>
+        <position>-1</position>
+        <length>-1</length>
+        <precision>-1</precision>
+        <trim_type>none</trim_type>
+        <repeat>N</repeat>
+      </field>
+      <field>
+        <name>TabFimSubmotivo</name>
+        <type>String</type>
+        <format/>
+        <currency/>
+        <decimal>,</decimal>
+        <group>.</group>
+        <nullif>-</nullif>
+        <ifnull/>
+        <position>-1</position>
+        <length>-1</length>
+        <precision>-1</precision>
+        <trim_type>none</trim_type>
+        <repeat>N</repeat>
+      </field>
+      <field>
+        <name>TabFimDetalhamento</name>
+        <type>String</type>
+        <format/>
+        <currency/>
+        <decimal>,</decimal>
+        <group>.</group>
+        <nullif>-</nullif>
+        <ifnull/>
+        <position>-1</position>
+        <length>-1</length>
+        <precision>-1</precision>
+        <trim_type>none</trim_type>
+        <repeat>N</repeat>
+      </field>
+      <field>
+        <name>Csat</name>
+        <type>String</type>
+        <format/>
+        <currency/>
+        <decimal>,</decimal>
+        <group>.</group>
+        <nullif>-</nullif>
+        <ifnull/>
+        <position>-1</position>
+        <length>-1</length>
+        <precision>-1</precision>
+        <trim_type>none</trim_type>
+        <repeat>N</repeat>
+      </field>
+      <field>
+        <name>MotivoNota</name>
+        <type>String</type>
+        <format/>
+        <currency/>
+        <decimal>,</decimal>
+        <group>.</group>
+        <nullif>-</nullif>
+        <ifnull/>
+        <position>-1</position>
+        <length>-1</length>
+        <precision>-1</precision>
+        <trim_type>none</trim_type>
+        <repeat>N</repeat>
+      </field>
+      <field>
+        <name>CustomerCode</name>
+        <type>Number</type>
+        <format>#.#</format>
+        <currency/>
+        <decimal>.</decimal>
+        <group>,</group>
+        <nullif>-</nullif>
+        <ifnull/>
+        <position>-1</position>
+        <length>-1</length>
+        <precision>-1</precision>
+        <trim_type>none</trim_type>
+        <repeat>N</repeat>
+      </field>
+    </fields>
+    <limit>0</limit>
+    <error_ignored>Y</error_ignored>
+    <skip_bad_files>N</skip_bad_files>
+    <file_error_field/>
+    <file_error_message_field/>
+    <error_line_skipped>Y</error_line_skipped>
+    <error_count_field/>
+    <error_fields_field/>
+    <error_text_field/>
+    <bad_line_files_destination_directory/>
+    <bad_line_files_extension>warning</bad_line_files_extension>
+    <error_line_files_destination_directory/>
+    <error_line_files_extension>error</error_line_files_extension>
+    <line_number_files_destination_directory/>
+    <line_number_files_extension>line</line_number_files_extension>
+    <date_format_lenient>Y</date_format_lenient>
+    <date_format_locale>pt_BR</date_format_locale>
+    <shortFileFieldName>arquivo</shortFileFieldName>
+    <pathFieldName/>
+    <hiddenFieldName/>
+    <lastModificationTimeFieldName/>
+    <uriNameFieldName/>
+    <rootUriNameFieldName/>
+    <extensionFieldName/>
+    <sizeFieldName/>
+    <attributes/>
+    <cluster_schema/>
+    <remotesteps>
+      <input>
+      </input>
+      <output>
+      </output>
+    </remotesteps>
+    <GUI>
+      <xloc>64</xloc>
+      <yloc>288</yloc>
+      <draw>Y</draw>
+    </GUI>
+  </step>
+  <step>
+    <name>SORT_ 2</name>
+    <type>SortRows</type>
+    <description/>
+    <distribute>Y</distribute>
+    <custom_distribution/>
+    <copies>1</copies>
+    <partitioning>
+      <method>none</method>
+      <schema_name/>
+    </partitioning>
+    <directory>%%java.io.tmpdir%%</directory>
+    <prefix>out</prefix>
+    <sort_size>1000000</sort_size>
+    <free_memory/>
+    <compress>N</compress>
+    <compress_variable/>
+    <unique_rows>N</unique_rows>
+    <fields>
+      <field>
+        <name>Date</name>
+        <ascending>Y</ascending>
+        <case_sensitive>N</case_sensitive>
+        <collator_enabled>N</collator_enabled>
+        <collator_strength>0</collator_strength>
+        <presorted>N</presorted>
+      </field>
+    </fields>
+    <attributes/>
+    <cluster_schema/>
+    <remotesteps>
+      <input>
+      </input>
+      <output>
+      </output>
+    </remotesteps>
+    <GUI>
+      <xloc>208</xloc>
+      <yloc>128</yloc>
+      <draw>Y</draw>
+    </GUI>
+  </step>
+  <step>
+    <name>SORT_ 3</name>
+    <type>SortRows</type>
+    <description/>
+    <distribute>Y</distribute>
+    <custom_distribution/>
+    <copies>1</copies>
+    <partitioning>
+      <method>none</method>
+      <schema_name/>
+    </partitioning>
+    <directory>%%java.io.tmpdir%%</directory>
+    <prefix>out</prefix>
+    <sort_size>1000000</sort_size>
+    <free_memory/>
+    <compress>N</compress>
+    <compress_variable/>
+    <unique_rows>N</unique_rows>
+    <fields>
+      <field>
+        <name>StatusStartDate</name>
+        <ascending>Y</ascending>
+        <case_sensitive>N</case_sensitive>
+        <collator_enabled>N</collator_enabled>
+        <collator_strength>0</collator_strength>
+        <presorted>N</presorted>
+      </field>
+    </fields>
+    <attributes/>
+    <cluster_schema/>
+    <remotesteps>
+      <input>
+      </input>
+      <output>
+      </output>
+    </remotesteps>
+    <GUI>
+      <xloc>208</xloc>
+      <yloc>208</yloc>
+      <draw>Y</draw>
+    </GUI>
+  </step>
+  <step>
+    <name>SORT_ 4</name>
+    <type>SortRows</type>
+    <description/>
+    <distribute>Y</distribute>
+    <custom_distribution/>
+    <copies>1</copies>
+    <partitioning>
+      <method>none</method>
+      <schema_name/>
+    </partitioning>
+    <directory>%%java.io.tmpdir%%</directory>
+    <prefix>out</prefix>
+    <sort_size>1000000</sort_size>
+    <free_memory/>
+    <compress>N</compress>
+    <compress_variable/>
+    <unique_rows>N</unique_rows>
+    <fields>
+      <field>
+        <name>StartDate</name>
+        <ascending>Y</ascending>
+        <case_sensitive>N</case_sensitive>
+        <collator_enabled>N</collator_enabled>
+        <collator_strength>0</collator_strength>
+        <presorted>N</presorted>
+      </field>
+    </fields>
+    <attributes/>
+    <cluster_schema/>
+    <remotesteps>
+      <input>
+      </input>
+      <output>
+      </output>
+    </remotesteps>
+    <GUI>
+      <xloc>336</xloc>
+      <yloc>288</yloc>
+      <draw>Y</draw>
+    </GUI>
+  </step>
+  <step>
+    <name>SORT_1</name>
+    <type>SortRows</type>
+    <description/>
+    <distribute>Y</distribute>
+    <custom_distribution/>
+    <copies>1</copies>
+    <partitioning>
+      <method>none</method>
+      <schema_name/>
+    </partitioning>
+    <directory>%%java.io.tmpdir%%</directory>
+    <prefix>out</prefix>
+    <sort_size>1000000</sort_size>
+    <free_memory/>
+    <compress>N</compress>
+    <compress_variable/>
+    <unique_rows>N</unique_rows>
+    <fields>
+      <field>
+        <name>data</name>
+        <ascending>Y</ascending>
+        <case_sensitive>N</case_sensitive>
+        <collator_enabled>N</collator_enabled>
+        <collator_strength>0</collator_strength>
+        <presorted>N</presorted>
+      </field>
+    </fields>
+    <attributes/>
+    <cluster_schema/>
+    <remotesteps>
+      <input>
+      </input>
+      <output>
+      </output>
+    </remotesteps>
+    <GUI>
+      <xloc>208</xloc>
+      <yloc>32</yloc>
+      <draw>Y</draw>
+    </GUI>
+  </step>
+  <step>
+    <name>TO_NULL_ 2</name>
+    <type>NullIf</type>
+    <description/>
+    <distribute>Y</distribute>
+    <custom_distribution/>
+    <copies>1</copies>
+    <partitioning>
+      <method>none</method>
+      <schema_name/>
+    </partitioning>
+    <fields>
+      <field>
+        <name>DataCarga</name>
+        <value/>
+      </field>
+      <field>
+        <name>Date</name>
+        <value/>
+      </field>
+      <field>
+        <name>UserEps</name>
+        <value/>
+      </field>
+      <field>
+        <name>UserBss</name>
+        <value/>
+      </field>
+      <field>
+        <name>StatusDuration</name>
+        <value/>
+      </field>
+      <field>
+        <name>TmpOperacional</name>
+        <value/>
+      </field>
+      <field>
+        <name>Tmo</name>
+        <value/>
+      </field>
+      <field>
+        <name>Origin</name>
+        <value/>
+      </field>
+      <field>
+        <name>MilestoneType</name>
+        <value/>
+      </field>
+      <field>
+        <name>RecordType</name>
+        <value/>
+      </field>
+      <field>
+        <name>Calls</name>
+        <value/>
+      </field>
+      <field>
+        <name>Paired</name>
+        <value/>
+      </field>
+      <field>
+        <name>AvgPaired</name>
+        <value/>
+      </field>
+      <field>
+        <name>arquivo</name>
+        <value/>
+      </field>
+    </fields>
+    <attributes/>
+    <cluster_schema/>
+    <remotesteps>
+      <input>
+      </input>
+      <output>
+      </output>
+    </remotesteps>
+    <GUI>
+      <xloc>336</xloc>
+      <yloc>128</yloc>
+      <draw>Y</draw>
+    </GUI>
+  </step>
+  <step>
+    <name>TO_NULL_ 3</name>
+    <type>NullIf</type>
+    <description/>
+    <distribute>Y</distribute>
+    <custom_distribution/>
+    <copies>1</copies>
+    <partitioning>
+      <method>none</method>
+      <schema_name/>
+    </partitioning>
+    <fields>
+      <field>
+        <name>DataCarga</name>
+        <value/>
+      </field>
+      <field>
+        <name>UserName</name>
+        <value/>
+      </field>
+      <field>
+        <name>StatusStartDate</name>
+        <value/>
+      </field>
+      <field>
+        <name>StatusEndDate</name>
+        <value/>
+      </field>
+      <field>
+        <name>StatusDuration</name>
+        <value/>
+      </field>
+      <field>
+        <name>ConfiguredCapacity</name>
+        <value/>
+      </field>
+      <field>
+        <name>AverageCapacity</name>
+        <value/>
+      </field>
+      <field>
+        <name>TmpOperacional</name>
+        <value/>
+      </field>
+      <field>
+        <name>MasterLabel</name>
+        <value/>
+      </field>
+      <field>
+        <name>UserEps</name>
+        <value/>
+      </field>
+      <field>
+        <name>arquivo</name>
+        <value/>
+      </field>
+    </fields>
+    <attributes/>
+    <cluster_schema/>
+    <remotesteps>
+      <input>
+      </input>
+      <output>
+      </output>
+    </remotesteps>
+    <GUI>
+      <xloc>336</xloc>
+      <yloc>208</yloc>
+      <draw>Y</draw>
+    </GUI>
+  </step>
+  <step>
+    <name>TO_NULL_ 4</name>
+    <type>NullIf</type>
+    <description/>
+    <distribute>Y</distribute>
+    <custom_distribution/>
+    <copies>1</copies>
+    <partitioning>
+      <method>none</method>
+      <schema_name/>
+    </partitioning>
+    <fields>
+      <field>
+        <name>DataCarga</name>
+        <value/>
+      </field>
+      <field>
+        <name>StartDate</name>
+        <value/>
+      </field>
+      <field>
+        <name>CompletionDate</name>
+        <value/>
+      </field>
+      <field>
+        <name>TimeSecond</name>
+        <value/>
+      </field>
+      <field>
+        <name>CaseNumber</name>
+        <value/>
+      </field>
+      <field>
+        <name>Protocol</name>
+        <value/>
+      </field>
+      <field>
+        <name>MilestoneType</name>
+        <value/>
+      </field>
+      <field>
+        <name>UserBss</name>
+        <value/>
+      </field>
+      <field>
+        <name>UserEps</name>
+        <value/>
+      </field>
+      <field>
+        <name>RecordType</name>
+        <value/>
+      </field>
+      <field>
+        <name>Status</name>
+        <value/>
+      </field>
+      <field>
+        <name>Origin</name>
+        <value/>
+      </field>
+      <field>
+        <name>Reason</name>
+        <value/>
+      </field>
+      <field>
+        <name>TabIniMotivo</name>
+        <value/>
+      </field>
+      <field>
+        <name>TabIniSubmotivo</name>
+        <value/>
+      </field>
+      <field>
+        <name>TabIniDetalhamento</name>
+        <value/>
+      </field>
+      <field>
+        <name>TabFimMotivo</name>
+        <value/>
+      </field>
+      <field>
+        <name>TabFimSubmotivo</name>
+        <value/>
+      </field>
+      <field>
+        <name>TabFimDetalhamento</name>
+        <value/>
+      </field>
+      <field>
+        <name>Csat</name>
+        <value/>
+      </field>
+      <field>
+        <name>MotivoNota</name>
+        <value/>
+      </field>
+      <field>
+        <name>CustomerCode</name>
+        <value/>
+      </field>
+      <field>
+        <name>arquivo</name>
+        <value/>
+      </field>
+    </fields>
+    <attributes/>
+    <cluster_schema/>
+    <remotesteps>
+      <input>
+      </input>
+      <output>
+      </output>
+    </remotesteps>
+    <GUI>
+      <xloc>464</xloc>
+      <yloc>288</yloc>
+      <draw>Y</draw>
+    </GUI>
+  </step>
+  <step>
+    <name>TO_NULL_1</name>
+    <type>NullIf</type>
+    <description/>
+    <distribute>Y</distribute>
+    <custom_distribution/>
+    <copies>1</copies>
+    <partitioning>
+      <method>none</method>
+      <schema_name/>
+    </partitioning>
+    <fields>
+      <field>
+        <name>ano_mes</name>
+        <value/>
+      </field>
+      <field>
+        <name>id</name>
+        <value/>
+      </field>
+      <field>
+        <name>data</name>
+        <value/>
+      </field>
+      <field>
+        <name>data_inicio</name>
+        <value/>
+      </field>
+      <field>
+        <name>data_fim</name>
+        <value/>
+      </field>
+      <field>
+        <name>dep_id</name>
+        <value/>
+      </field>
+      <field>
+        <name>segmento</name>
+        <value/>
+      </field>
+      <field>
+        <name>customer_code</name>
+        <value/>
+      </field>
+      <field>
+        <name>customer_id</name>
+        <value/>
+      </field>
+      <field>
+        <name>agentes_id</name>
+        <value/>
+      </field>
+      <field>
+        <name>login</name>
+        <value/>
+      </field>
+      <field>
+        <name>nome</name>
+        <value/>
+      </field>
+      <field>
+        <name>site</name>
+        <value/>
+      </field>
+      <field>
+        <name>partition_id</name>
+        <value/>
+      </field>
+      <field>
+        <name>pxm_partition_id</name>
+        <value/>
+      </field>
+      <field>
+        <name>pxm_data_inicio</name>
+        <value/>
+      </field>
+      <field>
+        <name>pxm_data_fim</name>
+        <value/>
+      </field>
+      <field>
+        <name>tmp_retorno</name>
+        <value/>
+      </field>
+      <field>
+        <name>eps_id</name>
+        <value/>
+      </field>
+      <field>
+        <name>arquivo</name>
+        <value/>
+      </field>
+    </fields>
+    <attributes/>
+    <cluster_schema/>
+    <remotesteps>
+      <input>
+      </input>
+      <output>
+      </output>
+    </remotesteps>
+    <GUI>
+      <xloc>336</xloc>
+      <yloc>32</yloc>
       <draw>Y</draw>
     </GUI>
   </step>
