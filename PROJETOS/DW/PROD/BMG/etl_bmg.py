@@ -15,9 +15,11 @@ def d0():
 
 
 # if __name__ == '__main__':
+#     d1()
+#     d0()
 
-#     for dia in reversed(range(0,35)):
-#         dt = (datetime.now() - timedelta(days=dia)).strftime('%Y-%m-%d')
-#         print(dt)
-#         batch_cross(dia)
-#         batch_fcr(dia)
+#     # for dia in reversed(range(0,4)):
+#     #     dt = (datetime.now() - timedelta(days=dia)).strftime('%Y-%m-%d')
+#     #     print(dt)
+#     #     # batch_cross(dia)
+#     #     batch_fcr(dia)

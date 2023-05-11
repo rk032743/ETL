@@ -7,6 +7,7 @@ from datetime import datetime, timedelta
 import time
 import re
 import db
+from sqlalchemy import text
 from get_dir import get_onedrive_dirs
 
 
@@ -30,7 +31,7 @@ TABELA_ALVO = 'tbadmin'
 CHARINDEX = re.search('bd_bi_', BANCO_ORIGEM).end()
 REPRESENTANTE = BANCO_ORIGEM[CHARINDEX:].upper()
 TABELA_ORIGEM  = BANCO_ORIGEM + '.' + TABELA_ALVO
-TABELA_DESTINO = TABELA_ALVO + '_stg2' # USADO SOMENTE NAS TABELAS STAGE.
+TABELA_DESTINO = TABELA_ALVO + '_stg' # USADO SOMENTE NAS TABELAS STAGE.
 ARQUIVO = os.path.join(dir, f'{TABELA_ALVO}.csv')
 PRESTMT = f'TRUNCATE {TABELA_DESTINO}'
 
@@ -87,7 +88,8 @@ def prep():
         print("PREPARANDO AMBIENTE...")
         with engine_destination.connect() as conn:
             truncate_statement = PRESTMT
-            conn.execution_options(autocommit=True).execute(truncate_statement)
+            conn.execute(text(truncate_statement))
+            conn.commit()
         counter(start_time)
         msg = "AMBIENTE PRONTO!"
     except Exception as err:

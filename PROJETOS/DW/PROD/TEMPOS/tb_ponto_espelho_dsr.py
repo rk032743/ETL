@@ -38,6 +38,7 @@ def main():
     df.insert(loc=0, column='etl_data', value=ETL_DATA)
     df.insert(loc=0, column='etl_empresa', value=REPRESENTANTE)
     df.insert(loc=0, column='etl_origem', value=TABELA_ORIGEM)
+    df = transform(df)
     print(df.head())
     print('SALVANDO ARQUIVO...')
     df.to_csv(ARQUIVO, sep=';',index=False, lineterminator= '\r\n', encoding='utf-8')
@@ -46,3 +47,17 @@ def main():
     print('CARREGANDO PARA O BANCO...')
     cnn.load_data(PRESTMT, ARQUIVO, TABELA_DESTINO, 0)
     print('CARGA CONCLUÍDA!')
+
+
+def transform(df)-> pd.DataFrame:
+    # CONVERSÃO DE TIMEDELTA PARA HORA.
+    # NO PANDAS 2.0 É NECESSÁRIO SUBSTITUIR O "ITERITEMS" POR "ITEMS".
+    for colname, coltype in df.dtypes.items():
+        if coltype == 'timedelta64[ns]':
+            df[colname] = df[colname].astype(str).map(lambda x: x[7:])
+    # REMOVE DADOS INVÁLIDOS.
+    for colname in df.columns:
+        df[colname] = df[colname].astype(str).map(lambda x: x.replace('1111-11-11 00:00:00', 'NULL'))
+
+
+    return df

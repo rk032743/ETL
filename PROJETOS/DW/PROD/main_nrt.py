@@ -6,7 +6,20 @@ from ORIZON.etl_orizon import d0 as etl_orizon
 
 
 if __name__ == "__main__":
-    etl_veloe()
-    etl_bmg()
-    etl_orizon()
-    etl_ligacoes()
+  
+    try:
+        etl_veloe()
+    except:
+        pass
+    try:
+        etl_bmg()
+    except:
+        pass
+    try:
+        etl_orizon()
+    except:
+        pass
+    try:
+        etl_ligacoes()
+    except:
+        pass

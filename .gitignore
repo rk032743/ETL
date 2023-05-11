@@ -1,4 +1,8 @@
+.vscode/
+.venv/
+DUMP/
 *.csv
 *.txt
 *.crt
 *.key
+*.json

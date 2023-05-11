@@ -16,11 +16,11 @@ def d0():
 
 
 # if __name__ == '__main__':
-#     for dia in range(1,16):
+#     for dia in range(1,4):
 #         ETL_DATA = (datetime.now() - timedelta(days=dia)).strftime('%Y-%m-%d')
 #         print(ETL_DATA)
 #         batch_follow(dia)
         # d1()
 
 # if __name__ == '__main__':
-#     d1()
+#     d0()

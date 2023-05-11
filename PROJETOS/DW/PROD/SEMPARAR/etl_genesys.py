@@ -6,6 +6,7 @@ from datetime import datetime, timedelta
 import time
 import re
 import db
+from sqlalchemy import text
 from get_dir import get_onedrive_dirs
 
 
@@ -125,7 +126,8 @@ def prep():
         print("PREPARANDO AMBIENTE...")
         with engine_destination.connect() as conn:
             truncate_statement = parametros['PRESTMT']
-            conn.execution_options(autocommit=True).execute(truncate_statement)
+            conn.execute(text(truncate_statement))
+            conn.commit()
         counter(start_time)
     except Exception:
         print("ERRO NA PREPARAÇÃO!")

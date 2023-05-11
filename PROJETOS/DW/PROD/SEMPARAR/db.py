@@ -1,6 +1,6 @@
 from sqlalchemy import create_engine
 from sqlalchemy.ext.declarative import declarative_base
-from sqlalchemy import Table, Column, Float, String, Integer, Index, Date, Time, TIMESTAMP, func
+from sqlalchemy import Table, Column, Float, String, Integer, Index, Date, Time, TIMESTAMP, func, text
 from sqlalchemy.exc import IntegrityError
 from sqlalchemy import event
 from sqlalchemy.dialects import mssql, mysql
@@ -27,6 +27,7 @@ for f in os.listdir(dir):
     if not f.endswith(".csv"):
         continue
     os.remove(os.path.join(dir, f))
+
 
 def conn_engine(id_db:int, banco:str):
 

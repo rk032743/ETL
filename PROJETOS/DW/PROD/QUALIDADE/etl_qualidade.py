@@ -12,8 +12,8 @@ def d1():
 
 
 
-# if __name__ == '__main__':
-#     d1()
+if __name__ == '__main__':
+    d1()
 # # #     for dia in range(1,19):
 # # #         ETL_DATA = (datetime.now() - timedelta(days=dia)).strftime('%Y-%m-%d')
 # # #         print(ETL_DATA)

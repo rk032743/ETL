@@ -7,6 +7,7 @@ from datetime import datetime, timedelta
 import time
 import re
 import db
+from sqlalchemy import text
 from get_dir import get_onedrive_dirs
 
 
@@ -106,6 +107,7 @@ def batch(dia)-> dict:
     # PARÂMETROS DE TABELAS.
     global parametros
     global ETL_DATA
+    global CREATETB
     ETL_DATA = (datetime.now() - timedelta(days=dia)).strftime('%Y-%m-%d')
     ANOMES = pd.to_datetime(ETL_DATA).strftime('%y%m')
     parametros = dict()
@@ -114,11 +116,12 @@ def batch(dia)-> dict:
     REPRESENTANTE = BANCO_ORIGEM[CHARINDEX:].upper()
     TABELA_ORIGEM  = BANCO_ORIGEM + '.' + TABELA_ALVO + '_' + ANOMES
     TABELA_DESTINO = BANCO_DESTINO + '.' + TABELA_ALVO + '_' + ANOMES
+    CREATETB = f"CREATE TABLE IF NOT EXISTS {TABELA_DESTINO} LIKE tb_follow_atividade_fcr_2304"
     ARQUIVO = os.path.join(dir, f'{TABELA_ALVO}.csv')
     PRESTMT = f"DELETE FROM {TABELA_DESTINO} WHERE {CAMPO_DATA} = '{ETL_DATA}'"
     WHERE = f"WHERE data_cri = '{ETL_DATA}' AND mk_flag = 'MD' AND mk_numero = 'YB' AND IF(atd_nivel_acesso = 0, pend_nivel_acesso, atd_nivel_acesso) = 318"
     UPDATE_STMT = f"WHERE data_atualiza = '{ETL_DATA}' AND mk_flag = 'MD' AND mk_numero = 'YB' AND IF(atd_nivel_acesso = 0, pend_nivel_acesso, atd_nivel_acesso) = 318"
-
+    POSSTMT = f"SELECT 1"
     parametros['BANCO_ORIGEM'] = BANCO_ORIGEM
     parametros['BANCO_DESTINO'] = BANCO_DESTINO
     parametros['CAMPO_DATA'] = CAMPO_DATA
@@ -130,12 +133,12 @@ def batch(dia)-> dict:
     parametros['PRESTMT'] = PRESTMT
     parametros['WHERE'] = WHERE
     parametros['COLUNAS'] = COLUNAS
+    parametros['POSSTMT'] = POSSTMT
 
     p =prep()
     e = extract()
     t = transform(e)
     l = load(t,1)
-
     return l
 
 
@@ -153,7 +156,7 @@ def update(dia)-> dict:
     TABELA_DESTINO2 = BANCO_DESTINO + '.' + TABELA_ALVO + '_' + ANOMES
     TABELA_DESTINO = BANCO_DESTINO + '.' + TABELA_ALVO + '_stg'
     ARQUIVO = os.path.join(dir, f'{TABELA_ALVO}.csv')
-    PRESTMT = f"CREATE TABLE {TABELA_ALVO}_stg LIKE {TABELA_DESTINO}"
+    PRESTMT = f"CREATE TABLE {TABELA_ALVO}_stg LIKE {TABELA_DESTINO2}"
     WHERE = f"WHERE data_atualiza = '{ETL_DATA}' AND mk_flag = 'MD' AND mk_numero = 'YB' AND IF(atd_nivel_acesso = 0, pend_nivel_acesso, atd_nivel_acesso) = 318"
     POSSTMT = f"DROP TABLE IF EXISTS {TABELA_ALVO}_stg"
     UPDATE = f"REPLACE INTO {TABELA_DESTINO2} SELECT * FROM {TABELA_DESTINO}"
@@ -186,10 +189,12 @@ def nrt(dia=0)-> dict:
     # PARÂMETROS DE TABELAS.
     global parametros
     global ETL_DATA
+    global CREATETB
     ETL_DATA = (datetime.now() - timedelta(days=dia)).strftime('%Y-%m-%d')
     ANOMES = pd.to_datetime(ETL_DATA).strftime('%y%m')
     parametros = dict()
 
+    CREATETB = 'SELECT 1'
     CHARINDEX = re.search('bd_bi_', BANCO_ORIGEM).end()
     REPRESENTANTE = BANCO_ORIGEM[CHARINDEX:].upper()
     TABELA_ORIGEM  = BANCO_ORIGEM + '.' + TABELA_ALVO + '_' + ANOMES
@@ -198,6 +203,7 @@ def nrt(dia=0)-> dict:
     PRESTMT = f"DELETE FROM {TABELA_DESTINO} WHERE {CAMPO_DATA} = '{ETL_DATA}'"
     WHERE = f"WHERE data_cri = '{ETL_DATA}' AND mk_flag = 'MD' AND mk_numero = 'YB' AND IF(atd_nivel_acesso = 0, pend_nivel_acesso, atd_nivel_acesso) = 318"
     UPDATE_STMT = f"WHERE data_atualiza = '{ETL_DATA}' AND mk_flag = 'MD' AND mk_numero = 'YB' AND IF(atd_nivel_acesso = 0, pend_nivel_acesso, atd_nivel_acesso) = 318"
+    POSSTMT = f"SELECT 1"
     
     parametros['BANCO_ORIGEM'] = BANCO_ORIGEM
     parametros['BANCO_DESTINO'] = BANCO_DESTINO
@@ -210,6 +216,7 @@ def nrt(dia=0)-> dict:
     parametros['PRESTMT'] = PRESTMT
     parametros['WHERE'] = WHERE
     parametros['COLUNAS'] = COLUNAS
+    parametros['POSSTMT'] = POSSTMT
 
     p =prep()
     e = extract()
@@ -237,14 +244,21 @@ def prep():
     # PREPARAÇÃO DAS TABELAS DE DESTINO, DELETE OU TRUNCATE.
     engine_destination = db.conn_engine(1, parametros['BANCO_DESTINO'])
     start_time = time.time()
-    try:
-        print("PREPARANDO AMBIENTE...")
-        with engine_destination.connect() as conn:
-            truncate_statement = parametros['PRESTMT']
-            conn.execution_options(autocommit=True).execute(truncate_statement)
-        counter(start_time)
-    except Exception:
-        print("ERRO NA PREPARAÇÃO!")
+    # try:
+    print("PREPARANDO AMBIENTE...")
+    with engine_destination.connect() as conn:
+        create_statement = CREATETB
+        conn.execute(text(create_statement))
+        conn.commit()
+        drop = parametros['POSSTMT']
+        conn.execute(text(drop))
+        conn.commit()
+        truncate_statement = parametros['PRESTMT']
+        conn.execute(text(truncate_statement))
+        conn.commit()
+    counter(start_time)
+    # except Exception:
+    #     print("ERRO NA PREPARAÇÃO!")
     return print("AMBIENTE PRONTO!")
 
 
@@ -252,18 +266,18 @@ def posp():
     # PREPARAÇÃO DAS TABELAS DE DESTINO, DELETE OU TRUNCATE.
     engine_destination = db.conn_engine(1, parametros['BANCO_DESTINO'])
     start_time = time.time()
-    try:
-        print("PREPARANDO AMBIENTE...")
-        with engine_destination.connect() as conn:
-            update_statement = parametros['UPDATE']
-            print(update_statement)
-            drop_statement = parametros['POSSTMT']
-            print(drop_statement)
-            conn.execution_options(autocommit=True).execute(update_statement)
-            conn.execution_options(autocommit=True).execute(drop_statement)
-        counter(start_time)
-    except Exception:
-        print("ERRO NA ATUALIZAÇÃO!")
+    # try:
+    print("PREPARANDO AMBIENTE...")
+    with engine_destination.connect() as conn:
+        update_statement = parametros['UPDATE']
+        print(update_statement)
+        drop_statement = parametros['POSSTMT']
+        print(drop_statement)
+        conn.execute(text(update_statement))
+        conn.execute(text(drop_statement))
+    counter(start_time)
+    # except Exception:
+    #     print("ERRO NA ATUALIZAÇÃO!")
 
     return print("ATUALIZAÇÃO CONCLUÍDA!")
 
@@ -298,7 +312,7 @@ def extract()-> pd.DataFrame:
 
 def transform(df)-> pd.DataFrame:
     # CONVERSÃO DE TIMEDELTA PARA HORA.
-    for colname, coltype in df.dtypes.iteritems():
+    for colname, coltype in df.dtypes.items():
         if coltype == 'timedelta64[ns]':
             df[colname] = df[colname].astype(str).map(lambda x: x[7:])
     # REMOVE DADOS INVÁLIDOS.
@@ -318,7 +332,7 @@ def load(df, tipo)->dict:
         print("INSERINDO DADOS...")
         df.to_sql(parametros['TABELA_DESTINO'], con=engine_destination,  index=False, if_exists='append')
     elif tipo == 1:
-        df.to_csv(parametros['ARQUIVO'], sep=';',index=False, line_terminator= '\r\n', encoding='utf-8')
+        df.to_csv(parametros['ARQUIVO'], sep=';',index=False, lineterminator= '\r\n', encoding='utf-8')
         print("DADOS SALVOS!")
         print("CARREGANDO DADOS...")
         db.bulk(parametros['ARQUIVO'], parametros['BANCO_DESTINO'], parametros['TABELA_DESTINO'], 0)
@@ -357,3 +371,6 @@ def meta(df)-> dict:
 
     return metadata
 
+
+# if __name__ == '__main__':
+#     batch(1)

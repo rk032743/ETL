@@ -7,6 +7,7 @@ from datetime import datetime, timedelta
 import time
 import re
 import db
+from sqlalchemy import text
 from get_dir import get_onedrive_dirs
 
 
@@ -72,13 +73,13 @@ def update(dia)-> dict:
     CHARINDEX = re.search('bd_bi_', BANCO_ORIGEM).end()
     REPRESENTANTE = BANCO_ORIGEM[CHARINDEX:].upper()
     TABELA_ORIGEM  = BANCO_ORIGEM + '.' + TABELA_ALVO
-    TABELA_DESTINO2 = BANCO_DESTINO + '.' + TABELA_ALVO
-    TABELA_DESTINO = BANCO_DESTINO + '.' + TABELA_ALVO + '_stg'
+    TABELA_DESTINO2 = BANCO_DESTINO + '.' + TABELA_ALVO + '_stg'
+    TABELA_DESTINO = BANCO_DESTINO + '.' + TABELA_ALVO
     ARQUIVO = os.path.join(dir, f'{TABELA_ALVO}.csv')
-    PRESTMT = f"CREATE TABLE {TABELA_ALVO}_stg LIKE {TABELA_DESTINO}"
+    PRESTMT = f"CREATE TABLE IF NOT EXISTS {TABELA_ALVO}_stg LIKE {TABELA_DESTINO}"
     WHERE = f"WHERE data_atualiza = '{ETL_DATA}'"
     POSSTMT = f"DROP TABLE IF EXISTS {TABELA_ALVO}_stg"
-    UPDATE = f"REPLACE INTO {TABELA_DESTINO2} SELECT * FROM {TABELA_DESTINO}"
+    UPDATE = f"REPLACE INTO {TABELA_DESTINO} SELECT * FROM {TABELA_DESTINO2}"
     COLUNAS = ['*']
 
     parametros['BANCO_ORIGEM'] = BANCO_ORIGEM
@@ -87,7 +88,7 @@ def update(dia)-> dict:
     parametros['TABELA_ALVO'] = TABELA_ALVO
     parametros['REPRESENTANTE'] = REPRESENTANTE
     parametros['TABELA_ORIGEM'] = TABELA_ORIGEM
-    parametros['TABELA_DESTINO'] = TABELA_DESTINO
+    parametros['TABELA_DESTINO'] = TABELA_DESTINO2
     parametros['ARQUIVO'] = ARQUIVO
     parametros['PRESTMT'] = PRESTMT
     parametros['WHERE'] = WHERE
@@ -162,7 +163,8 @@ def prep():
         print("PREPARANDO AMBIENTE...")
         with engine_destination.connect() as conn:
             truncate_statement = parametros['PRESTMT']
-            conn.execution_options(autocommit=True).execute(truncate_statement)
+            conn.execute(text(truncate_statement))
+            conn.commit()
         counter(start_time)
     except Exception:
         print("ERRO NA PREPARAÇÃO!")
@@ -180,8 +182,10 @@ def posp():
             print(update_statement)
             drop_statement = parametros['POSSTMT']
             print(drop_statement)
-            conn.execution_options(autocommit=True).execute(update_statement)
-            conn.execution_options(autocommit=True).execute(drop_statement)
+            conn.execute(text(update_statement))
+            conn.commit()
+            conn.execute(text(drop_statement))
+            conn.commit()
         counter(start_time)
     except Exception:
         print("ERRO NA ATUALIZAÇÃO!")

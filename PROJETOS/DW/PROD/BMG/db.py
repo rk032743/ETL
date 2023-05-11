@@ -1,6 +1,6 @@
 from sqlalchemy import create_engine
 from sqlalchemy.ext.declarative import declarative_base
-from sqlalchemy import Table, Column, Float, String, Integer, Index, Date, Time, TIMESTAMP, func
+from sqlalchemy import Table, Column, Float, String, Integer, Index, Date, Time, TIMESTAMP, func, text
 from sqlalchemy.exc import IntegrityError
 from sqlalchemy import event
 from sqlalchemy.dialects import mssql, mysql
@@ -112,17 +112,3 @@ def bulk(arquivo, banco, tabela, tipo, *args):
         except IntegrityError as err:
             print(err.detail)
 
-# print("Delete Data...")
-# start_time = time.time()
-# engine.execute("DELETE FROM dm_latam.ext.tb_forecast WHERE data IN (SELECT DISTINCT data FROM dm_latam.ext.tb_forecast_temp);")
-# print("--- %s seconds ---" % (time.time() - start_time))
-
-# print("Insert Valid Data...")
-# start_time = time.time()
-# engine.execute("INSERT INTO dm_latam.ext.tb_forecast SELECT * FROM dm_latam.ext.tb_forecast_temp;")
-# print("--- %s seconds ---" % (time.time() - start_time))
-
-# print("Drop Temp Table...")
-# start_time = time.time()
-# engine.execute("DROP TABLE dm_latam.ext.tb_forecast_temp;")
-# print("--- %s seconds ---" % (time.time() - start_time))

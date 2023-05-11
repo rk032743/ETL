@@ -8,5 +8,5 @@ def d0():
     resultado_lig()
     
 
-if __name__ == '__main__':
-    d0()
+# if __name__ == '__main__':
+#     d0()

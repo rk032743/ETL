@@ -7,6 +7,7 @@ from datetime import datetime, timedelta
 import time
 import re
 import db
+from sqlalchemy import text
 from get_dir import get_onedrive_dirs
 
 
@@ -165,7 +166,7 @@ def prep():
     try:
         print("PREPARANDO AMBIENTE...")
         with engine_destination.connect() as conn:
-            truncate_statement = db.text(parametros['PRESTMT'])
+            truncate_statement = text(parametros['PRESTMT'])
             conn.execute(truncate_statement)
             conn.commit()
         counter(start_time)
@@ -185,8 +186,10 @@ def posp():
             print(update_statement)
             drop_statement = parametros['POSSTMT']
             print(drop_statement)
-            conn.execution_options(autocommit=True).execute(update_statement)
-            conn.execution_options(autocommit=True).execute(drop_statement)
+            conn.execute(text(update_statement))
+            conn.commit()
+            conn.execute(text(drop_statement))
+            conn.commit()
         counter(start_time)
     except Exception:
         print("ERRO NA ATUALIZAÇÃO!")

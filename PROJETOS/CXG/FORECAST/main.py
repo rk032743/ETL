@@ -11,6 +11,11 @@ with open(rsp, 'r') as json_file:
     j = json_file.read()
 rsp_dict = json.loads(j)
 
+def execute_latam():
+    forecast_latam()
+
+    return
+
 
 def execute_multi():
 
@@ -21,7 +26,9 @@ def execute_multi():
         print(key['BANCO'])
         print(key['TABELA'])
         forecast(key['REPRESENTANTE'],key['ARQUIVO'],key['BANCO'],key['TABELA'],key['ID'])
+
     return
+
 
 def execute_one(id:int):
 
@@ -35,8 +42,9 @@ def execute_one(id:int):
 
     return
 
+
 if __name__ == '__main__':
-    forecast_latam()
+    execute_latam()
     execute_multi()
-    # execute_one(90)
+    # execute_one(65)
     # execute_one(65)

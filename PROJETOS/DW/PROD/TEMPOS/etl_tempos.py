@@ -1,5 +1,7 @@
 from tb_ponto_espelho_dsr import main as espelho_dsr
 from tb_produtividade_tempo import main as prod_tempo
+from tb_escala_intergrall import main as escala
+from tb_ponto_espelho_marcacoes import main as espelho_marcacoes
 from datetime import datetime, timedelta, date
 import pandas
 
@@ -8,6 +10,8 @@ def d1(dia=1):
     
     prod_tempo(dia)
     espelho_dsr()
+    escala()
+    espelho_marcacoes()
 
 def d0():
     

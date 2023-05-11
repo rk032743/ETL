@@ -7,6 +7,7 @@ from datetime import datetime, timedelta
 import time
 import re
 import db
+from sqlalchemy import text
 from get_dir import get_onedrive_dirs
 
 
@@ -151,8 +152,8 @@ def update(dia)-> dict:
     TABELA_DESTINO2 = BANCO_DESTINO + '.' + TABELA_ALVO + '_cross'
     TABELA_DESTINO = BANCO_DESTINO + '.' + TABELA_ALVO + '_stg'
     ARQUIVO = os.path.join(dir, f'{TABELA_ALVO}.csv')
-    PRESTMT = f"CREATE TABLE {TABELA_ALVO}_stg LIKE {TABELA_DESTINO}"
-    WHERE = f"WHERE data_atualiza = '{ETL_DATA}' AND mk_flag = 'MD' AND mk_numero = 'YB' AND AND IF(atd_nivel_acesso = 0, pend_nivel_acesso, atd_nivel_acesso) = 318"
+    PRESTMT = f"CREATE TABLE {TABELA_ALVO}_stg LIKE {TABELA_DESTINO2};"
+    WHERE = f"WHERE data_atualiza = '{ETL_DATA}' AND mk_flag = 'MD' AND mk_numero = 'YB' AND IF(atd_nivel_acesso = 0, pend_nivel_acesso, atd_nivel_acesso) = 318"
     POSSTMT = f"DROP TABLE IF EXISTS {TABELA_ALVO}_stg"
     UPDATE = f"REPLACE INTO {TABELA_DESTINO2} SELECT * FROM {TABELA_DESTINO}"
    
@@ -284,33 +285,41 @@ def prep():
     # PREPARAÇÃO DAS TABELAS DE DESTINO, DELETE OU TRUNCATE.
     engine_destination = db.conn_engine(1, parametros['BANCO_DESTINO'])
     start_time = time.time()
-    try:
-        print("PREPARANDO AMBIENTE...")
-        with engine_destination.connect() as conn:
-            truncate_statement = parametros['PRESTMT']
-            conn.execution_options(autocommit=True).execute(truncate_statement)
-        counter(start_time)
-    except Exception:
-        print("ERRO NA PREPARAÇÃO!")
-    return print("AMBIENTE PRONTO!")
+    # try:
+    print("PREPARANDO AMBIENTE...")
+    with engine_destination.connect() as conn:
+        truncate_statement = parametros['PRESTMT']
+        drop_statetemt = f"DROP TABLE IF EXISTS {TABELA_ALVO}_stg;"
+        conn.execute(text(drop_statetemt))
+        conn.commit()
+        conn.execute(text(truncate_statement))
+        conn.commit()
+        
+        
+    counter(start_time)
+    # except Exception:
+    #     print("ERRO NA PREPARAÇÃO!")
+    # return print("AMBIENTE PRONTO!")
 
 
 def posp():
     # PREPARAÇÃO DAS TABELAS DE DESTINO, DELETE OU TRUNCATE.
     engine_destination = db.conn_engine(1, parametros['BANCO_DESTINO'])
     start_time = time.time()
-    try:
-        print("PREPARANDO AMBIENTE...")
-        with engine_destination.connect() as conn:
-            update_statement = parametros['UPDATE']
-            print(update_statement)
-            drop_statement = parametros['POSSTMT']
-            print(drop_statement)
-            conn.execution_options(autocommit=True).execute(update_statement)
-            conn.execution_options(autocommit=True).execute(drop_statement)
-        counter(start_time)
-    except Exception:
-        print("ERRO NA ATUALIZAÇÃO!")
+    # try:
+    print("PREPARANDO AMBIENTE...")
+    with engine_destination.connect() as conn:
+        update_statement = parametros['UPDATE']
+        print(update_statement)
+        drop_statement = parametros['POSSTMT']
+        print(drop_statement)
+        conn.execute(text(update_statement))
+        conn.commit()
+        conn.execute(text(drop_statement))
+        conn.commit()
+    counter(start_time)
+    # except Exception:
+    #     print("ERRO NA ATUALIZAÇÃO!")
 
     return print("ATUALIZAÇÃO CONCLUÍDA!")
 
@@ -330,22 +339,22 @@ def extract()-> pd.DataFrame:
     print(SQL_ORIGEM)
     print(f'{tabela_alvo.upper()} - INICIANDO REPLICAÇÃO...')
 
-    try:
-        print("EXTRAINDO DADOS...")
-        engine_source = db.conn_engine(0, parametros['BANCO_ORIGEM'])
-        data = pd.read_sql(sql=SQL_ORIGEM, con=engine_source)
-        counter(start_time)
-        print("DADOS EXTRAÍDOS!")
-    except Exception:
-        print("ERRO NA EXTRAÇÃO!")
-        data = 'Erro'
-        sys.exit()
+    # try:
+    print("EXTRAINDO DADOS...")
+    engine_source = db.conn_engine(0, parametros['BANCO_ORIGEM'])
+    data = pd.read_sql(sql=SQL_ORIGEM, con=engine_source)
+    counter(start_time)
+    print("DADOS EXTRAÍDOS!")
+    # except Exception:
+    #     print("ERRO NA EXTRAÇÃO!")
+    #     data = 'Erro'
+    #     sys.exit()
     return data
 
 
 def transform(df)-> pd.DataFrame:
     # CONVERSÃO DE TIMEDELTA PARA HORA.
-    for colname, coltype in df.dtypes.iteritems():
+    for colname, coltype in df.dtypes.items():
         if coltype == 'timedelta64[ns]':
             df[colname] = df[colname].astype(str).map(lambda x: x[7:])
     # REMOVE DADOS INVÁLIDOS.
@@ -365,7 +374,7 @@ def load(df, tipo)->dict:
         print("INSERINDO DADOS...")
         df.to_sql(parametros['TABELA_DESTINO'], con=engine_destination,  index=False, if_exists='append')
     elif tipo == 1:
-        df.to_csv(parametros['ARQUIVO'], sep=';',index=False, line_terminator= '\r\n', encoding='utf-8')
+        df.to_csv(parametros['ARQUIVO'], sep=';',index=False, lineterminator= '\r\n', encoding='utf-8')
         print("DADOS SALVOS!")
         print("CARREGANDO DADOS...")
         db.bulk(parametros['ARQUIVO'], parametros['BANCO_DESTINO'], parametros['TABELA_DESTINO'], 0)
