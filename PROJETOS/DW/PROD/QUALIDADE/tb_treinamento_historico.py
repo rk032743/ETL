@@ -6,7 +6,7 @@ import numpy as np
 from datetime import datetime, timedelta
 import time
 import re
-import db
+import qualidade_db as db
 from sqlalchemy import text
 from get_dir import get_onedrive_dirs
 
@@ -25,7 +25,7 @@ for f in os.listdir(dir):
 
 BANCO_ORIGEM = 'bd_bi_monitoria'
 BANCO_DESTINO = 'dm_treinamento'
-CAMPO_DATA = 'data_inicio'
+CAMPO_DATA = 'data_atual'
 TABELA_ALVO = 'tb_treinamento_historico'
 COLUNAS = ['*']
 
@@ -260,7 +260,7 @@ def load(df, tipo)->dict:
     end_process = datetime.now()
     print("DADOS CARREGADOS!")
     metadata = meta(df)
-    dump_log(metadata)
+    
     
     return metadata
 
@@ -290,3 +290,8 @@ def meta(df)-> dict:
 
     return metadata
 
+
+if __name__ == "__main__":
+        
+    b = batch(1)
+    print(b)

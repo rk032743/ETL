@@ -1,15 +1,20 @@
-from msilib import sequence
-import os, logging, shutil
+import os
 import pandas as pd
 from datetime import datetime, timedelta
-import time
+from dateutil.relativedelta import relativedelta
 import re
 from get_dir import get_onedrive_dirs
-from mariadb import MariaDB
+from tempos_mariadb import MariaDB
 
 
 ETL_DATA = datetime.now().strftime('%Y-%m-%d')
-DATA_REF = (datetime.now() - timedelta(days=1)).strftime('%Y-%m-%d')
+DATA_REF_FIM = (datetime.now() - timedelta(days=1)).strftime('%Y%m')
+DATA_REF_FIM = (datetime.now() + relativedelta(months=1)).strftime('%Y%m')
+
+DATA_REF_INI = (datetime.now() - relativedelta(months=1)).strftime('%Y%m')
+DATA_REF_INI = (datetime.now() - timedelta(days=1)).strftime('%Y%m')
+TABELA_REF = (datetime.now() - timedelta(days=1)).strftime('%Y')
+
 dirs = get_onedrive_dirs()
 dir = os.path.join(dirs['dump_dir'], 'DW', 'TEMPOS')
 if not os.path.isdir(dir):
@@ -22,16 +27,15 @@ TABELA_ORIGEM  = BANCO_ORIGEM + '.' + 'tb_ptoespelho_dsr'
 BANCO_DESTINO = 'dm_db_tempos'
 TABELA_DESTINO = BANCO_DESTINO + '.' + 'tb_ptoespelho_dsr_stg'
 ARQUIVO = os.path.join(dir,'tb_ptoespelho_dsr_stg.csv')
-PRESTMT = f''
-
 COLUNAS = ['flag_empresa','anomes_folha','login','data_entrada','tipo_dsr','data_cri','hora_cri']
-CAMPO_CHAVE = 'data_entrada'
+CAMPO_CHAVE = 'anomes_folha'
+PRESTMT = f"DELETE FROM {TABELA_DESTINO} WHERE {CAMPO_CHAVE} BETWEEN {DATA_REF_INI} AND {DATA_REF_FIM};"
 
 def main():
 
     print('PONTO ESPELHO DSR - INICIANDO REPLICAÇÃO...')
     col = ','.join(COLUNAS)
-    SQL_ORIGEM = f"SELECT {col} FROM {TABELA_ORIGEM} WHERE {CAMPO_CHAVE} = '{DATA_REF}';"
+    SQL_ORIGEM = f"SELECT {col} FROM {TABELA_ORIGEM} WHERE {CAMPO_CHAVE} BETWEEN {DATA_REF_INI} AND {DATA_REF_FIM};"
     cnn = MariaDB(2)
     print('EXTRAINDO DADOS...')
     df = cnn.read_sql(SQL_ORIGEM)
@@ -61,3 +65,6 @@ def transform(df)-> pd.DataFrame:
 
 
     return df
+
+if __name__ == '__main__':
+    main()

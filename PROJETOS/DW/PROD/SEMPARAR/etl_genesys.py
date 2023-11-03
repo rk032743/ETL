@@ -5,7 +5,7 @@ import numpy as np
 from datetime import datetime, timedelta
 import time
 import re
-import db
+import semparar_db as db
 from sqlalchemy import text
 from get_dir import get_onedrive_dirs
 
@@ -190,7 +190,7 @@ def load(df, tipo)->dict:
     end_process = datetime.now()
     print("DADOS CARREGADOS!")
     metadata = meta(df)
-    dump_log(metadata)
+    
     
     return metadata
 

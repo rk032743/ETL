@@ -3,11 +3,12 @@ from tb_follow_atividade_fcr import batch as batch_fcr, update as update_fcr, nr
 from datetime import datetime, timedelta
 import pandas as pd
 
-def d1():
-    batch_cross(1)
-    batch_fcr(1)
-    update_cross(1)
-    update_fcr(1)
+def d1(dia=1):
+
+    batch_cross(dia)
+    batch_fcr(dia)
+    update_cross(dia)
+    update_fcr(dia)
 
 def d0():
     nrt_cross()
@@ -15,6 +16,7 @@ def d0():
 
 
 # if __name__ == '__main__':
+#     nrt_fcr()
 #     d1()
 #     d0()
 

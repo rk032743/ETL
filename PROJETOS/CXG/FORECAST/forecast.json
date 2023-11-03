@@ -17,15 +17,6 @@
       "TABELA": "tb_forecast",
       "COLUNAS": "'DATA','INTERVALO','ATENDIMENTO','AGRUPAMENTO','VOLUME','PA','TMO','NS', 'NR17', 'REFORCO', 'DIALOGO','FEEDBACK', 'PARTICULAR'"
     },
-	
-	  {
-      "ID": 90,
-      "REPRESENTANTE": "Orizon",
-      "ARQUIVO": "Forecast Orizon.xlsx",
-      "BANCO": "cxg_db_orizon",
-      "TABELA": "tb_forecast",
-      "COLUNAS": "'DATA','INTERVALO','ATENDIMENTO','AGRUPAMENTO','VOLUME','PA','TMO','NS', 'NR17', 'REFORCO', 'DIALOGO','FEEDBACK', 'PARTICULAR'"
-    },
   	{
       "ID": 65,
       "REPRESENTANTE": "Sem Parar",

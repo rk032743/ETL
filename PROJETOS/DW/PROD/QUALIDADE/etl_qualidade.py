@@ -5,10 +5,10 @@ from tb_treinamento_historico import batch as tb2
 from datetime import datetime, timedelta
 
 
-def d1():
+def d1(dia=1):
 
-    tb1(1)
-    tb2(1)
+    tb1(dia)
+    tb2(dia)
 
 
 

@@ -6,12 +6,15 @@ from dateutil.relativedelta import relativedelta
 import time
 import re
 from get_dir import get_onedrive_dirs
-from mariadb import MariaDB
+from tempos_mariadb import MariaDB
 
 
 ETL_DATA = datetime.now().strftime('%Y-%m-%d')
 DATA_REF_FIM = (datetime.now() - timedelta(days=1)).strftime('%Y%m')
+DATA_REF_FIM = (datetime.now() + relativedelta(months=1)).strftime('%Y%m')
+
 DATA_REF_INI = (datetime.now() - relativedelta(months=1)).strftime('%Y%m')
+DATA_REF_INI = (datetime.now() - timedelta(days=1)).strftime('%Y%m')
 TABELA_REF = (datetime.now() - timedelta(days=1)).strftime('%Y')
 dirs = get_onedrive_dirs()
 dir = os.path.join(dirs['dump_dir'], 'DW', 'TEMPOS')
@@ -32,20 +35,17 @@ CAMPO_CHAVE = 'anomes_folha'
 PRESTMT = f"DELETE FROM {TABELA_DESTINO} WHERE {CAMPO_CHAVE} BETWEEN {DATA_REF_INI} AND {DATA_REF_FIM};"
 
 
-print('ANOMES')
-print(DATA_REF_INI)
-print(DATA_REF_FIM)
-print(TABELA_REF)
-print(TABELA)
-print(TABELA_ORIGEM)
-print(TABELA_DESTINO)
-print(PRESTMT)
-
 def main():
 
+    print(PRESTMT)
+    print('ANOMES - INICIO')
+    print(DATA_REF_INI)
+    print('ANOMES - FIM')
+    print(DATA_REF_FIM)
     print('PONTO ESPELHO DSR - INICIANDO REPLICAÇÃO...')
     col = ','.join(COLUNAS)
     SQL_ORIGEM = f"SELECT {col} FROM {TABELA_ORIGEM} WHERE {CAMPO_CHAVE} BETWEEN {DATA_REF_INI} AND {DATA_REF_FIM};"
+    print(SQL_ORIGEM)
     cnn = MariaDB(2)
     print('EXTRAINDO DADOS...')
     df = cnn.read_sql(SQL_ORIGEM)
@@ -59,11 +59,11 @@ def main():
     print('ARQUIVO SALVO!')
     cnn = MariaDB(1)
     print('CARREGANDO PARA O BANCO...')
-    cnn.load_data(PRESTMT, ARQUIVO, TABELA_DESTINO, 0)
+    comd = cnn.load_data(PRESTMT, ARQUIVO, TABELA_DESTINO, 0)
     print('CARGA CONCLUÍDA!')
 
-    return df
-
+    # return df
+    return comd
 
 def transform(df)-> pd.DataFrame:
     # CONVERSÃO DE TIMEDELTA PARA HORA.
@@ -79,5 +79,5 @@ def transform(df)-> pd.DataFrame:
     return df
 
 
-# if __name__ == '__main__':
-#     print(main())
+if __name__ == '__main__':
+    main()

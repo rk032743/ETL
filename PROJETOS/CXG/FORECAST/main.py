@@ -43,8 +43,8 @@ def execute_one(id:int):
     return
 
 
-if __name__ == '__main__':
-    execute_latam()
-    execute_multi()
+# if __name__ == '__main__':
+    # execute_latam()
+    # execute_multi()
     # execute_one(65)
     # execute_one(65)

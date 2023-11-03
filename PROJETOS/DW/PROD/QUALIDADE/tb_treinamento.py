@@ -6,7 +6,7 @@ import numpy as np
 from datetime import datetime, timedelta
 import time
 import re
-import db
+import qualidade_db as db
 from sqlalchemy import text
 from get_dir import get_onedrive_dirs
 
@@ -25,7 +25,7 @@ for f in os.listdir(dir):
 
 BANCO_ORIGEM = 'bd_bi_monitoria'
 BANCO_DESTINO = 'dm_treinamento'
-CAMPO_DATA = 'data_inicio'
+CAMPO_DATA = 'data_atual'
 TABELA_ALVO = 'tb_treinamento'
 COLUNAS = ['*']
 
@@ -205,7 +205,7 @@ def extract()-> pd.DataFrame:
     tabela_origem = parametros['TABELA_ORIGEM']
     where  = parametros['WHERE']
     SQL_ORIGEM = f'SELECT {col} FROM {tabela_origem} {where}'
-
+    # SQL_ORIGEM = f'SELECT {col} FROM {tabela_origem}'
     tabela_alvo = parametros['TABELA_ALVO']
     start_time = time.time()
     print(SQL_ORIGEM)
@@ -233,6 +233,7 @@ def transform(df)-> pd.DataFrame:
     # REMOVE DADOS INVÁLIDOS.
     for colname in df.columns:
         df[colname] = df[colname].astype(str).map(lambda x: x.replace('1111-11-11 00:00:00', 'NULL'))
+        df[colname] = df[colname].astype(str).map(lambda x: x.replace('0000-00-00 00:00:00', 'NULL'))
     for colname in df.columns:
         df[colname] = df[colname].astype(str).map(lambda x: x.replace('None', 'NULL'))
 
@@ -259,7 +260,7 @@ def load(df, tipo)->dict:
     end_process = datetime.now()
     print("DADOS CARREGADOS!")
     metadata = meta(df)
-    dump_log(metadata)
+    
     
     return metadata
 
@@ -289,3 +290,7 @@ def meta(df)-> dict:
 
     return metadata
 
+if __name__ == "__main__":
+        
+    b = batch(1)
+    print(b)

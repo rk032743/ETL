@@ -388,7 +388,7 @@
       <attributes_kjc/>
     </entry>
     <entry>
-      <name>GET_FROM_SFTP</name>
+      <name>GET_INTERVENCIONES</name>
       <description/>
       <type>SFTP</type>
       <attributes/>
@@ -396,7 +396,7 @@
       <serverport>22</serverport>
       <username>${VAR_FTP_USR}</username>
       <password>${VAR_FTP_PWD}</password>
-      <sftpdirectory>${P_FTP_PATH}</sftpdirectory>
+      <sftpdirectory>${P_FTP_PATH_INTER}</sftpdirectory>
       <targetdirectory>${P_DUMP}</targetdirectory>
       <wildcard>${FILENAME_INTERVENCIONES_MASK}</wildcard>
       <remove>N</remove>
@@ -621,43 +621,35 @@ SET SESSION TRANSACTION ISOLATION LEVEL REPEATABLE READ;</sql>
       <attributes_kjc/>
     </entry>
     <entry>
-      <name>Checks if files exist</name>
+      <name>GET_NPS</name>
       <description/>
-      <type>FILES_EXIST</type>
+      <type>SFTP</type>
       <attributes/>
-      <filename/>
-      <fields>
-        <field>
-          <name>${P_DUMP}${FILENAME_INTERVENCIONES_MASK}</name>
-        </field>
-      </fields>
+      <servername>${VAR_FTP_HOST}</servername>
+      <serverport>22</serverport>
+      <username>${VAR_FTP_USR}</username>
+      <password>${VAR_FTP_PWD}</password>
+      <sftpdirectory>${P_FTP_PATH_NPS}</sftpdirectory>
+      <targetdirectory>${P_DUMP}</targetdirectory>
+      <wildcard>${FILENAME_NPS_MASK}</wildcard>
+      <remove>N</remove>
+      <isaddresult>Y</isaddresult>
+      <createtargetfolder>N</createtargetfolder>
+      <copyprevious>N</copyprevious>
+      <usekeyfilename>N</usekeyfilename>
+      <keyfilename/>
+      <keyfilepass>Encrypted </keyfilepass>
+      <compression>none</compression>
+      <proxyType/>
+      <proxyHost/>
+      <proxyPort/>
+      <proxyUsername/>
+      <proxyPassword>Encrypted </proxyPassword>
       <parallel>N</parallel>
       <draw>Y</draw>
       <nr>0</nr>
-      <xloc>608</xloc>
-      <yloc>176</yloc>
-      <attributes_kjc/>
-    </entry>
-    <entry>
-      <name>Dummy</name>
-      <description/>
-      <type>SPECIAL</type>
-      <attributes/>
-      <start>N</start>
-      <dummy>Y</dummy>
-      <repeat>N</repeat>
-      <schedulerType>0</schedulerType>
-      <intervalSeconds>0</intervalSeconds>
-      <intervalMinutes>60</intervalMinutes>
-      <hour>12</hour>
-      <minutes>0</minutes>
-      <weekDay>1</weekDay>
-      <DayOfMonth>1</DayOfMonth>
-      <parallel>N</parallel>
-      <draw>Y</draw>
-      <nr>0</nr>
-      <xloc>736</xloc>
-      <yloc>176</yloc>
+      <xloc>816</xloc>
+      <yloc>32</yloc>
       <attributes_kjc/>
     </entry>
   </entries>
@@ -718,7 +710,7 @@ SET SESSION TRANSACTION ISOLATION LEVEL REPEATABLE READ;</sql>
     </hop>
     <hop>
       <from>CLEAR_FOLDERS</from>
-      <to>GET_FROM_SFTP</to>
+      <to>GET_INTERVENCIONES</to>
       <from_nr>0</from_nr>
       <to_nr>0</to_nr>
       <enabled>Y</enabled>
@@ -726,34 +718,47 @@ SET SESSION TRANSACTION ISOLATION LEVEL REPEATABLE READ;</sql>
       <unconditional>Y</unconditional>
     </hop>
     <hop>
-      <from>GET_FROM_SFTP</from>
-      <to>Checks if files exist</to>
+      <from>GET_INTERVENCIONES</from>
+      <to>GET_NPS</to>
       <from_nr>0</from_nr>
       <to_nr>0</to_nr>
       <enabled>Y</enabled>
-      <evaluation>Y</evaluation>
+      <evaluation>N</evaluation>
       <unconditional>Y</unconditional>
     </hop>
     <hop>
-      <from>Checks if files exist</from>
+      <from>GET_NPS</from>
       <to>TR_VOLUMES</to>
       <from_nr>0</from_nr>
       <to_nr>0</to_nr>
       <enabled>Y</enabled>
-      <evaluation>Y</evaluation>
-      <unconditional>N</unconditional>
-    </hop>
-    <hop>
-      <from>Checks if files exist</from>
-      <to>Dummy</to>
-      <from_nr>0</from_nr>
-      <to_nr>0</to_nr>
-      <enabled>Y</enabled>
       <evaluation>N</evaluation>
-      <unconditional>N</unconditional>
+      <unconditional>Y</unconditional>
     </hop>
   </hops>
   <notepads>
+    <notepad>
+      <note>CONCLUIR O ETL NA TRANSFORMAÇÃO "TR_VOLUMES"
+DENTRO DELA ESTÃO O INTERVENCIONES (COMPLETO) E O NPS (STEP DE LEITURA JÁ CONFIGURADO)</note>
+      <xloc>704</xloc>
+      <yloc>272</yloc>
+      <width>551</width>
+      <heigth>42</heigth>
+      <fontname>Segoe UI</fontname>
+      <fontsize>9</fontsize>
+      <fontbold>N</fontbold>
+      <fontitalic>N</fontitalic>
+      <fontcolorred>0</fontcolorred>
+      <fontcolorgreen>0</fontcolorgreen>
+      <fontcolorblue>0</fontcolorblue>
+      <backgroundcolorred>255</backgroundcolorred>
+      <backgroundcolorgreen>128</backgroundcolorgreen>
+      <backgroundcolorblue>192</backgroundcolorblue>
+      <bordercolorred>100</bordercolorred>
+      <bordercolorgreen>100</bordercolorgreen>
+      <bordercolorblue>100</bordercolorblue>
+      <drawshadow>Y</drawshadow>
+    </notepad>
   </notepads>
   <attributes/>
 </job>

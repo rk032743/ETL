@@ -1,0 +1,16 @@
+DEBUG:root:2023-11-03 07:30:02: Rotina iniciada!
+DEBUG:root:2023-11-03 07:30:02: Executando --> etl_yduqs
+DEBUG:root:2023-11-03 07:32:14: Concluído --> etl_yduqs!
+DEBUG:root:2023-11-03 07:32:14: Executando --> etl_veloe
+DEBUG:root:2023-11-03 07:32:15: Concluído --> etl_veloe!
+DEBUG:root:2023-11-03 07:32:15: Executando --> etl_caixa_pre
+DEBUG:root:2023-11-03 07:32:20: Concluído --> etl_caixa_pre!
+DEBUG:root:2023-11-03 07:32:20: Executando --> etl_tracker
+DEBUG:root:2023-11-03 07:32:24: Concluído --> etl_tracker!
+DEBUG:root:2023-11-03 07:32:24: Executando --> etl_superdigital
+DEBUG:root:2023-11-03 07:32:28: Concluído --> etl_superdigital!
+DEBUG:root:2023-11-03 07:32:28: Executando --> etl_bmg
+DEBUG:root:2023-11-03 07:32:28: Concluído --> etl_bmg!
+DEBUG:root:2023-11-03 07:32:28: Executando --> etl_orizon
+DEBUG:root:2023-11-03 07:32:33: Concluído --> etl_orizon!
+DEBUG:root:2023-11-03 07:32:33: Rotina finalizada!

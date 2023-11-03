@@ -6,7 +6,7 @@ import numpy as np
 from datetime import datetime, timedelta
 import time
 import re
-import db
+import bmg_db as db
 from sqlalchemy import text
 from get_dir import get_onedrive_dirs
 
@@ -318,7 +318,10 @@ def transform(df)-> pd.DataFrame:
     # REMOVE DADOS INVÁLIDOS.
     for colname in df.columns:
         df[colname] = df[colname].astype(str).map(lambda x: x.replace('1111-11-11 00:00:00', 'NULL'))
-
+    # CRIADO_EM E ATUALIZADO EM.
+    df['criado_em'] = df['data_cri'].astype(str) + ' ' + df['hora_cri'].astype(str)
+    df['atualizado_em'] = df['data_cri'].astype(str) + ' ' + df['hora_cri'].astype(str)
+    
     return df
 
 
@@ -341,7 +344,7 @@ def load(df, tipo)->dict:
     end_process = datetime.now()
     print("DADOS CARREGADOS!")
     metadata = meta(df)
-    dump_log(metadata)
+    
     
     return metadata
 

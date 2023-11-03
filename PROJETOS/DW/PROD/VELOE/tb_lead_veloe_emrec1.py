@@ -6,7 +6,7 @@ import numpy as np
 from datetime import datetime, timedelta
 import time
 import re
-import db
+import veloe_db as db
 from sqlalchemy import text
 from get_dir import get_onedrive_dirs
 
@@ -76,9 +76,10 @@ def update(dia)-> dict:
     TABELA_DESTINO2 = BANCO_DESTINO + '.' + TABELA_ALVO + '_stg'
     TABELA_DESTINO = BANCO_DESTINO + '.' + TABELA_ALVO
     ARQUIVO = os.path.join(dir, f'{TABELA_ALVO}.csv')
-    PRESTMT = f"CREATE TABLE IF NOT EXISTS {TABELA_ALVO}_stg LIKE {TABELA_DESTINO}"
+    PRESTMT = f"CREATE TABLE IF NOT EXISTS {TABELA_ALVO}_stg LIKE {TABELA_ALVO}"
     WHERE = f"WHERE data_atualiza = '{ETL_DATA}'"
     POSSTMT = f"DROP TABLE IF EXISTS {TABELA_ALVO}_stg"
+    POSSTMT = f"select 1"
     UPDATE = f"REPLACE INTO {TABELA_DESTINO} SELECT * FROM {TABELA_DESTINO2}"
     COLUNAS = ['*']
 
@@ -230,7 +231,10 @@ def transform(df)-> pd.DataFrame:
     # REMOVE DADOS INVÁLIDOS.
     for colname in df.columns:
         df[colname] = df[colname].astype(str).map(lambda x: x.replace('1111-11-11 00:00:00', 'NULL'))
-
+    # CRIADO_EM E ATUALIZADO EM.
+    df['criado_em'] = df['data_cri'].astype(str) + ' ' + df['hora_cri'].astype(str)
+    df['atualizado_em'] = df['data_cri'].astype(str) + ' ' + df['hora_cri'].astype(str)
+    
     return df
 
 
@@ -254,7 +258,7 @@ def load(df, tipo)->dict:
     end_process = datetime.now()
     print("DADOS CARREGADOS!")
     metadata = meta(df)
-    dump_log(metadata)
+    
     
     return metadata
 

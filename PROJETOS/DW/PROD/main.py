@@ -1,38 +1,33 @@
+from datetime import datetime, timedelta
+from TEMPOS.etl_tempos_d1 import d1 as etl_tempos
+from LIGACOES.etl_ligacoes import d1 as etl_ligacoes
 from GESTAO_OPERACIONAL.etl_gestao import d1 as etl_gestao
-from TEMPOS.etl_tempos import d1 as etl_tempos
 from QUALIDADE.etl_qualidade import d1 as etl_treinamento
-from VELOE.etl_veloe import d1 as etl_veloe
-from BMG.etl_bmg import d1 as etl_bmg
-from ORIZON.etl_orizon import d1 as etl_orizon
-# from LIGACOES.etl_ligacoes import d1 as etl_ligacoes
+from INTERGRALL.etl_intergrall import d1 as etl_intergrall
+from WFM.etl_wfm import d1 as etl_wfm
+from YDUQS.etl_yduqs import hist as etl_ydqus_hr_reclamacao
 
-"""CRIAR ETL D1 DAS LIGACOES"""
-if __name__ == "__main__":
-    # try:
-    #     etl_ligacoes()
-    # except:
-    #     pass
-    try:
-        etl_gestao()
-    except:
-        pass
-    try:
+
+
+if __name__ == '__main__':
+
         etl_tempos()
-    except:
-        pass
-    try:
+
+        etl_ligacoes()
+
+        etl_gestao()
+
         etl_treinamento()
-    except:
-        pass
-    try:
-        etl_veloe()
-    except:
-        pass
-    try:
-        etl_bmg()
-    except:
-        pass
-    try:
-        etl_orizon()
-    except:
-        pass
+
+        etl_intergrall()
+
+        etl_wfm()
+
+        etl_ydqus_hr_reclamacao()
+
+# if __name__ == '__main__':
+
+#     for dia in range(0,6):
+#         ETL_DATA = (datetime.now() - timedelta(days=dia)).strftime('%Y-%m-%d')
+#         print(ETL_DATA)
+#         d1(dia)

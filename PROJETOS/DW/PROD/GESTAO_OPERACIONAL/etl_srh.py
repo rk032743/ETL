@@ -1,11 +1,9 @@
-from msilib import sequence
-import os, logging, shutil
+import os
 import pandas as pd
 from datetime import datetime, timedelta
-import time
 import re
 from get_dir import get_onedrive_dirs
-from mariadb import MariaDB
+from gest_mariadb import MariaDB
 
 
 ETL_DATA = datetime.now().strftime('%Y-%m-%d')
@@ -16,6 +14,8 @@ dir = os.path.join(dirs['dump_dir'], 'DW', 'GESTAO_OPERACIONAL')
 if not os.path.isdir(dir):
     os.makedirs(dir)
 
+COLUNAS = ['*']
+CAMPO_CHAVE = 'data_solicitacao'
 BANCO_ORIGEM = 'bd_bi_gestao'
 CHARINDEX = re.search('bd_bi_', BANCO_ORIGEM).end()
 TABELA = 'tb_srh'
@@ -24,10 +24,9 @@ TABELA_ORIGEM  = BANCO_ORIGEM + '.' + TABELA
 BANCO_DESTINO = 'dm_db_gestao_operacional'
 TABELA_DESTINO = BANCO_DESTINO + '.' + TABELA + '_stg'
 ARQUIVO = os.path.join(dir,f'{TABELA}_stg.csv')
-PRESTMT = f'TRUNCATE TABLE {TABELA_DESTINO}'
+PRESTMT = f"DELETE FROM {TABELA_DESTINO} WHERE {CAMPO_CHAVE} = '{DATA_REF}';"
 
-COLUNAS = ['*']
-CAMPO_CHAVE = 'data_solicitacao'
+
 
 
 def main():

@@ -1,4 +1,5 @@
 import os, logging
+import os, logging
 import json
 import sys
 import pandas as pd
@@ -6,9 +7,10 @@ import numpy as np
 from datetime import datetime, timedelta
 import time
 import re
-import db
+import tempos_db as db
 from sqlalchemy import text
 from get_dir import get_onedrive_dirs
+from MySQLToSQL import espelho
 
 
 ########################################### PARÂMETROS. ###########################################
@@ -21,15 +23,13 @@ if not os.path.isdir(dir):
 for f in os.listdir(dir):
     if not f.endswith(".csv"):
         continue
-    os.remove(os.path.join(dir, f))
+    # os.remove(os.path.join(dir, f))
 
 
 
 BANCO_DESTINO = 'dm_db_tempos'
 TABELA_ALVO = 'tb_produtividade_tempo'
 TB_A = TABELA_ALVO
-TABELA_DESTINO = BANCO_DESTINO + '.' + TB_A + '_stg'
-# TABELA_DESTINO = BANCO_DESTINO + '.' + TB_A
 COLUNAS = ['*']
 CAMPO_CHAVE = 'data'
 ###################################################################################################
@@ -43,9 +43,12 @@ def representante(tabela) -> str:
     return repre
 
 
-def main(d=1) -> list:
+def d1(d=1) -> list:
 
+    global TABELA_DESTINO
     global PRESTMT
+
+    TABELA_DESTINO = BANCO_DESTINO + '.' + TB_A + '_stg'
     DT = (datetime.now() - timedelta(days=d)).strftime('%Y-%m-%d')
     PRESTMT = f"DELETE FROM {TABELA_DESTINO} WHERE {CAMPO_CHAVE} = '{DT}';"
     col = 'TABLE_SCHEMA'
@@ -61,6 +64,34 @@ def main(d=1) -> list:
         print(bd)
         batch(d,banco=bd)
 
+    espelho(d)
+
+    return 
+
+
+def d0(d=0) -> list:
+
+    global TABELA_DESTINO
+    global PRESTMT
+    TB_A = 'tb_a_produtividade_tempo'
+    TABELA_DESTINO = BANCO_DESTINO + '.' + TB_A + '_d0'
+    DT = (datetime.now() - timedelta(days=d)).strftime('%Y-%m-%d')
+    PRESTMT = f"TRUNCATE {TABELA_DESTINO};"
+    col = 'TABLE_SCHEMA'
+    where  = f"WHERE TABLE_TYPE = 'BASE TABLE' AND TABLE_NAME = '{TABELA_ALVO}' AND TABLE_SCHEMA NOT IN ('test', 'bd_wr_analise', 'bd_bi_dimep')"
+    SQL = f'SELECT {col} FROM information_schema.TABLES {where}'
+    engine_source = db.conn_engine(0, 'information_schema')
+    data = pd.read_sql(sql=SQL, con=engine_source)
+    result = data['TABLE_SCHEMA'].values.tolist()
+    p =prep()
+
+    for bd in result:
+
+        print(bd)
+        nrt(d,banco=bd)
+
+    espelho(d)
+    
     return 
 
 
@@ -68,7 +99,6 @@ def batch(dia=1, banco='')-> dict:
     # PARÂMETROS DE TABELAS.
     global parametros
     global ETL_DATA
-    
     global REPRESENTANTE
     global TABELA_ORIGEM
 
@@ -81,7 +111,52 @@ def batch(dia=1, banco='')-> dict:
     REPRESENTANTE = BANCO_ORIGEM[CHARINDEX:].upper()
     TABELA_ORIGEM  = BANCO_ORIGEM + '.' + TABELA_ALVO
     
-    ARQUIVO = os.path.join(dir, f'{TABELA_ALVO}_{BANCO_ORIGEM}.csv')
+    ARQUIVO = os.path.join(dir, f'{TABELA_ALVO}_{BANCO_ORIGEM}_{ETL_DATA}.csv')
+    
+    WHERE = f"WHERE {CAMPO_CHAVE}  = '{ETL_DATA}' "
+    
+    parametros['BANCO_ORIGEM'] = BANCO_ORIGEM
+    parametros['BANCO_DESTINO'] = BANCO_DESTINO
+    parametros['CAMPO_DATA'] = CAMPO_CHAVE
+    parametros['TABELA_ALVO'] = TABELA_ALVO
+    parametros['REPRESENTANTE'] = REPRESENTANTE
+    parametros['TABELA_ORIGEM'] = TABELA_ORIGEM
+    parametros['TABELA_DESTINO'] = TABELA_DESTINO
+    parametros['ARQUIVO'] = ARQUIVO
+    parametros['PRESTMT'] = PRESTMT
+    parametros['WHERE'] = WHERE
+    parametros['COLUNAS'] = COLUNAS
+
+    
+    e = extract()
+    print("EXTRAÍDO")
+    print(e)
+    t = transform(e)
+    print("TRANSFORMADO")
+    print(t)
+    l = load(t,1)
+
+    return l
+
+
+def nrt(dia=0, banco='')-> dict:
+
+    # PARÂMETROS DE TABELAS.
+    global parametros
+    global ETL_DATA
+    global REPRESENTANTE
+    global TABELA_ORIGEM
+
+    ETL_DATA = (datetime.now() - timedelta(days=dia)).strftime('%Y-%m-%d')
+    ANOMES = pd.to_datetime(ETL_DATA).strftime('%y%m')
+    parametros = dict()
+
+    BANCO_ORIGEM = banco
+    CHARINDEX = re.search('bd_bi_', BANCO_ORIGEM).end()
+    REPRESENTANTE = BANCO_ORIGEM[CHARINDEX:].upper()
+    TABELA_ORIGEM  = BANCO_ORIGEM + '.' + TABELA_ALVO
+    
+    ARQUIVO = os.path.join(dir, f'{TABELA_ALVO}_{BANCO_ORIGEM}_{ETL_DATA}.csv')
     
     WHERE = f"WHERE {CAMPO_CHAVE}  = '{ETL_DATA}' "
     
@@ -225,7 +300,7 @@ def load(df, tipo)->dict:
     end_process = datetime.now()
     print("DADOS CARREGADOS!")
     metadata = meta(df)
-    # dump_log(metadata)
+    # 
     
     return metadata
 
@@ -255,3 +330,8 @@ def meta(df)-> dict:
 
     return metadata
 
+
+if __name__ == '__main__':
+    d1(1)
+#     d1(2)
+#     d1(3)

@@ -6,7 +6,7 @@ from dateutil.relativedelta import relativedelta
 import time
 import re
 from get_dir import get_onedrive_dirs
-from mariadb import MariaDB
+from tempos_mariadb import MariaDB
 
 
 ETL_DATA = datetime.now().strftime('%Y-%m-%d')

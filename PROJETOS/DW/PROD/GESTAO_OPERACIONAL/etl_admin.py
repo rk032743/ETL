@@ -6,7 +6,7 @@ import numpy as np
 from datetime import datetime, timedelta
 import time
 import re
-import db
+import gest_db as db
 from sqlalchemy import text
 from get_dir import get_onedrive_dirs
 
@@ -197,7 +197,7 @@ def meta(df)-> dict:
     duration = end_process - start_process
     tempo = time.gmtime(duration.total_seconds())
     metadata['Duração'] = time.strftime("%H:%M:%S", tempo)
-    dump_log(metadata)
+    
 
     return metadata
 

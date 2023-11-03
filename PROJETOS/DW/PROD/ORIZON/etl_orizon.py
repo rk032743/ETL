@@ -1,17 +1,16 @@
 
-from tb_follow_atividade import batch as batch_follow, update as update_follow, nrt as nrt_follow
+from orizon_tb_follow_atividade import batch as batch_follow, update as update_follow, nrt as nrt_follow
 
 from datetime import datetime, timedelta
 
 
-def d1():
+def d1(dia=1):
 
-    batch_follow(1)
-    update_follow(1)
+    batch_follow(dia)
+    update_follow(dia)
 
 
 def d0():
-
     nrt_follow()
 
 
@@ -22,5 +21,10 @@ def d0():
 #         batch_follow(dia)
         # d1()
 
-# if __name__ == '__main__':
-#     d0()
+
+
+if __name__ == '__main__':
+    for dia in reversed(range(1,11)):
+        ETL_DATA = (datetime.now() - timedelta(days=dia)).strftime('%Y-%m-%d')
+        print(ETL_DATA)
+        d1(dia)

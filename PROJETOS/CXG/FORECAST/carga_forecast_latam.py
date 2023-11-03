@@ -4,7 +4,7 @@ import pandas as pd
 from datetime import datetime, timedelta
 import time
 from get_dir import get_onedrive_dirs
-from telegram_bot import bot_notification, bot_notification2
+# from telegram_bot import bot_notification, bot_notification2
 from mariadb import MariaDB
 import json
 from pathlib import Path
@@ -16,12 +16,12 @@ pd.options.display.max_columns
     
 DIRS = get_onedrive_dirs()
 LOG_DIR = DIRS['plan_dir']
-filename_log = os.path.join(LOG_DIR, "Log","forecast.log")
-with open(filename_log, 'w') as fp:
-    pass
-logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(process)d - %(message)s',
-            level=logging.INFO,
-            filename=filename_log)
+# filename_log = os.path.join(LOG_DIR, "Log","forecast.log")
+# with open(filename_log, 'w') as fp:
+#     pass
+# logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(process)d - %(message)s',
+#             level=logging.INFO,
+#             filename=filename_log)
 
 
 hora = int(datetime.now().strftime("%H"))

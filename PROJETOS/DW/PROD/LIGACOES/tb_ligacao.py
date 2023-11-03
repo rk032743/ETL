@@ -6,8 +6,10 @@ import numpy as np
 from datetime import datetime, timedelta
 import time
 import re
-import db
+import lig_db as db
 from sqlalchemy import text
+from sqlalchemy.exc import OperationalError as erro
+sys.path.append(os.path.dirname(os.path.abspath(__file__)))
 from get_dir import get_onedrive_dirs
 
 
@@ -19,42 +21,113 @@ if not os.path.isdir(dir):
     os.makedirs(dir)
 
 for f in os.listdir(dir):
-    if not f.endswith(".csv"):
-        continue
     os.remove(os.path.join(dir, f))
-
-
+    # if not f.endswith(".csv"):
+    #     continue
+    # try:
+    #     os.remove(os.path.join(dir, f))
+    # except:
+    #     pass
 
 BANCO_DESTINO = 'dm_db_ligacoes'
 CAMPO_DATA = 'data_ligacao'
-ETL_DATA = datetime.now().strftime('%Y-%m-%d')
-ANOMES = pd.to_datetime(ETL_DATA).strftime('%y%m')
 TABELA_ALVO = 'tb_ligacao'
-TB_A = TABELA_ALVO.replace('tb_', 'tb_a_')
-TABELA_DESTINO = BANCO_DESTINO + '.' + TB_A + '_d0'
-PRESTMT = f"TRUNCATE {TABELA_DESTINO}"
+
+
 COLUNAS = ['*']
 ###################################################################################################
+
+def maintance() -> str:
+
+    ETL_DATA = (datetime.now() - timedelta(days=1)).strftime('%Y-%m-%d')
+    ANOMES_ATUAL = datetime.now().strftime('%y%m')
+    ANOMES = pd.to_datetime(ETL_DATA).strftime('%y%m')
+    TB_CURRENT = 'tb_a_ligacao'
+    TB_OLD = f'tb_a_ligacao{ANOMES}'
+    CREATE = f'CREATE TABLE IF NOT EXISTS {TB_CURRENT} LIKE tb_a_ligacao_d0;'
+
+    if ANOMES < ANOMES_ATUAL:
+        
+        RENAME = f'RENAME TABLE {TB_CURRENT} to {TB_OLD};'
+        engine_destination = db.conn_engine(1, BANCO_DESTINO)
+        with engine_destination.connect() as conn:
+            cmd1 = CREATE
+            cmd2 = RENAME
+            # conn.execute(text(cmd1))
+            try:
+                conn.execute(text(cmd2))
+            except erro as err:
+                if err.orig.args[0]==1050:
+                    pass
+                else:
+                    print("Erro:", err.orig.args[0])
+                    print("Desc:", err.orig.args[1])
+            conn.execute(text(cmd1))
+            conn.commit()
+        TABELA_ALVO = TB_OLD
+    else:
+        # engine_destination = db.conn_engine(1, BANCO_DESTINO)
+        # with engine_destination.connect() as conn:
+        #     cmd1 = CREATE
+        #     conn.execute(text(cmd1))
+        #     conn.commit()
+        TABELA_ALVO = TB_CURRENT
+    
+    return TABELA_ALVO
+
 
 def representante(tabela) -> str:
 
     loc = tabela.find('.')
     length = len(tabela)
-    limit = tabela.rfind('_',0,loc)
-    repre = tabela[limit+1:loc].upper()
+    limit = tabela.rfind('_',-1,loc)
+    repre = tabela[limit+1:loc].replace('bd_bi_', '').upper()
+    # limit = tabela.rfind('_',1,loc)
+    # repre = tabela[limit+1:loc].upper()
+
     return repre
 
 
-def main() -> list:
-
-
+def d1(dia) -> list:
+    global ETL_DATA
+    ETL_DATA = (datetime.now() - timedelta(days=dia)).strftime('%Y-%m-%d')
+    ANOMES = pd.to_datetime(ETL_DATA).strftime('%y%m')
     col = 'TABLE_SCHEMA'
     where  = f"WHERE TABLE_TYPE = 'BASE TABLE' AND TABLE_NAME = '{TABELA_ALVO}{ANOMES}' AND TABLE_SCHEMA NOT IN ('test', 'bd_wr_analise', 'bd_bi_dimep')"
     SQL = f'SELECT {col} FROM information_schema.TABLES {where}'
     engine_source = db.conn_engine(0, 'information_schema')
     data = pd.read_sql(sql=SQL, con=engine_source)
     result = data['TABLE_SCHEMA'].values.tolist()
-    p =prep()
+    tb = maintance()
+    TABELA_DESTINO = tb
+    
+    PRESTMT = f"DELETE FROM {TABELA_DESTINO} WHERE {CAMPO_DATA} = '{ETL_DATA}'"
+
+    p = prep(PRESTMT)
+
+    for bd in result:
+
+        print(bd)
+        batch(dia=dia,banco=bd,tabela=tb)
+
+    return
+
+
+def d0() -> list:
+    global ETL_DATA
+    global TABELA_DESTINO
+    ETL_DATA = datetime.now().strftime('%Y-%m-%d')
+    ANOMES = pd.to_datetime(ETL_DATA).strftime('%y%m')
+    col = 'TABLE_SCHEMA'
+    where  = f"WHERE TABLE_TYPE = 'BASE TABLE' AND TABLE_NAME = '{TABELA_ALVO}{ANOMES}' AND TABLE_SCHEMA NOT IN ('test', 'bd_wr_analise', 'bd_bi_dimep')"
+    SQL = f'SELECT {col} FROM information_schema.TABLES {where}'
+    engine_source = db.conn_engine(0, 'information_schema')
+    data = pd.read_sql(sql=SQL, con=engine_source)
+    result = data['TABLE_SCHEMA'].values.tolist()
+    TB_A = TABELA_ALVO.replace('tb_', 'tb_a_')
+    TABELA_DESTINO = BANCO_DESTINO + '.' + TB_A + '_d0'
+    PRESTMT = f"TRUNCATE {TABELA_DESTINO}"
+    p =prep(PRESTMT)
 
     for bd in result:
 
@@ -64,12 +137,14 @@ def main() -> list:
     return 
 
 
-def nrt(dia=0, banco='')-> dict:
+def batch(dia=1, banco='', tabela='')-> dict:
     # PARÂMETROS DE TABELAS.
     global parametros
-    global ETL_DATA
-    ETL_DATA = (datetime.now() - timedelta(days=dia)).strftime('%Y-%m-%d')
+    ANOMES_ATUAL = datetime.now().strftime('%y%m')
     ANOMES = pd.to_datetime(ETL_DATA).strftime('%y%m')
+    print(ANOMES_ATUAL)
+
+
     parametros = dict()
 
     BANCO_ORIGEM = banco
@@ -77,9 +152,43 @@ def nrt(dia=0, banco='')-> dict:
     REPRESENTANTE = BANCO_ORIGEM[CHARINDEX:].upper()
     TABELA_ORIGEM  = BANCO_ORIGEM + '.' + TABELA_ALVO + ANOMES
     
-    ARQUIVO = os.path.join(dir, f'{TABELA_ALVO}.csv')
+    ARQUIVO = os.path.join(dir, f'{TABELA_ALVO}_{BANCO_ORIGEM}_{ETL_DATA}.csv')
+    WHERE = f"WHERE {CAMPO_DATA} = '{ETL_DATA}'"
     
-    WHERE = f"WHERE {CAMPO_DATA}  = '{ETL_DATA}' "
+    parametros['BANCO_ORIGEM'] = BANCO_ORIGEM
+    parametros['BANCO_DESTINO'] = BANCO_DESTINO
+    parametros['CAMPO_DATA'] = CAMPO_DATA
+    parametros['TABELA_ALVO'] = TABELA_ALVO
+    parametros['REPRESENTANTE'] = REPRESENTANTE
+    parametros['TABELA_ORIGEM'] = TABELA_ORIGEM
+    parametros['TABELA_DESTINO'] = BANCO_DESTINO+'.'+tabela
+    parametros['ARQUIVO'] = ARQUIVO
+    parametros['PRESTMT'] = 'SELECT 1'
+    parametros['WHERE'] = WHERE
+    parametros['COLUNAS'] = COLUNAS
+
+    
+    e = extract()
+    t = transform(e)
+    l = load(t,1)
+    # l = load(t,0)
+    return l
+
+
+def nrt(dia=0, banco='')-> dict:
+    # PARÂMETROS DE TABELAS.
+    global parametros
+
+    ANOMES = pd.to_datetime(ETL_DATA).strftime('%y%m')
+    parametros = dict()
+
+    BANCO_ORIGEM = banco
+    CHARINDEX = re.search('bd_bi_', BANCO_ORIGEM).end()
+    REPRESENTANTE = BANCO_ORIGEM[CHARINDEX:].upper()
+    TABELA_ORIGEM  = BANCO_ORIGEM + '.' + TABELA_ALVO + ANOMES
+    PRESTMT = f"SELECT 1"
+    ARQUIVO = os.path.join(dir, f'{TABELA_ALVO}_{BANCO_ORIGEM}_{ETL_DATA}.csv')
+    WHERE = f"WHERE {CAMPO_DATA} = '{ETL_DATA}' "
     
     parametros['BANCO_ORIGEM'] = BANCO_ORIGEM
     parametros['BANCO_DESTINO'] = BANCO_DESTINO
@@ -103,10 +212,11 @@ def nrt(dia=0, banco='')-> dict:
 
 def dump_log(data):
     # SALVA LOG DE ETL.
-    tabela_alvo = parametros['TABELA_ALVO']
-    file = os.path.join(dir, f'log_{tabela_alvo}_{start_process.strftime("%Y%m%d")}.json')
-    with open(file, 'w') as fp:
-        json.dump(data, fp, ensure_ascii=False, indent=4)
+    # tabela_alvo = parametros['TABELA_ALVO']
+    # file = os.path.join(dir, f'log_{tabela_alvo}_{start_process.strftime("%Y%m%d")}.json')
+    # with open(file, 'w') as fp:
+    #     json.dump(data, fp, ensure_ascii=False, indent=4)
+    pass
 
 
 def counter(start_time):
@@ -115,15 +225,16 @@ def counter(start_time):
     return print("TEMPO DECORRIDO: %s SEGUNDOS" % round(tempo, 1))
 
 
-def prep():
+def prep(stmt):
     # PREPARAÇÃO DAS TABELAS DE DESTINO, DELETE OU TRUNCATE.
+
     engine_destination = db.conn_engine(1, BANCO_DESTINO)
     start_time = time.time()
     try:
         print("PREPARANDO AMBIENTE...")
         with engine_destination.connect() as conn:
-            truncate_statement = PRESTMT
-            conn.execute(text(truncate_statement))
+            statement1 = stmt
+            conn.execute(text(statement1))
             conn.commit()
         counter(start_time)
     except Exception:
@@ -184,6 +295,13 @@ def extract()-> pd.DataFrame:
 def transform(df)-> pd.DataFrame:
 
     df['representante'] = representante(parametros['TABELA_ORIGEM'])
+    # NO PANDAS 2.0 É NECESSÁRIO SUBSTITUIR O "ITERITEMS" POR "ITEMS".
+    for colname, coltype in df.dtypes.items():
+        if coltype == 'timedelta64[ns]':
+            df[colname] = df[colname].astype(str).map(lambda x: x[7:])
+    # REMOVE DADOS INVÁLIDOS.
+    for colname in df.columns:
+        df[colname] = df[colname].astype(str).map(lambda x: x.replace('1111-11-11 00:00:00', 'NULL'))
 
     return df
 
@@ -191,7 +309,6 @@ def transform(df)-> pd.DataFrame:
 def load(df, tipo)->dict:
     # CARGA DOS DADOS VIA STREAMING.
     global end_process
-
     engine_destination = db.conn_engine(1, parametros['BANCO_DESTINO'])
     start_time = time.time()
     if tipo == 0:
@@ -199,16 +316,17 @@ def load(df, tipo)->dict:
         df.to_sql(parametros['TABELA_DESTINO'], con=engine_destination,  index=False, if_exists='append')
     elif tipo == 1:
         # NO PANDAS 2.0 É NECESSÁRIO SUBSTITUIR O "LINE_TERMINATOR" POR "LINETERMINATOR".
-        df.to_csv(parametros['ARQUIVO'], sep=';',index=False, lineterminator= '\r\n', encoding='utf-8')
+        df.to_csv(parametros['ARQUIVO'], sep="§",index=False, lineterminator= '\r\n', encoding='utf-8')
         print("DADOS SALVOS!")
         print("CARREGANDO DADOS...")
-        db.bulk(parametros['ARQUIVO'], parametros['BANCO_DESTINO'], parametros['TABELA_DESTINO'], 0)
+        db.loaddata(arquivo=parametros['ARQUIVO'], banco=parametros['BANCO_DESTINO'], tabela=parametros['TABELA_DESTINO'], tipo=0, separador='§')
 
     counter(start_time)
     end_process = datetime.now()
     print("DADOS CARREGADOS!")
-    metadata = meta(df)
-    dump_log(metadata)
+    metadata = 1
+    # metadata = meta(df)
+    # 
     
     return metadata
 
@@ -238,3 +356,15 @@ def meta(df)-> dict:
 
     return metadata
 
+
+if __name__ == '__main__':
+    # d0()
+
+    # m = maintance()
+    # print(m)
+    d1(7)
+#     for i in range(1,29):
+#         # print(i)
+#         ETL_DATA = (datetime.now() - timedelta(days=i)).strftime('%Y-%m-%d')
+#         print(ETL_DATA)
+#         d1(i)
